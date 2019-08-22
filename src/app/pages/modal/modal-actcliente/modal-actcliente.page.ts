@@ -32,7 +32,7 @@ export class ModalActClientePage implements OnInit {
   agmStyles: any[] = environment.agmStyles;
   cargo_posicion = false;
   // Op Agosto 15 19 se deshabilita actualización dirección
-  activaract_direccion = false;
+  activaract_direccion = true;
   private photo: string = 'assets/img/logo.png';
   private userId: string;
 
@@ -93,6 +93,7 @@ export class ModalActClientePage implements OnInit {
     });
     // asignar valores al formulario
     this.onActclieForm.controls['direccion'].setValue(this._visitas.direc_actual.direccion);
+    this.onActclieForm.controls['direccion'].disable();
     this.onActclieForm.controls['email'].setValue(this._visitas.direc_actual.email);
     this.onActclieForm.controls['contacto'].setValue(this._visitas.direc_actual.contacto);
     this.onActclieForm.controls['telefono'].setValue(this._visitas.direc_actual.telefono);
@@ -112,7 +113,7 @@ export class ModalActClientePage implements OnInit {
         console.log(ldiract);
         if (ldiract==undefined || ldiract==''){
           console.log('a act direccion');
-          //op agosto 16 19 se desahactiva act dirección
+          //op agosto 16 19 se desactiva act dirección
           // this.onActclieForm.controls['direccion'].setValue(this.address);
         }
       },errStatus=>{
