@@ -1,0 +1,136 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Reg. Clie. Potencial</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <!-- <ion-content class="profile"> -->
+    <ion-card no-margin>
+        <!-- <ion-card-content class="bg-profile">
+            <h2 class="fw500">{{ _visitas.visita_activa_copvdet.nombre }}</h2>
+            <h3 color="light" margin-bottom>{{_visitas.visita_activa_copvdet.direccion}}</h3>
+        </ion-card-content> -->
+        <ion-card-content>
+            <img *ngIf=" tomofoto && imagenPreview" [src]="_DomSanitizer.bypassSecurityTrustUrl(imagenPreview)" />
+            <img *ngIf="!tomofoto && link_foto" [src]="_DomSanitizer.bypassSecurityTrustUrl(link_foto)" />
+            <img *ngIf="!link_foto && !imagenPreview" src="assets/img/imagennodisponible.jpg" />
+            <ion-button icon-left size="small" shape="round" color="tertiary" (click)="mostrar_camara()">
+                Foto
+                <ion-icon name="camera"></ion-icon>
+            </ion-button>
+            <ion-button icon-left size="small" shape="round" color="tertiary" (click)="seleccionarFoto()">
+                Archivo
+                <ion-icon name="folder"></ion-icon>
+            </ion-button>
+        </ion-card-content>
+        <p>{{address}}</p>
+        <ion-card-content no-padding>
+            <agm-map [latitude]="coords.lat" [longitude]="coords.lng" [zoom]="14" [zoomControl]="false" [styles]="agmStyles" [streetViewControl]="false">
+                <agm-marker [latitude]="coords.lat" [longitude]="coords.lng"></agm-marker>
+            </agm-map>
+        </ion-card-content>
+
+        <form [formGroup]="onActclieForm" class="list-form">
+            <ion-item no-padding class="itemcaptura animated fadeInUp">
+                <ion-label position="floating">
+                    <ion-icon name="key" item-start></ion-icon>CC/Nit/Código
+                </ion-label>
+                <ion-input color="secondary" type="text" formControlName="codigo"></ion-input>
+            </ion-item>
+            <p ion-text class="text08" *ngIf="onActclieForm.get('codigo').touched && onActclieForm.get('codigo').hasError('required')">
+                <ion-text color="danger">
+                    Este campo es obligatorio
+                </ion-text>
+            </p>
+            <ion-item no-padding class="itemcaptura animated fadeInUp">
+                <ion-label position="floating">
+                    <ion-icon name="business" item-start></ion-icon>Nombre
+                </ion-label>
+                <ion-input color="secondary" type="text" formControlName="nombre"></ion-input>
+            </ion-item>
+            <p ion-text class="text08" *ngIf="onActclieForm.get('nombre').touched && onActclieForm.get('nombre').hasError('required')">
+                <ion-text color="danger">
+                    Este campo es obligatorio
+                </ion-text>
+            </p>
+            <ion-item no-padding class="itemcaptura animated fadeInUp">
+                <ion-label position="floating">
+                    <ion-icon name="pin" item-start></ion-icon>
+                    Dirección</ion-label>
+                <ion-input color="secondary" type="text" formControlName="direccion"></ion-input>
+            </ion-item>
+            <p ion-text class="text08" *ngIf="onActclieForm.get('direccion').touched && onActclieForm.get('direccion').hasError('required')">
+                <ion-text color="danger">
+                    Este campo es obligatorio
+                </ion-text>
+            </p>
+            <ion-item no-padding class="itemcaptura animated fadeInUp">
+                <ion-label position="floating">
+                    <ion-icon name="mail" item-start></ion-icon>
+                    <!-- {{ 'app.label.email' | translate }} -->
+                    Email
+                </ion-label>
+                <ion-input color="secondary" type="email" formControlName="email"></ion-input>
+            </ion-item>
+            <p ion-text class="text08" *ngIf="onActclieForm.get('email').touched && onActclieForm.get('email').hasError('required')">
+                <ion-text color="danger">
+                    Este campo es obligatorio
+                </ion-text>
+            </p>
+            <ion-item no-padding class="itemcaptura animated fadeInUp">
+                <ion-label position="floating">
+                    <ion-icon name="person" item-start></ion-icon>
+                    <!-- {{ 'app.label.email' | translate }} -->
+                    Contacto
+                </ion-label>
+                <ion-input color="secondary" type="email" formControlName="contacto"></ion-input>
+            </ion-item>
+            <p ion-text class="text08" *ngIf="onActclieForm.get('contacto').touched && onActclieForm.get('contacto').hasError('required')">
+                <ion-text color="danger">
+                    Este campo es obligatorio
+                </ion-text>
+            </p>
+            <ion-item no-padding class="itemcaptura animated fadeInUp">
+                <ion-label position="floating">
+                    <ion-icon name="phone-portrait" item-start></ion-icon>
+                    Teléfono
+                </ion-label>
+                <ion-input color="secondary" type="phone" formControlName="telefono"></ion-input>
+            </ion-item>
+            <p ion-text class="text08" *ngIf="onActclieForm.get('telefono').touched && onActclieForm.get('telefono').hasError('required')">
+                <ion-text color="danger">
+                    Este campo es obligatorio
+                </ion-text>
+            </p>
+            <ion-item no-padding class="itemcaptura animated fadeInUp">
+                <ion-label position="floating">
+                    <ion-icon name="phone-portrait" item-start></ion-icon>
+                    Celular
+                </ion-label>
+                <ion-input color="secondary" type="phone" formControlName="celular"></ion-input>
+            </ion-item>
+            <p ion-text class="text08" *ngIf="onActclieForm.get('celular').touched && onActclieForm.get('celular').hasError('required')">
+                <ion-text color="danger">
+                    Este campo es obligatorio
+                </ion-text>
+            </p>
+            <ion-item>
+                <ion-label color="dark" position="stacked">Notas:</ion-label>
+                <ion-textarea rows="6" cols="12" inputmode="text" placeholder="Registre Notas" formControlName='notas'></ion-textarea>
+            </ion-item>
+            <p ion-text class="text08" *ngIf="onActclieForm.get('notas').touched && onActclieForm.get('notas').hasError('required')">
+                <ion-text color="danger">
+                    Este campo es obligatorio
+                </ion-text>
+            </p>
+
+        </form>
+
+        <ion-button *ngIf="tipocrud == 'A'" size="large" expand="full" color="dark" [disabled]="!onActclieForm.valid" (click)="grabarClienpoten()">Registrar</ion-button>
+        <ion-button *ngIf="tipocrud != 'A'" size="large" expand="full" color="dark" [disabled]="!onActclieForm.valid" (click)="modificarClienpoten()">Modificar</ion-button>
+    </ion-card>
+
+</ion-content>
