@@ -236,7 +236,7 @@
                                     <ion-row>
                                         <ion-col size="5">
                                             <div>
-                                                <a (click)="presentImage(item.data.link_imgfb)">
+                                                <a (click)="presentImage(item.data.link_imgfb, item.data.id)">
                                                     <img *ngIf="item.data.link_imgfb"
                                                         [src]="_DomSanitizer.bypassSecurityTrustUrl(item.data.link_imgfb)" />
                                                     <img *ngIf="!item.data.link_imgfb"

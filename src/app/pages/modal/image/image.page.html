@@ -15,9 +15,9 @@
       <div class="image-wrap">
               <img [src]="value">
             </div>                                                  
-      <ion-card-subtitle>
-      <ion-badge color="danger" (click)="eliminarImagen(value)">
-      <ion-icon size="small" name="trash" class="trash_icon"></ion-icon>
+      <ion-card-subtitle *ngIf="idimg !== '' && rutafbi !== ''">
+        <ion-badge color="danger" (click)="eliminarImagen()">
+        <ion-icon size="small" name="trash" class="trash_icon"></ion-icon>
       </ion-badge>
       </ion-card-subtitle>
   </ion-card>

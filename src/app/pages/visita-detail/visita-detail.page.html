@@ -66,7 +66,7 @@
                         <ion-grid class="size-col">
                             <ion-row>
                                 <ion-col size="3">
-                                    <ion-avatar class="cliente-avatar" (click)="presentImage(ubicaAct.link_foto)">
+                                    <ion-avatar class="cliente-avatar" (click)="presentImage(ubicaAct.link_foto,'')">
                                         <!-- <img *ngIf="_visitas.direc_actual != null" [src]="_DomSanitizer.bypassSecurityTrustUrl(_visitas.direc_actual.link_foto)" /> -->
                                         <img *ngIf="cargo_ubicaact && ubicaAct.link_foto" [src]="_DomSanitizer.bypassSecurityTrustUrl(ubicaAct.link_foto)" />
                                         <img *ngIf="cargo_ubicaact && !ubicaAct.link_foto" src="assets/img/imagennodisponible.jpg" />
@@ -233,17 +233,12 @@
                             </ion-slide>
                           </ion-slides> -->
                         <ion-slides pager="true" margin-bottom class="slide">
-                            <ion-slide *ngFor="let foto of listafotos" (click)="presentImage(foto.link_foto)">
+                            <ion-slide *ngFor="let foto of listafotos" (click)="presentImage(foto.link_foto,foto.id)">
                                     <div class="slide-content">
                                             <ion-card class="actividadesCard">
                                                     <div class="image-wrap">
                                                             <img [src]="_DomSanitizer.bypassSecurityTrustUrl(foto.link_foto)">
                                                           </div>                                                  
-                                                    <!-- <ion-card-subtitle>
-                                                    <ion-badge color="danger" (click)="eliminarFoto(foto)">
-                                                    <ion-icon size="small" name="trash" class="trash_icon"></ion-icon>
-                                                    </ion-badge>
-                                                    </ion-card-subtitle> -->
                                                 </ion-card>
                                     </div>
                                 <!-- <ion-grid no-padding>
@@ -251,12 +246,6 @@
                                         <ion-col size="12">
                                             <ion-card class="actividadesCard">
                                                 <ion-img [src]="foto.link_foto"></ion-img>
-                                               
-                                                <ion-card-subtitle>
-                                                <ion-badge color="danger" (click)="eliminarFoto(foto)">
-                                                <ion-icon size="small" name="trash" class="trash_icon"></ion-icon>
-                                                </ion-badge>
-                                                </ion-card-subtitle>
                                             </ion-card>
                                         </ion-col>
                                     </ion-row>

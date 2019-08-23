@@ -72,6 +72,7 @@ export class VisitaDetailPage implements OnInit {
   imagenPreview: string;
   listafotos: any;
   cargo_posicion = false;
+  urlimgenfb = '';
 
   constructor(
     public _parEmpre: ParEmpreService,
@@ -236,6 +237,7 @@ export class VisitaDetailPage implements OnInit {
             // console.log(this.listaactividades.payload.doc.data());
             // console.log(this.listaactividades.payload.doc.id);
           });
+          this.urlimgenfb=`/personal/${this._parEmpre.usuario.cod_usuar}/rutas/${this.visitaAct.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this.visitaAct.id_visita}/fotos`;
           this._actividad.getFotosVisitaActual(this.visitaAct).subscribe((datosf: any) => {
             console.log('Fotos de la visita: ', datosf);
             this.listafotos = datosf;
@@ -313,10 +315,12 @@ export class VisitaDetailPage implements OnInit {
   }
 
 
-  async presentImage(image: any) {
+  async presentImage(image: any, idimg: number) {
+    console.log('presentImage imagenimage,idimg,this.urlimgenfb: ',image,idimg,this.urlimgenfb);
+
     const modal = await this.modalCtrl.create({
       component: ImagePage,
-      componentProps: { value: image }
+      componentProps: { value: image, idimg: idimg, rutafbi: this.urlimgenfb }
     });
     return await modal.present();
   }

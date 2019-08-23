@@ -49,7 +49,8 @@ export class ConsignarPage implements OnInit {
   tomofoto: boolean = false;
   fototomada: any;
   imagenPreview: string = "";
-
+  urlimgenfb ="";
+  
   constructor(
     public _parEmpre: ParEmpreService,
     public navCtrl: NavController,
@@ -89,10 +90,10 @@ export class ConsignarPage implements OnInit {
     return await modal.present();
   }
 
-  async presentImage(image: any) {
+  async presentImage(image: any, idimg: any) {
     const modal = await this.modalCtrl.create({
       component: ImagePage,
-      componentProps: { value: image }
+      componentProps: { value: image, idimg: idimg, rutafbi: this.urlimgenfb }
     });
     return await modal.present();
   }
