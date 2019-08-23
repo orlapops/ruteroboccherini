@@ -633,12 +633,20 @@ export class VisitaDetailPage implements OnInit {
   }
   seleccionarFoto() {
     const options = {
-      quality: 100,
+      // quality: 100,
+      // outputType: 0
+      width: 200,
+      //height: 200,
+      // quality of resized image, defaults to 100
+      quality: 25,      
       outputType: 0
     };
-    this.imagePicker.getPictures(options).then((image) => {
-      this.presentLoading('Guardando Imagen');
+      console.log('seleccionarFoto 1 options:',options);
+      this.imagePicker.getPictures(options).then((image) => {
+        console.log('seleccionarFoto 2 image:',image);
+        this.presentLoading('Guardando Imagen');
       for (var i = 0; i < image.length; i++) {
+        console.log('seleccionarFoto 3 i image[i]:',i,image[i]);
         this.imagenPreview = this.webview.convertFileSrc(image[i]);
         this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,
           this.visitaID, image[i]).then(() => {

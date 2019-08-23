@@ -53,7 +53,6 @@
     "cordova-plugin-native-keyboard": "^2.0.3",
     "cordova-plugin-nativestorage": "^2.3.2",
     "cordova-plugin-splashscreen": "^5.0.2",
-    "cordova-plugin-telerik-imagepicker": "2.3.2",
     "cordova-res": "^0.6.0",
     "cordova-sqlite-storage": "^3.3.0",
     "core-js": "^2.5.4",
@@ -101,7 +100,6 @@
       "cordova-plugin-camera": {},
       "cordova-plugin-file": {},
       "cordova-plugin-geolocation": {},
-      "cordova-plugin-telerik-imagepicker": {},
       "cordova-plugin-nativestorage": {},
       "cordova-plugin-ionic": {
         "APP_ID": "d2668b42",
@@ -118,7 +116,10 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-telerik-imagepicker": {
+        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "Seleccionar Imagenes"
+      }
     },
     "platforms": [
       "android"
