@@ -227,23 +227,33 @@
                             </ion-row>
                         </ion-grid>
                         <hr class="bg-tertiary">
+                        <!-- <ion-slides>
+                            <ion-slide *ngFor="let foto of listafotos" (click)="presentImage(foto.link_foto)">
+                                <ion-img [src]="_DomSanitizer.bypassSecurityTrustUrl(foto.link_foto)"></ion-img>
+                            </ion-slide>
+                          </ion-slides> -->
                         <ion-slides pager="true" margin-bottom class="slide">
                             <ion-slide *ngFor="let foto of listafotos" (click)="presentImage(foto.link_foto)">
-                                <ion-grid no-padding>
+                                    <div class="slide-content">
+                                            <div class="image-wrap">
+                                              <img [src]="_DomSanitizer.bypassSecurityTrustUrl(foto.link_foto)">
+                                            </div>
+                                    </div>
+                                <!-- <ion-grid no-padding>
                                     <ion-row>
                                         <ion-col size="12">
                                             <ion-card class="actividadesCard">
                                                 <ion-img [src]="foto.link_foto"></ion-img>
-                                                <!--
+                                               
                                                 <ion-card-subtitle>
                                                 <ion-badge color="danger" (click)="eliminarFoto(foto)">
                                                 <ion-icon size="small" name="trash" class="trash_icon"></ion-icon>
                                                 </ion-badge>
-                                                </ion-card-subtitle> -->
+                                                </ion-card-subtitle>
                                             </ion-card>
                                         </ion-col>
                                     </ion-row>
-                                </ion-grid>
+                                </ion-grid> -->
 
                             </ion-slide>
                         </ion-slides>
