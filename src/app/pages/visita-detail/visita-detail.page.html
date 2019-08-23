@@ -235,9 +235,16 @@
                         <ion-slides pager="true" margin-bottom class="slide">
                             <ion-slide *ngFor="let foto of listafotos" (click)="presentImage(foto.link_foto)">
                                     <div class="slide-content">
-                                            <div class="image-wrap">
-                                              <img [src]="_DomSanitizer.bypassSecurityTrustUrl(foto.link_foto)">
-                                            </div>
+                                            <ion-card class="actividadesCard">
+                                                    <div class="image-wrap">
+                                                            <img [src]="_DomSanitizer.bypassSecurityTrustUrl(foto.link_foto)">
+                                                          </div>                                                  
+                                                    <!-- <ion-card-subtitle>
+                                                    <ion-badge color="danger" (click)="eliminarFoto(foto)">
+                                                    <ion-icon size="small" name="trash" class="trash_icon"></ion-icon>
+                                                    </ion-badge>
+                                                    </ion-card-subtitle> -->
+                                                </ion-card>
                                     </div>
                                 <!-- <ion-grid no-padding>
                                     <ion-row>

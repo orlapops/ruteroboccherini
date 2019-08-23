@@ -9,5 +9,19 @@
 </ion-header>
 
 <ion-content>
-  <img [src]="value">
+  <!-- <img [src]="value"> -->
+
+  <ion-card class="actividadesCard">
+      <div class="image-wrap">
+              <img [src]="value">
+            </div>                                                  
+      <ion-card-subtitle>
+      <ion-badge color="danger" (click)="eliminarImagen(value)">
+      <ion-icon size="small" name="trash" class="trash_icon"></ion-icon>
+      </ion-badge>
+      </ion-card-subtitle>
+  </ion-card>
+
+
 </ion-content>
+

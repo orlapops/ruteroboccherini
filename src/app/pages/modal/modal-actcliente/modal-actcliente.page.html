@@ -113,8 +113,12 @@
             </p>
 
         </form>
-        <ion-button *ngIf="cargo_posicion && activaract_direccion" icon-left size="small" shape="round" [disabled]="!onActclieForm.valid" color="tertiary" (click)="actualiza_ubicaciongps()">
-            Actualizar
+        <ion-text color="danger">
+                Se actualizaran datos Ubicación GPS Long:{{coords.lng}} Lat: {{coords.lat}} Contacto, Teléfonos, Email. Debe estar seguro que se encuentra en el sitio.
+             </ion-text>
+      <ion-button *ngIf="cargo_posicion && activaract_direccion" icon-left size="small" shape="round" [disabled]="!onActclieForm.valid" color="tertiary" (click)="actualiza_ubicaciongps()">
+                Actualizar
+
             <ion-icon name="pin"></ion-icon>
         </ion-button>
     </ion-card>
