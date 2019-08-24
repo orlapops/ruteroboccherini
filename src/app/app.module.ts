@@ -47,6 +47,7 @@ import { File } from "@ionic-native/file/ngx";
 // import { ModalActClientePageModule } from './pages/modal/modal-actcliente/modal-actcliente';
 // import { VisitanService } from './providers/visitan.service';
 // import { Network } from '@ionic-native/network';
+import { OneSignal } from '@ionic-native/onesignal/ngx';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -106,6 +107,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Camera,
     ImagePicker,
     BluetoothSerial,
+    OneSignal,
     VisitasProvider,
     UbicacionProvider,
     ActividadesService,

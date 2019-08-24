@@ -12,6 +12,8 @@ import { Pages } from './interfaces/pages';
 import { ParEmpreService } from './providers/par-empre.service';
 import { AuthService } from './providers/auth.service';
 import { UbicacionProvider } from './providers/ubicacion/ubicacion.service';
+import { PushService } from './providers/push.service';
+
 import { expressionType } from '@angular/compiler/src/output/output_ast';
 // import * as jstest from '../assets/js/netsolin.js'
 // declare var testvar;
@@ -34,6 +36,7 @@ export class AppComponent {
     public _parEmpreProv: ParEmpreService,
     private auth: AuthService ,
     public ubicacionService: UbicacionProvider,
+    private pushService: PushService,
     public navCtrl: NavController
   ) {
     // console.log('vartext js: ' + testvar);
@@ -109,6 +112,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.pushService.configuracionInicial();
       // Set language of the app.
       this.translateService.setDefaultLang(environment.language);
       this.translateService.use(environment.language);
