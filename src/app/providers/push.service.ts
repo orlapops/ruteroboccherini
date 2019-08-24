@@ -99,7 +99,7 @@ console.log('notificacionRecibida this.mensajes 1: ',this.mensajes);
     console.log('notificacionRecibida this.mensajes 8: ',this.mensajes);
     const alert2 = await this.alertCtrl.create({
       message: payload.body,
-      subHeader: payload.title;
+      subHeader: payload.title,
       buttons: ['Enterado']
     });
      await alert2.present();
