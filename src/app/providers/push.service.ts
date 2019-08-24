@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/onesignal/ngx';
 import { Storage } from '@ionic/storage';
+import { NavController, AlertController} from '@ionic/angular';
 
 
 @Injectable({
@@ -23,7 +24,9 @@ export class PushService {
 
 
   constructor( private oneSignal: OneSignal,
-               private storage: Storage ) {
+              public navCtrl: NavController,
+              public alertCtrl: AlertController,
+              private storage: Storage ) {
 
     this.cargarMensajes();
   }
@@ -94,6 +97,14 @@ console.log('notificacionRecibida this.mensajes 1: ',this.mensajes);
 
     await this.guardarMensajes();
     console.log('notificacionRecibida this.mensajes 8: ',this.mensajes);
+    const alert2 = await this.alertCtrl.create({
+      message: payload.body,
+      subHeader: payload.title;
+      buttons: ['Enterado']
+    });
+     await alert2.present();
+    
+    this.navCtrl.navigateForward("messages");
 
   }
 
