@@ -59,8 +59,8 @@ export class UbicacionProvider {
                   // data can be a set of coordinates, or an error (if an error occurred).
                   // data.coords.latitude
                   // data.coords.longitude
-                  console.log('watch ubica');
-                  console.log(data);
+                  // console.log('watch ubica');
+                  // console.log(data);
                   this.usuario.update({
                     latitud: data.coords.latitude,
                     longitud: data.coords.longitude
@@ -69,8 +69,8 @@ export class UbicacionProvider {
                   this.ultlongitud = data.coords.longitude;
                   //Actualizar recorrido si han pasado 5 minutos
                   const now = new Date();
-                  console.log('watch ubica 2');
-                  console.log("Actualizar recorrido inicial", data.coords);                      
+                  // console.log('watch ubica 2');
+                  // console.log("Actualizar recorrido inicial", data.coords);                      
                   this.actualizarRecorrido(data, now);
 
                   if (this.lastUpdateTime == null) {
@@ -95,7 +95,7 @@ export class UbicacionProvider {
   }
 
   actualizarRecorrido(data, fechat){
-    console.log("Actualizar recorrido");                      
+    // console.log("Actualizar recorrido");                      
                   //extraemos el día mes y año 
                   const dia = fechat.getDate();
                   // const mes = parseInt(now.getMonth()) + 1;
@@ -107,7 +107,7 @@ export class UbicacionProvider {
 
     const lruta = `/personal/${this._parEmpre.usuario.cod_usuar}/recorrido/${ano}/meses/${mes}/dias/${dia}/historial`;
                   // /personal/1014236804/recorrido/2019/meses/2/dias/22/historial/h1
-                  console.log("Actualizar recorrido", lruta);
+                  // console.log("Actualizar recorrido", lruta);
     this.lastUpdateTime = fechat;
     const lfechahora = fechat.toLocaleString();
     const lif = lfechahora.replace('/' , '_');

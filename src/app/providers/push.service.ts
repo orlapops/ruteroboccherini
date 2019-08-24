@@ -67,35 +67,47 @@ export class PushService {
     // Obtener ID del suscriptor
     const info = await this.oneSignal.getIds();
     this.userId = info.userId;
+    console.log('Cargando userId this.userId:',this.userId);
     return info.userId;
   }
 
   async notificacionRecibida( noti: OSNotification ) {
-
+console.log('notificacionRecibida this.mensajes 1: ',this.mensajes);
     await this.cargarMensajes();
+    console.log('notificacionRecibida this.mensajes 2: ',this.mensajes);
 
     const payload = noti.payload;
 
     const existePush = this.mensajes.find( mensaje => mensaje.notificationID === payload.notificationID );
+    console.log('notificacionRecibida this.mensajes 3: ',this.mensajes);
 
     if ( existePush ) {
+      console.log('notificacionRecibida this.mensajes 4: ',this.mensajes);
       return;
     }
+    console.log('notificacionRecibida this.mensajes 5: ',this.mensajes);
 
     this.mensajes.unshift( payload );
+    console.log('notificacionRecibida this.mensajes 6: ',this.mensajes);
     this.pushListener.emit( payload );
+    console.log('notificacionRecibida this.mensajes 7: ',this.mensajes);
 
     await this.guardarMensajes();
+    console.log('notificacionRecibida this.mensajes 8: ',this.mensajes);
 
   }
 
   guardarMensajes() {
+    console.log('guardarMensajes this.mensajes 1: ',this.mensajes);
     this.storage.set('mensajes', this.mensajes );
+    console.log('guardarMensajes this.mensajes 2: ',this.mensajes);
   }
 
   async cargarMensajes() {
 
+    console.log('cargarMensajes this.mensajes 1: ',this.mensajes);
     this.mensajes =  await this.storage.get('mensajes') || [];
+    console.log('cargarMensajes this.mensajes 2: ',this.mensajes);
 
     return this.mensajes;
 
