@@ -3,7 +3,7 @@ import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/
 import { Storage } from '@ionic/storage';
 import { NavController, AlertController} from '@ionic/angular';
 import { MessageService } from '../providers/message/message.service';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
