@@ -43,8 +43,8 @@ export class MessageService {
 
   public act_onesignalid(id) {
     return this.fbDb
-    .collection(`/personal/${this._parempre.usuario.cod_usuar}/`)
-    .doc(id.toString()).update({idOnesignal: id});
+    .collection(`/personal/`)
+    .doc(this._parempre.usuario.cod_usuar).update({idOnesignal: id});
   }
   
   public adicionarMensaje(id, datosact) {
