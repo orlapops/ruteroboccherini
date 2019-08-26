@@ -41,6 +41,19 @@ export class MessageService {
     .doc(id.toString()).update(datosact);
   }
 
+  public act_onesignalid(id) {
+    return this.fbDb
+    .collection(`/personal/${this._parempre.usuario.cod_usuar}/`)
+    .doc(id.toString()).update({idOnesignal: id});
+  }
+  
+  public adicionarMensaje(id, datosact) {
+    return this.fbDb
+    .collection(`/personal/${this._parempre.usuario.cod_usuar}/mensajes/`)
+    .doc(id.toString()).set(datosact);
+  }
+
+
   BorrarMensaje(id) {
     return this.fbDb
     .collection(`/personal/${this._parempre.usuario.cod_usuar}/mensajes/`)

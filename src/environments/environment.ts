@@ -37,6 +37,10 @@ export const environment = {
     messagingSenderId: "22671254985"        
     
         },
+  oneSignal: {
+    appId: '27ae219e-b05b-4a5a-b4e3-bca1a8651f86',
+    pojNumber: '22671254985'
+  },
 
   // Set language to use.
   language: 'en',

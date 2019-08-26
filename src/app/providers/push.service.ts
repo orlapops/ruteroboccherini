@@ -2,6 +2,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/onesignal/ngx';
 import { Storage } from '@ionic/storage';
 import { NavController, AlertController} from '@ionic/angular';
+import { MessageService } from '../providers/message/message.service';
+import { environment } from '../environments/environment';
 
 
 @Injectable({
@@ -26,6 +28,7 @@ export class PushService {
   constructor( private oneSignal: OneSignal,
               public navCtrl: NavController,
               public alertCtrl: AlertController,
+              public messageService: MessageService,
               private storage: Storage ) {
 
     this.cargarMensajes();
@@ -38,7 +41,7 @@ export class PushService {
 
   async configuracionInicial() {
 
-    this.oneSignal.startInit('27ae219e-b05b-4a5a-b4e3-bca1a8651f86', '22671254985');
+    this.oneSignal.startInit(environment.appId, environment.projNumber);
 
     this.oneSignal.inFocusDisplaying( this.oneSignal.OSInFocusDisplayOption.Notification );
 
@@ -57,7 +60,9 @@ export class PushService {
 
     // Obtener ID del suscriptor
     this.oneSignal.getIds().then( info => {
-      this.userId = info.userId || 'bb4c4088-3427-44ff-8380-570aa6c1ce1a';
+      // || 'bb4c4088-3427-44ff-8380-570aa6c1ce1a'
+      this.userId = info.userId;
+      //actualizar en firebase el dato para enviar mensaje 
       console.log(this.userId);
     });
 
@@ -70,6 +75,7 @@ export class PushService {
     // Obtener ID del suscriptor
     const info = await this.oneSignal.getIds();
     this.userId = info.userId;
+    this.messageService.act_onesignalid(this.userId);
     console.log('Cargando userId this.userId:',this.userId);
     return info.userId;
   }
@@ -104,7 +110,7 @@ console.log('notificacionRecibida this.mensajes 1: ',this.mensajes);
     });
      await alert2.present();
     
-    this.navCtrl.navigateForward("messages");
+    // this.navCtrl.navigateForward("messages");
 
   }
 
