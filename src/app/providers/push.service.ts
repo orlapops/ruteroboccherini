@@ -75,8 +75,8 @@ export class PushService {
     // Obtener ID del suscriptor
     const info = await this.oneSignal.getIds();
     this.userId = info.userId;
-    this.messageService.act_onesignalid(this.userId);
-    console.log('Cargando userId this.userId:',this.userId);
+    console.log('a act Onesignalid userId this.userId:',this.userId);
+    await this.messageService.act_onesignalid(this.userId);
     return info.userId;
   }
 
@@ -99,8 +99,9 @@ console.log('notificacionRecibida this.mensajes 1: ',this.mensajes);
     this.mensajes.unshift( payload );
     console.log('notificacionRecibida this.mensajes 6: ',this.mensajes);
     this.pushListener.emit( payload );
-    console.log('notificacionRecibida this.mensajes 7: ',this.mensajes);
-
+    console.log('notificacionRecibida this.mensajes 7 a getid: ',this.mensajes);
+    await this.getUserIdOneSignal();
+    console.log('notificacionRecibida this.mensajes 7.1 a getid: ',this.mensajes);
     await this.guardarMensajes();
     console.log('notificacionRecibida this.mensajes 8: ',this.mensajes);
     const alert2 = await this.alertCtrl.create({
