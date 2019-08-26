@@ -41,6 +41,11 @@ export const environment = {
         },
   // Set language to use.
   language: 'en',
+  oneSignal: {
+    appId: '27ae219e-b05b-4a5a-b4e3-bca1a8651f86',
+    pojNumber: '22671254985'
+  },
+
   // Loading Configuration.
   // Please refer to the official Loading documentation here: https://ionicframework.com/docs/api/components/loading/LoadingController/
   loading: {

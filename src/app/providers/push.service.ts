@@ -41,7 +41,7 @@ export class PushService {
 
   async configuracionInicial() {
 
-    this.oneSignal.startInit(environment.appId, environment.projNumber);
+    this.oneSignal.startInit(environment.oneSignal.appId, environment.oneSignal.pojNumber);
 
     this.oneSignal.inFocusDisplaying( this.oneSignal.OSInFocusDisplayOption.Notification );
 
