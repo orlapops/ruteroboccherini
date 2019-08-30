@@ -43,7 +43,8 @@
             <ion-content class="bg-profile">
                 <ion-list class="listmenu">
                     <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-                        <ion-item [routerDirection]="[p.direct]" [routerLink]="[p.url]" color="primary">
+                        <!-- <ion-item [routerDirection]="[p.direct]" [routerLink]="[p.url]" color="primary"> -->
+                            <ion-item  [routerLink]="[p.url]" color="primary">
                             <ion-icon class="iconfill" slot="start" [name]="p.icon"></ion-icon>
                             <ion-label>
                                 {{p.title}}

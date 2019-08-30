@@ -111,7 +111,10 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      // this.splashScreen.hide();
+      setTimeout(() => {
+        this.splashScreen.hide();
+      }, 1000);
       this.pushService.configuracionInicial();
       // Set language of the app.
       this.translateService.setDefaultLang(environment.language);
