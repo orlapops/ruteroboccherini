@@ -327,6 +327,7 @@ export class RecibosService implements OnInit {
     if (!exist) {
       this.recibocajaCounter = this.recibocajaCounter + 1;
       const itemAdi = {
+        id_visita: this._visitas.visita_activa_copvdet.id_visita,
         num_obliga: item.num_obliga,
         fecha_obl: item.fecha_obl,
         paga_efectivo: paga_efectivo,

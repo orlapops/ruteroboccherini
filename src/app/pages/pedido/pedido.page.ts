@@ -24,6 +24,8 @@ export class PedidoPage implements OnInit {
   direcdespa:any;
   notaPed = '';
   es_obsequio = false;
+  inconsistencia = false;
+  men_inconsisten = '';
   constructor(
     public navCtrl: NavController,
     public btCtrl: BluetoothSerial,
@@ -39,6 +41,14 @@ export class PedidoPage implements OnInit {
     ) { }
   ngOnInit() {
     this.getPedido();
+    if (this._cliente.clienteActual.cod_tercer !== this._visitas.visita_activa_copvdet.cod_tercer){
+      console.log('Inconsistencia el cliente de la visita no es el mismo del cliente del pedido');
+      this.inconsistencia = true;
+      this.men_inconsisten = 'Inconsistencia el cliente de la visita no es el mismo del cliente del pedido. Salga y reintente.';
+      this.men_inconsisten += ' Cliente: '+this._cliente.clienteActual.cliente + ' Cliente visita a generar pedido: '+this._visitas.visita_activa_copvdet.nombre;
+      return;
+    }
+
   }
 
   deleteItem(item) {
@@ -93,29 +103,39 @@ export class PedidoPage implements OnInit {
   realizar_pedido(){
     if (this._prods.generando_pedido){
       console.log('Ya se esta generando un pedido. Espere');
+      this.inconsistencia = true;
+      this.men_inconsisten = 'Ya se esta generando un pedido. Espere';
+      return;
+    }
+    if (this._cliente.clienteActual.cod_tercer !== this._visitas.visita_activa_copvdet.cod_tercer){
+      console.log('Inconsistencia el cliente de la visita no es el mismo del cliente del pedido');
+      this.inconsistencia = true;
+      this.men_inconsisten = 'Inconsistencia el cliente de la visita no es el mismo del cliente del pedido. Salga y reintente.';
+      this.men_inconsisten += ' Cliente: '+this._cliente.clienteActual.cliente + ' Cliente visita a generar pedido: '+this._visitas.visita_activa_copvdet.nombre;
+      return;
     }
     this.grabando_pedido = true;
     this._prods.genera_pedido_netsolin(this.direcdespa, this.notaPed, this.es_obsequio)
     .then(res => {
       if (res){
+        console.log('retorna genera_pedido_netsolin por si res:', res);
         this.mostrandoresulado = true;
         this.grabo_pedido = true;
         //Actualizar existencias de referencias restando valores
         this._prods.restaExistenciasprodxpedido();
         this._prods.borrar_storage_pedido();
-        // console.log('retorna genera_pedido_netsolin res:', res);
       } else {
         this.mostrandoresulado = true;
         this.grabo_pedido = false;
         this.grabando_pedido = true;
-        // console.log('retorna genera_pedido_netsolin error.message: ');  
+        console.log('retorna genera_pedido_netsolin por no ');  
       }
     })
     .catch(error => {
       this.mostrandoresulado = true;
       this.grabo_pedido = false;
       this.grabando_pedido = true;
-      // console.log('retorna genera_pedido_netsolin error.message: ', error.message);
+      console.error('retorna genera_pedido_netsolin por error: ', error);
     });
   }
   quitar_resuladograboped(){

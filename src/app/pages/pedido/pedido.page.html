@@ -19,7 +19,18 @@
         <ion-icon name="ios-cart-outline" class="icon-5x"></ion-icon>
         <br> No tiene items a Pedir
     </div>
-    <div *ngIf="!_prods.generando_pedido && !grabando_pedido && !mostrandoresulado && pedido.length != 0" class="bg-white">
+    <div text-center *ngIf="_prods.generando_pedido" >
+        <ion-icon name="ios-cart-outline" class="icon-5x"></ion-icon>
+        <br> Se esta generando un pedido
+    </div>
+    <ion-card *ngIf="inconsistencia">
+        <ion-text color="danger"> Error captura pedido </ion-text>
+        <ion-item  padding class="animated fadeIn fast">
+            <ion-text color="danger"> {{men_inconsisten}}</ion-text>
+        </ion-item>
+    </ion-card>
+
+    <div *ngIf="!inconsistencia && !_prods.generando_pedido && !grabando_pedido && !mostrandoresulado && pedido.length != 0" class="bg-white">
         <ion-grid class="btpedido-color">
             <ion-row *ngFor="let itemp of pedido; let i = index;">
                 <ion-col size="4">
@@ -105,6 +116,7 @@
             <ion-spinner name="bubbles"></ion-spinner>
         </ion-item>
     </ion-card>
+
 
     <ion-card *ngIf="grabando_pedido && !grabo_pedido && mostrandoresulado && _visitas.visita_activa_copvdet.errorgrb_pedido">
         <!-- <ion-text color="danger"> {{_visitas.visita_activa_copvdet.pedido_grabado.men_error}}</ion-text> -->

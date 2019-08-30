@@ -93,7 +93,18 @@ export class ClientesListPage implements OnInit {
   }
   async crearvisita(dcliente) {
     // console.log('crearvisita');
-    console.log('datos para crear visita del cliente:',dcliente,this._visitas.visitaTodas[0].data);
+    console.log('datos para crear visita del cliente:',dcliente);
+    console.log('datos para crear visita del cliente:',this._visitas);
+    if (!this._visitas.visitaTodas){
+      console.log('No tienes visitas asginadas. Debe por lo menos tener una asignada para poder tomar llamadas');
+      const alert2 = await this.alertCtrl.create({
+        message: 'No tienes visitas asginadas. Debe por lo menos tener una asignada para poder tomar llamadas',
+        buttons: ['Enterado']
+      });
+       await alert2.present();
+      return;
+    }
+    console.log('datos para crear visita del cliente:',this._visitas);
     const ldatvisi = this._visitas.visitaTodas[0].data;
 // tslint:disable-next-line: triple-equals
     if (typeof ldatvisi !== undefined){

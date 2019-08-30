@@ -45,6 +45,8 @@ export class RecibocajaPage implements OnInit {
   grabo_recibo = false;
   mostrandoresulado = false;
   vistapagos: String = 'verobls';
+  inconsistencia = false;
+  men_inconsisten = '';
   
   constructor(
     public _parEmpre: ParEmpreService,
@@ -60,6 +62,13 @@ export class RecibocajaPage implements OnInit {
 
   ngOnInit() {
     this.getRecibocaja();
+    if (this._cliente.clienteActual.cod_tercer !== this._visitas.visita_activa_copvdet.cod_tercer){
+      console.log('Inconsistencia el cliente de la visita no es el mismo del cliente del recibo');
+      this.inconsistencia = true;
+      this.men_inconsisten = 'Inconsistencia el cliente de la visita no es el mismo del cliente del pedido. Salga y reintente.';
+      this.men_inconsisten += ' Cliente: '+this._cliente.clienteActual.cliente + ' Cliente visita a generar recibo: '+this._visitas.visita_activa_copvdet.nombre;
+      return;
+    }
     // this.totalpago();
     console.log('for pagos: ', this._recibos.formpago);
   }
@@ -172,6 +181,13 @@ export class RecibocajaPage implements OnInit {
   realizar_recibo(){
     if (this._recibos.generando_recibo){
       console.log('Ya se esta generando recibo. Espere');
+    }
+    if (this._cliente.clienteActual.cod_tercer !== this._visitas.visita_activa_copvdet.cod_tercer){
+      console.log('Inconsistencia el cliente de la visita no es el mismo del cliente del recibo');
+      this.inconsistencia = true;
+      this.men_inconsisten = 'Inconsistencia el cliente de la visita no es el mismo del cliente del pedido. Salga y reintente.';
+      this.men_inconsisten += ' Cliente: '+this._cliente.clienteActual.cliente + ' Cliente visita a generar recibo: '+this._visitas.visita_activa_copvdet.nombre;
+      return;
     }
     this.grabando_recibo = true;
     console.log('a generar recibo ', this.recibocaja,  this._recibos.recibocaja ,  this._recibos.formpago);

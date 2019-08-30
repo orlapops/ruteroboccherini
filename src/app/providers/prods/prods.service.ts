@@ -114,7 +114,7 @@ export class ProdsService implements OnInit {
       console.log("cargaInventarioNetsolin url", url);
       console.log("cargaInventarioNetsolin NetsolinApp.objenvrest",NetsolinApp.objenvrest);
       this.http.post(url, NetsolinApp.objenvrest).subscribe((data: any) => {
-        console.log(" cargaInventarioNetsolin data:", data);
+        // console.log(" cargaInventarioNetsolin data:", data);
         if (data){
         if (data.error) {
           console.error(" cargaInventarioNetsolin ", data.error);
@@ -123,11 +123,11 @@ export class ProdsService implements OnInit {
           console.log('inventario en prods a null: ',this.inventario);
           resolve(false);
         } else {
-          console.log("Datos traer cargaInventarioNetsolin ", data.inventario);
+          // console.log("Datos traer cargaInventarioNetsolin ", data.inventario);
           this.cargoInventarioNetsolin = true;
           // this.menerror_usuar="";
           this.inventario = data.inventario;
-          console.log('inventario en prods resolve true: ',this.inventario);
+          // console.log('inventario en prods resolve true: ',this.inventario);
           resolve(true);
         }
       } 
@@ -159,14 +159,14 @@ export class ProdsService implements OnInit {
       NetsolinApp.objenvrest.filtro = this._parempre.usuario.bod_pedido;
       NetsolinApp.objenvrest.parametros = lparfiltro;
 
-      console.log('his._parempre.usuario.bod_pedido:', this._parempre.usuario.bod_pedido);
-      console.log('NetsolinApp.objenvrest.filtro', NetsolinApp.objenvrest.filtro);
-      console.log('NetsolinApp.objenvrest:', NetsolinApp.objenvrest);
+      // console.log('his._parempre.usuario.bod_pedido:', this._parempre.usuario.bod_pedido);
+      // console.log('NetsolinApp.objenvrest.filtro', NetsolinApp.objenvrest.filtro);
+      // console.log('NetsolinApp.objenvrest:', NetsolinApp.objenvrest);
       let copiaobjrest = Object.assign(NetsolinApp.objenvrest);
-      console.log('copiaobjrest 1:',copiaobjrest);
+      // console.log('copiaobjrest 1:',copiaobjrest);
       // copiaobjrest.filtro = 'PTR';
       copiaobjrest.filtro = this._parempre.usuario.bod_pedido;
-      console.log('copiaobjrest.filtro 2:',copiaobjrest.filtro);
+      // console.log('copiaobjrest.filtro 2:',copiaobjrest.filtro);
       console.log('copiaobjrest 2:',copiaobjrest);
 
       // console.log(" cargaInventarioNetsolinPedido 1");
@@ -180,7 +180,7 @@ export class ProdsService implements OnInit {
       );
       console.log('url:', url);
       this.http.post(url, NetsolinApp.objenvrest).subscribe((data: any) => {
-        console.log(" cargaInventarioNetsolinPedido data:", data);
+        // console.log(" cargaInventarioNetsolinPedido data:", data);
         if (data){
           if (data.error) {
             // console.error(" cargaInventarioNetsolinPedido ", data.error);
@@ -447,6 +447,7 @@ export class ProdsService implements OnInit {
     if (!exist) {
       this.facturaCounter = this.facturaCounter + 1;
       const itemAdi = {
+        id_visita: this._visitas.visita_activa_copvdet.id_visita,
         cod_ref: item.cod_refinv,
         nombre: item.nombre,
         precio: item.precio_ven,
@@ -480,6 +481,7 @@ export class ProdsService implements OnInit {
 
     if (!exist) {
       const itemAdi = {
+        id_visita: this._visitas.visita_activa_copvdet.id_visita,
         cod_ref: item.cod_refinv,
         nombre: item.nombre,
         precio: item.precio_ven,
@@ -676,16 +678,21 @@ export class ProdsService implements OnInit {
     // return new Promise((resolve, reject) => {
     //   resolve(true);
     // });
-    if (this.generando_pedido){
-      console.error('Ya se esta generando un pedido');
-      return;
-    }
-    this.generando_pedido = true;
-    this._visitas.visita_activa_copvdet.grb_pedido = false;
-    this._visitas.visita_activa_copvdet.resgrb_pedido = '';
-    this._visitas.visita_activa_copvdet.pedido_grabado = null;
-    this._visitas.visita_activa_copvdet.errorgrb_pedido = false;
+    //OJO SOLO PRUEBA PARA NO GRABAR BOORAR
+    // this.generando_pedido = true;
+    ////
     return new Promise((resolve, reject) => {
+
+      if (this.generando_pedido){
+        console.error('Ya se esta generando un pedido');
+        resolve(false);
+      }
+      this.generando_pedido = true;
+      this._visitas.visita_activa_copvdet.grb_pedido = false;
+      this._visitas.visita_activa_copvdet.resgrb_pedido = '';
+      this._visitas.visita_activa_copvdet.pedido_grabado = null;
+      this._visitas.visita_activa_copvdet.errorgrb_pedido = false;
+  
       let paramgrab = {
         // datos_gen: this._visitas.visita_activa_copvdet.datosgen,
         datos_gen: this._visitas.visita_activa_copvdet,
@@ -700,6 +707,7 @@ export class ProdsService implements OnInit {
       let url =
         this._parempre.URL_SERVICIOS +
         "netsolin_servirestgo.csvc?VRCod_obj=APPGENPEDIDO";
+        console.log(" A grabar en netsolin data:", paramgrab);
       this.http.post(url, NetsolinApp.objenvrest).subscribe((data: any) => {
         console.log(" genera_pedido_netsolin data:", data);
         if (data.error) {
@@ -738,11 +746,12 @@ export class ProdsService implements OnInit {
             txt_imp : data.txt_imp,
             detalle : data.ped_grabado
           };
+          console.log('Guardo pedido en netsolin a guardar en fb objpedidogfb:',objpedidogfb);
             this.guardarpedidoFb(data.cod_tercer, data.cod_dpedidg.trim() + data.num_dpedidg.trim(), objpedidogfb).then(res => {
-              console.log('Pedido guardada res: ', res);
+              console.log('Pedido guardado en fb res: ', res);
               // console.log('Pedido guardada res id: ', res.id);
               this.generando_pedido = false;
-              resolve(true);
+              resolve(true);  
             })
             .catch((err) => {
                 console.log('Error guardando pedido en Fb', err);

@@ -114,9 +114,16 @@ export class VisitaDetailPage implements OnInit {
       // this.obtenerPosicion();
     });
     // console.log('constructor detalle visita');
-    console.log(this.visitaID);
+    console.log('Id visita: ',this.visitaID);
     this.visita = this._visitas.getItem(this.visitaID);
-    console.log('visita antes inv luego de getitem', this.visita);
+    console.log('this.visita: ',this.visita);
+    // console.log('typeof this.visita.data: ',typeof this.visita.data);
+    if (this.visita === null) {
+      console.log('Error no se encontro visita: ',this.visitaID);
+      this.mostrar_error('Error no se encontro visita: '+this.visitaID);
+      return;
+    }
+    console.log('visita antes inv luego de getitem this.visita.data:', this.visita.data);
 
     //se pasa del home a qui op mayo 23 19 cargar inventario
     //carga inventario para factura
@@ -131,7 +138,7 @@ export class VisitaDetailPage implements OnInit {
             inventario: this._prods.inventario
           };
           // console.log('inventario en prods: ',reginv,this._prods.inventario);
-          this._parEmpre.reg_logappusuario('Carga inv factura', 'this._prods.inventario', this._prods.inventario);
+          // this._parEmpre.reg_logappusuario('Carga inv factura', 'this._prods.inventario', this._prods.inventario);
           //  this._visitas.guardarInvdFB(bodega, reginv).then(res => {
           //op mayo 23 19 no se guarda en firebase
           // this._prods
@@ -283,6 +290,14 @@ export class VisitaDetailPage implements OnInit {
       })
   }
 
+  async mostrar_error(perror){
+    const alert2 = await this.alertCtrl.create({
+      message: perror,
+      buttons: ['Enterado']
+    });
+     await alert2.present();
+
+  }
   // obtenerPosicion(): any {
   //   console.log('en obtener posicion', this.coords);
   //   this.geolocation
@@ -405,7 +420,9 @@ export class VisitaDetailPage implements OnInit {
       console.log('3');
       continua = true;
     } else {
-      if (this.ubicaAct.email && this.ubicaAct.contacto && this.ubicaAct.longitud && this.ubicaAct.latitud) {
+// OP AGOSTO 29 19 SE PERMITE SEGUIR SIN ACT GPS
+      // if (this.ubicaAct.email && this.ubicaAct.contacto && this.ubicaAct.longitud && this.ubicaAct.latitud) {
+        if (this.ubicaAct.email && this.ubicaAct.contacto) {
         continua = true;
       }
     }
@@ -420,7 +437,8 @@ export class VisitaDetailPage implements OnInit {
       }
     } else {
       console.error('Debe ingresar a actualizar datos cliente. Email, contacto, Ubicación Gps', this.visitaAct, this.cargo_posicion, this.ubicaAct);
-      this.presentError('Debe ingresar a actualizar datos cliente. Email, contacto, Ubicación Gps');
+      // this.presentError('Debe ingresar a actualizar datos cliente. Email, contacto, Ubicación Gps');
+      this.presentError('Debe ingresar a actualizar datos cliente. Email, contacto');
     }
     return retorna;
   }
@@ -616,7 +634,7 @@ export class VisitaDetailPage implements OnInit {
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     };
-    this._parEmpre.reg_logappusuario('tomafoto', 'Ingreso', {});
+    // this._parEmpre.reg_logappusuario('tomafoto', 'Ingreso', {});
     this.camera.getPicture(optionscam).then((imageData) => {
       this.presentLoading('Guardando Imagen');
       this.imagenPreview = this.webview.convertFileSrc(imageData);
@@ -628,7 +646,7 @@ export class VisitaDetailPage implements OnInit {
         });
     }, (err) => {
       console.log('Error en camara', JSON.stringify(err));
-      this._parEmpre.reg_logappusuario('tomafoto', 'Tomo foto Error ', { error: JSON.stringify(err) });
+      // this._parEmpre.reg_logappusuario('tomafoto', 'Tomo foto Error ', { error: JSON.stringify(err) });
     });
   }
   seleccionarFoto() {

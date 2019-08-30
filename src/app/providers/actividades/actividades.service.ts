@@ -39,24 +39,24 @@ export class ActividadesService implements OnInit {
   // Carga Actividades definidas en Netsolin
   cargaActividadesNetsolin() {
     return new Promise((resolve, reject) => {
-      console.log('ingreso a cargaActividadesNetsolin');
+      // console.log('ingreso a cargaActividadesNetsolin');
       if (this.cargoActividadesNetsolin) {
-        console.log("resolve true cargoActividadesNetsolin netsolin por ya estar inciada");
+        // console.log("resolve true cargoActividadesNetsolin netsolin por ya estar inciada");
         resolve(true);
       }
       NetsolinApp.objenvrest.filtro = '';
       let url =this._parempre.URL_SERVICIOS +"netsolin_servirestgo.csvc?VRCod_obj=APPTIPOSACT";
-      console.log('ingreso a cargaActividadesNetsolin url', url, NetsolinApp.objenvrest);
+      // console.log('ingreso a cargaActividadesNetsolin url', url, NetsolinApp.objenvrest);
       this.http.post(url, NetsolinApp.objenvrest).subscribe((data: any) => {
         if (data){
-        console.log('ingreso a cargaActividadesNetsolin data', data);
+        // console.log('ingreso a cargaActividadesNetsolin data', data);
         if (data.error) {
           console.error(" cargaActividadesNetsolin ", data.error);
           this.cargoActividadesNetsolin = false;
           this.tipos_activ = null;
           resolve(false);
         } else {
-          console.log('ingreso a cargaActividadesNetsolin cargo activudades');
+          // console.log('ingreso a cargaActividadesNetsolin cargo activudades');
           this.cargoActividadesNetsolin = true;
           this.tipos_activ = data.actividades;
           resolve(true);
@@ -84,14 +84,14 @@ export class ActividadesService implements OnInit {
   //guardar tipos actividades en firebase
   public guardarTiposactFB() {
     return new Promise((resolve, reject) => {
-    console.log('guardarTiposactFB:');
-    console.log(this.tipos_activ);
+    // console.log('guardarTiposactFB:');
+    // console.log(this.tipos_activ);
     let tiposlist: AngularFirestoreCollection<any>;
     tiposlist = this.fbDb.collection(`tipos_actividades/`);
     this.tipos_activ.forEach((tipact: any) => {
-      console.log('recorriendo tipos act :tipact ', tipact);
+      // console.log('recorriendo tipos act :tipact ', tipact);
       let idact   = tipact.cod_tipo;
-      console.log('recorriendo direcciones :iddir ', idact);
+      // console.log('recorriendo direcciones :iddir ', idact);
       let tipo_act = {
         cod_tipo: tipact.cod_tipo,
         descrip: tipact.descrip
