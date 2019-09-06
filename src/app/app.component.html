@@ -9,11 +9,11 @@
                             <!-- <img src="assets/img/avatar.jpeg"> -->
                             <img src="assets/img/logoempre.jpg">
                         </ion-avatar>
-                        <ion-label>
-                            <ion-text color="tertiary">
+                        <ion-label >
+                            <ion-text *ngIf="_parEmpreProv.usuario_valido" color="tertiary">
                                 <h2><strong>{{_parEmpreProv.usuario.nombre}}</strong></h2>
                             </ion-text>
-                            <ion-text color="secondary">
+                            <ion-text *ngIf="_parEmpreProv.usuario_valido" color="secondary">
                                 <h4>
                                     {{_parEmpreProv.usuario.email}}
                                     <!-- {{ testvar }} -->

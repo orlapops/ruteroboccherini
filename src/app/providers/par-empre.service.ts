@@ -271,15 +271,40 @@ verificausuarioNetsolin(codigo: string,psw:string,plogeo:string ) {
    return promesa;
 }
 
-  
-// Verifica licencia en sistemas integrales de colombia
 verificaLicencia( nit: string ) {
+      //Sept 6 2019 se quita control licencia en Netsolin por problemas en servicio algunas veces
+      this.licenValida=false;
+  let promesa=new Promise((resolve,reject)=>{
+      this.afDB.doc(`/datosempre/${nit}`)
+        .valueChanges().subscribe( data => {
+            console.log('dato leiod licencia ',data);
+              if (data) {
+                // correcto
+                this.licenValida = true;
+                this.datoslicencia = data;
+                this.URL_SERVICIOS = this.datoslicencia.url_publica;
+                // console.log(data);
+                resolve(true);
+              } else{ 
+                // incorrecto
+                this.licenValida = false;
+                this.datoslicencia = null;
+                this.URL_SERVICIOS = '';
+                resolve(false);
+              }
+              resolve();
+          })
+        });
+        return promesa;
+}
+// Verifica licencia en sistemas integrales de colombia
+verificaLicenciaAnt( nit: string ) {
     this.licenValida=false;
     let promesa=new Promise((resolve,reject)=>{
       NetsolinApp.objenvrest.filtro = nit;
       // console.log(" verificaLicencia 1");
       // console.log(nit);
-      
+     
       // let url= URL_NETSOLIN + "netsolin_servirestgo.csvc?VRCod_obj=VALLICENAPPS"
       let url = NetsolinApp.urlNetsolinverilicen + "netsolin_servirestgo.csvc?VRCod_obj=VALLICENAPPS"
       console.log(url);

@@ -204,6 +204,7 @@ export class AppComponent {
     this.ubicacionService.detenerUbicacion();
     this._parEmpreProv.borrarUsuarioStorage();
     this._parEmpreProv.borrarLicenciaStorage();
+    this._parEmpreProv.usuario_valido = false;
     this.navCtrl.navigateRoot('/licencia');
     // this.navCtrl.navigateRoot('login');
   }

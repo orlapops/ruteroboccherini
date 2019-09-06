@@ -24,6 +24,7 @@ export class UbicacionProvider {
 
   //apunta a firebase dato general personal usuario para cambio de ubicacion
   inicializarUsuario(){
+    console.log('inicializarUsuario this._parEmpre.usuario.cod_usuar:',this._parEmpre.usuario.cod_usuar);
     return new Promise((resolve) => {
     this.usuario = this.afDB.collection(`/personal/`).doc(this._parEmpre.usuario.cod_usuar);
     console.log('suscrita ubicacion a usuario ',this._parEmpre.usuario.cod_usuar, this.usuario);
