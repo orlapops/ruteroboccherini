@@ -202,6 +202,27 @@ export class RecibocajaPage implements OnInit {
         this.grabo_recibo = true;
         this._recibos.borrar_storage_recibo();
         this._recibos.borrar_storage_formpago();
+        //Actualizar cartera cliente
+        this._cliente.cargaClienteNetsolin(this._visitas.visita_activa_copvdet.cod_tercer).then(cargo =>{
+          console.log('En actualizarclientenetsolinFb cargo:', cargo);
+          if (cargo) {
+              //Actualizar en fb
+              this._cliente.guardarClienteFb(this._visitas.visita_activa_copvdet.cod_tercer).then(res => {
+                  // console.log('Guardoclientefb res', res, this._cliente.clienteActual.direcciones);
+                  this._cliente.guardardireccionesClienteFb(this._visitas.visita_activa_copvdet.cod_tercer, this._cliente.clienteActual.direcciones).then(() => {
+                  });
+              })
+              .catch(() => {
+                  console.log('error en actualizarclientenetsolinFb guardarClienteFb');
+              });
+          } else {
+              console.log('error en actualizarclientenetsolinFb guardarClienteFb');
+          }
+      })
+      .catch(() => {
+          console.log('error actualizarclientenetsolinFb cargaClienteNetsolin');
+      });
+
         console.log('retorna genera_pedido_netsolin res:', res);
       } else {
         this.mostrandoresulado = true;
