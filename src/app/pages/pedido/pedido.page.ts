@@ -23,6 +23,8 @@ export class PedidoPage implements OnInit {
   itemprodaped: any;
   direcdespa:any;
   notaPed = '';
+  // Ene 4 20 cambio solicitado por Cesar Dic 18 no pueden indicar que es obsequio
+  pedir_obsequio = false;
   es_obsequio = false;
   inconsistencia = false;
   men_inconsisten = '';

@@ -90,7 +90,7 @@
             </ion-row>
         </ion-grid>
         <div *ngIf="!grabando_pedido && !mostrandoresulado">
-            <ion-item class="bg-white">
+            <ion-item *ngIf='pedir_obsequio' class="bg-white">
                 <ion-label>Es Obsequio</ion-label>
                 <ion-checkbox [(ngModel)]="es_obsequio"></ion-checkbox>
             </ion-item>
