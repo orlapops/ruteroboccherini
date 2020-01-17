@@ -14,7 +14,6 @@ describe('RecibocajaPage', () => {
     })
     .compileComponents();
   }));
-
   beforeEach(() => {
     fixture = TestBed.createComponent(RecibocajaPage);
     component = fixture.componentInstance;

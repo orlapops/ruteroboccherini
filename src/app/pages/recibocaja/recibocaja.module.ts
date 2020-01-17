@@ -14,7 +14,6 @@ const routes: Routes = [
     component: RecibocajaPage
   }
 ];
-
 @NgModule({
   imports: [
     CommonModule,

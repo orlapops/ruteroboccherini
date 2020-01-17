@@ -41,7 +41,6 @@ export class ReciboDetailPage implements OnInit {
   ) {
     _recibo.inicializaRecibos();
   }
-
   ngOnInit() {
     console.log("ngonit recibo detalle num_obliga", this.num_obliga);
     this.oblshop = this._recibo.getOblCartera(this.num_obliga);
@@ -158,7 +157,7 @@ export class ReciboDetailPage implements OnInit {
           this.dcto_otref = this.oblshop.tot_otros * this.oblshop.pord_otrefe / 100;
           this.dcto_otref = Math.round(this.dcto_otref);
           this.dcto_otrban = 0;
-        } else {
+        } else { 
           this.dcto_dchef = 0;
           // this.dcto_dchban = Math.round(this.oblshop.tot_duchas * this.oblshop.pord_duban / 100)/100;
           this.dcto_dchban = this.oblshop.tot_duchas * this.oblshop.pord_duban / 100;

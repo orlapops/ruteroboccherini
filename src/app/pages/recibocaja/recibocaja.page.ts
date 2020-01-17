@@ -13,7 +13,6 @@ import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
   templateUrl: './recibocaja.page.html',
   styleUrls: ['./recibocaja.page.scss'],
 })
-
 export class RecibocajaPage implements OnInit {
   recibocaja: Array<any> = [];
   formaspago: Array<any> = [];
@@ -113,7 +112,9 @@ export class RecibocajaPage implements OnInit {
 
   totalpago(){
     return new Promise((resolve, reject) => {
-    console.log('totalpago 1');
+    console.log('totalpago this.tneto_recibir,this._recibos.totformaspago',this.tneto_recibir,this._recibos.totformaspago);
+    console.log('totalpago this.tneto_recibir,this.tneto_recibirban.totformaspago',this.tneto_recibirban,this._recibos.totformpagban);
+    console.log('totalpago this.tneto_recibirefe,this.tneto_recibirban.totformaspago',this.tneto_recibirban,this._recibos.totformpagefec);
     this.generar_recibo = false;
     this.actualizar_totalrecibo();
     console.log('totalpago 2');
