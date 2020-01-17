@@ -120,16 +120,16 @@ export class RegCliepotenPage implements OnInit {
         });
       }      
       this._ubicacionService.getUbicaUsuarFb().subscribe((datosc: any) => {
-        console.log('susc usuar para localiza fb ', datosc);
+        // console.log('susc usuar para localiza fb ', datosc);
         this.coords.lat = datosc.latitud;
         this.coords.lng = datosc.longitud;  
         this.cargo_posicion = true;
         this.getAddress(this.coords).then(results=>{
-          console.log('getAddress');
-          console.log(results);
+          // console.log('getAddress');
+          // console.log(results);
           this.address = results[0]['formatted_address'];      
           const ldiract = this.onActclieForm.controls['direccion'].value;
-          console.log(ldiract);
+          // console.log(ldiract);
           if (ldiract==undefined || ldiract==''){
             console.log('a act direccion');
             this.onActclieForm.controls['direccion'].setValue(this.address);

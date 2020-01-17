@@ -105,7 +105,7 @@ export class VisitaDetailPage implements OnInit {
       this.cargo_posicion = false;
       console.log('platfom lista');
       this._ubicacionService.getUbicaUsuarFb().subscribe((datosc: any) => {
-        console.log('susc usuar para localiza fb ', datosc);
+        // console.log('susc usuar para localiza fb ', datosc);
         this.coords.lat = datosc.latitud;
         this.coords.lng = datosc.longitud;
         this.cargo_posicion = true;

@@ -101,18 +101,18 @@ export class ModalActClientePage implements OnInit {
     // this.coords.lat = this.navParams.get('lat');
     // this.coords.lng = this.navParams.get('lng');
     this._ubicacionService.getUbicaUsuarFb().subscribe((datosc: any) => {
-      console.log('susc usuar para localiza fb ', datosc);
+      // console.log('susc usuar para localiza fb ', datosc);
       this.coords.lat = datosc.latitud;
       this.coords.lng = datosc.longitud;  
       this.cargo_posicion = true;
       this.getAddress(this.coords).then(results=>{
-        console.log('getAddress');
-        console.log(results);
+        // console.log('getAddress');
+        // console.log(results);
         this.address = results[0]['formatted_address'];      
         const ldiract = this.onActclieForm.controls['direccion'].value;
         console.log(ldiract);
         if (ldiract==undefined || ldiract==''){
-          console.log('a act direccion');
+          // console.log('a act direccion');
           //op agosto 16 19 se desactiva act dirección
           // this.onActclieForm.controls['direccion'].setValue(this.address);
         }

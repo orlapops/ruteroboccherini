@@ -311,18 +311,19 @@ export class RecibosService implements OnInit {
           val.item.retencion = retencion;
           val.item.saldoini = item.saldo;
           val.item.saldo = item.saldo - abono;
-          val.item.neto_recibir =
+          val.item.neto_recibir =Math.round(
             abono -
             dcto_dchban -
             dcto_otrban -
             dcto_dchef -
             dcto_otref -
             otros_desc -
-            retencion;
+            retencion);
           exist = true;
         }
       });
     }
+    console.log("Item a this.recibocaja:", this.recibocaja);
 
     if (!exist) {
       this.recibocajaCounter = this.recibocajaCounter + 1;
@@ -338,14 +339,14 @@ export class RecibosService implements OnInit {
         dcto_otref: dcto_otref,
         otros_desc: otros_desc,
         retencion: retencion,
-        neto_recibir:
+        neto_recibir:Math.round(
           abono -
           dcto_dchban -
           dcto_otrban -
           dcto_dchef -
           dcto_otref -
           otros_desc -
-          retencion,
+          retencion),
         saldoini: item.saldo,
         saldo: item.saldo - abono,
         dias_venci: item.dias_venci
