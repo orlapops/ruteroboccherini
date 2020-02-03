@@ -129,12 +129,32 @@ export class ReciboDetailPage implements OnInit {
     this.navCtrl.navigateForward(`recibo-checkout/${oblshopID}/${obligID}`);
   }
 
-  total() {
+  async total() {
     this.total_t = 0;
     const fechaobli = new Date(this.oblshop.fecha_obl);
     if (this.paga_efectivo) {
       //si paga efectivo la fecha base es hoy
       this.fecha_base = new Date().toISOString();
+    } else {
+      //verificar que ha hoy no se den mas de 15 días de diferencia
+      const fechahoy = new Date();
+      const fechabase1 = new Date(this.fecha_base);
+      console.log('fechahoy',fechabase1,fechahoy);
+      console.log('fechaobli',fechaobli);
+      const diasdifechas1 = this._parEmpre.diferenciaEntreDiasEnDias(fechahoy, fechabase1);
+      console.log('abs diasdifechas:',Math.abs(diasdifechas1));
+      if (Math.abs(diasdifechas1)>15){
+        console.error('Fecha maximo 15 dias de diferencia con fecha actual');
+        const toast = await this.toastCtrl.create({
+          showCloseButton: true,
+          message: "La fecha base es de maxímo 15 días con fecha actual.",
+          duration: 2000,
+          color: "danger",
+          position: "bottom"
+        });  
+        toast.present();
+          this.fecha_base = new Date().toISOString();
+        }
     }
     const fechabase = new Date(this.fecha_base);
     console.log('fecha_base',this.fecha_base,fechabase);
@@ -144,8 +164,21 @@ export class ReciboDetailPage implements OnInit {
     if (diasdifechas <= this.oblshop.dias_desc) {
       this.apli_desc = true;
     } else {
-      this.apli_desc = false;
     }
+    if (this.otros_desc>1000) {
+      console.error('Descuento maximo 1000');
+      const toast = await this.toastCtrl.create({
+        showCloseButton: true,
+        message: "El descuento maxímo es 1000 pesos.",
+        color: "danger",
+        duration: 2000, 
+        position: "bottom"
+      });
+
+      toast.present();
+      this.otros_desc = 0;
+    }
+
     console.log(this.apli_desc,this.abono_total,this.paga_efectivo);
     if (this.abono_total) {
       this.valor_abono = this.oblshop.saldo;
