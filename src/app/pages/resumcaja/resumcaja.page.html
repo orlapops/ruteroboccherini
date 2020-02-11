@@ -1,0 +1,157 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons *ngIf="!_consigna.generando_consigna" slot="start">
+            <ion-back-button defaultHref="home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Resumen Caja</ion-title>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="animated fadeIn">    
+    <ion-text color="primary">
+        <h6>
+            <ion-icon size="small" color="dark" name="cash"></ion-icon>Resumen Caja
+        </h6>
+    </ion-text>
+    <hr class="bg-tertiary">
+    <ion-item *ngIf="!paga_efectivo" class="bg-white">
+        <ion-label color="dark">Fecha Base:</ion-label>
+        <ion-datetime slot="end" no-padding no-margin class="text-warning fechacons" displayFormat="MM/DD/YYYY" pickerFormat="YYYY-MM-DD" min="2019" max="2032" (ionChange)="gen_resumen()" [(ngModel)]="fecha_base"></ion-datetime>
+    </ion-item>
+     <!-- (cierrecajaefe.length != 0 || formpagcheq.length != 0 || ultconsigna.length != 0)" -->
+
+    <div *ngIf="cargo_cierrecajaresum" class="bg-white">
+        <!-- <ion-card class="bg-primary" no-margin> -->
+        <ion-card no-margin>
+            <ion-segment [(ngModel)]="vistapagos" color="light">
+                <ion-segment-button value="verefec">
+                    <ion-label color="tertiary">Recibido</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="verconsignadas">
+                    <ion-label color="tertiary">Efectuadas</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+            <div class="ccFlags" [ngSwitch]="vistapagos">             
+                <ion-list>
+                    <ion-item class="selectresum">
+                        <ion-label class="selectresum"  color="warning">Efectivo
+                                {{totefectivo | currency }}
+                        </ion-label>
+                        <ion-select interface="popover" class="selectresum1">
+                            <ion-select-option class="selectresum" *ngFor="let iteme of cierrecajaefe; let i = index;" value="">
+                                {{iteme.cod_docume+'-'+iteme.num_docume }}
+                                    {{iteme.valor | currency }}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-list>
+                <ion-list>
+                    <ion-item class="selectresum">
+                        <ion-label class="selectresum"  color="warning">Cheques
+                                {{totalcheques | currency }}
+                        </ion-label>
+                        <ion-select interface="popover" class="selectresum1">
+                            <ion-select-option class="selectresum" *ngFor="let itemche of cierrecajachd; let i = index;" value="">
+                                {{itemche.cod_docume+'-'+itemche.num_docume }}
+                                    {{itemche.valor | currency }}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-list>
+                <ion-list>
+                    <ion-item class="selectresum">
+                        <ion-label class="selectresum"  color="warning">Consig.
+                                {{totalconsig | currency }}
+                        </ion-label>
+                        <ion-select interface="popover" class="selectresum1">
+                            <ion-select-option class="selectresum" *ngFor="let itemcon of cierrecajapbcs; let i = index;" value="">
+                                {{itemcon.cod_docume+'-'+itemcon.num_docume }}
+                                    {{itemcon.valor | currency }}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-list>
+                <ion-list>
+                    <ion-item class="selectresum">
+                        <ion-label class="selectresum"  color="warning">Trasfer.
+                                {{totaltrasfer | currency }}
+                        </ion-label>
+                        <ion-select interface="popover" class="selectresum1">
+                            <ion-select-option class="selectresum" *ngFor="let itemtra of cierrecajapbtr; let i = index;" value="">
+                                {{itemtra.cod_docume+'-'+itemtra.num_docume }}
+                                    {{itemtra.valor | currency }}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-list>
+                <ion-list>
+                        <ion-label class="selectresum"  color="danger">Total Recibido
+                                {{totefectivo+totalcheques+totalconsig+totaltrasfer | currency }}
+                        </ion-label>
+                </ion-list>
+
+
+                <ion-grid *ngSwitchCase="'verefec'" nopadding>
+                    <ion-row>
+                        <ion-col size="12">
+                            <h6 class="htitulo">Efectivo</h6>
+                            <ion-list class="listresum">
+                                <ion-item-sliding *ngFor="let iteme of cierrecajaefe; let i = index;">
+                                    <ion-item class="itemresum bg-white">
+                                        <p>
+                                            {{iteme.cod_docume+'-'+iteme.num_docume }}
+                                        </p>
+                                        <ion-badge slot="end" color="warning">
+                                            {{iteme.valor | currency }}
+                                        </ion-badge>
+                                    </ion-item>
+                                </ion-item-sliding>
+                                <ion-item class="bg-white">
+                                    <p>
+                                        Total Efectivo
+                                    </p>
+                                    <ion-badge slot="end" color="success">
+                                        {{totefectivo | currency }}
+                                    </ion-badge>
+                                </ion-item>
+                        </ion-list>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="12">
+                            <h6>Cheques</h6>
+                            <ion-list>
+                                <ion-item-sliding *ngFor="let iteme of cierrecajachd; let i = index;">
+                                    <ion-item class="bg-white">
+                                        <p>
+                                            {{iteme.cod_docume+'-'+iteme.num_docume }}
+                                        </p>
+                                        <ion-badge slot="end" color="warning">
+                                            {{iteme.valor | currency }}
+                                        </ion-badge>
+                                    </ion-item>
+                                </ion-item-sliding>
+                            </ion-list>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <ion-grid *ngSwitchCase="'vercheques'" nopadding>
+                    <ion-row>
+                        <ion-col size="12">
+
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <ion-grid *ngSwitchCase="'verconsignadas'">
+                    <ion-row>
+                        <ion-col size="12" no-margin>
+
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+        </ion-card>
+    </div>
+
+</ion-content>

@@ -21,7 +21,8 @@ export interface Icliente {
     inactivo: boolean;
     cartera: Array<any>;
     direcciones: Array<any>;
- }
+    segcartera: Array<any>;
+   }
 @Injectable({
   providedIn: 'root'
 })
@@ -35,6 +36,7 @@ export class ClienteProvider {
     public error_cargacliente = false;
     public men_errorcargacliente = "";
     direcciones: Array<any> = [];
+    segcartera: Array<any> = [];    
     clientevended: Array<any> = [];
     clienbus: Array<any> = [];
     cargoclienteNetsolin = false;
@@ -103,6 +105,11 @@ export class ClienteProvider {
     // console.log('getClienteFb idclie:' + idclie);    
     return this.fbDb.collection(`clientes`).doc(idclie).valueChanges();
   }
+  //op feb 10 20 traer seguimientos cartera
+  public getSegCarFb(idclie){
+    // console.log('getClienteFb idclie:' + idclie);    
+    return this.fbDb.collection(`clientes/${idclie}/segcartera`).valueChanges();
+  }
 
     public guardardireccionesCliente(id){
       // console.log('guardardireccionesCliente id:' + id);
@@ -133,6 +140,41 @@ export class ClienteProvider {
       });
     }
   
+    public guardarSegCarteraClienteFb(id, seguimientos) {
+      return new Promise((resolve, reject)=>{
+        let segcarFb: AngularFirestoreCollection<any>;
+        segcarFb = this.fbDb.collection(`clientes/${id}/segcartera/`);
+        console.log('segcarFb',segcarFb);
+        this.segcartera.forEach((segc: any) => {
+          console.log('segc',segc,segc.fecha);
+          const idsegf = segc.usuario.trim()+segc.fecha.replace(/[/]/g, '-');
+          console.log('idsegf',idsegf);
+
+          let anof = segc.fecha.substr(0, 4);
+          console.log('anof',anof);
+          let mesf = segc.fecha.substr(5, 2);
+          let diaf = segc.fecha.substr(8, 2);
+          let horaf = segc.fecha.substr(11, 2);
+          let minf = segc.fecha.substr(14, 2);
+          let segf = segc.fecha.substr(17, 2);
+          let fechaf = new Date(anof, mesf, diaf, horaf, minf, segf, 0);
+          console.log('fechaf',fechaf);
+          segc.fechahora = fechaf;
+      
+          // const dia = segc.fecha.getDate();
+          // const mes = segc.fecha.getMonth() + 1;
+          // const ano = segc.fecha.getFullYear();
+          // const hora = segc.fecha.getHours();
+          // const minutos = segc.fecha.getMinutes();
+          // const id = ano.toString()+mes.toString()+dia.toString();
+          // const fd = new  Date();
+          const idseg = segc.usuario.trim()+fechaf.toLocaleString().replace(/[/]/g, '-');
+          console.log('recorriendo seguimientos :segc, idseg ',segc, idseg.toString());
+          segcarFb.doc(idseg.toString()).set(segc);
+        });
+        resolve(true);
+      });
+    }
 
     chequeacliente(){
       console.log('cheque cliente this.clienteactualA: ', this.clienteactualA);
@@ -189,10 +231,13 @@ export class ClienteProvider {
                     lista : data.datos_gen[0].lista,
                     inactivo : data.datos_gen[0].inactivo,
                     cartera : data.cartera,
-                    direcciones : data.direcciones
+                    direcciones : data.direcciones,
+                    segcartera : data.segcartera
                 };
                 this.direcciones = data.direcciones;
+                this.segcartera = data.segcartera;
                 console.log('Direcciones traidas',this.direcciones);
+                console.log('Seg. cartera traidos',this.segcartera);
                 // console.log('Datos traer cargaClienteNetsolin');
                 // console.log('clieAux: ', clieAux);
                 this.clienteActual = clieAux;
@@ -300,6 +345,44 @@ export class ClienteProvider {
         });
       });
     }
+  
+    regseguimiento(idclie, pnotas,pnum_obliga) {
+      console.log('en regseguimiento idclie,pnotas: ', idclie, pnotas);    
+    
+    this.regseguimientoNetsolin(idclie, pnotas,pnum_obliga).then(res=>{
+      // console.log('Traer nuevamente datos cliente');
+      // this.cargaClienteNetsolin(idclie);
+    })
+    }
+  
+    // Registrar en Netsolin seguimiento
+    regseguimientoNetsolin(idclie, pnotas,pnum_obliga) {
+        console.log('Datos regseguimientoNetsolin:', idclie, pnotas);
+        return new Promise((resolve, reject) => {
+          const paramgrab = {
+            idclie: idclie,
+            num_obliga: pnum_obliga,
+            notas: pnotas
+          };
+          NetsolinApp.objenvrest.parametros = paramgrab;
+          console.log("  1");
+          let url =
+            this._parempre.URL_SERVICIOS +
+            "netsolin_servirestgo.csvc?VRCod_obj=APPADSEGCARTCLIE";          
+          this.http.post(url, NetsolinApp.objenvrest).subscribe((data: any) => {
+            // console.log(" actualizaimagenDirclienteNetsolin data:", data);
+            if (data.error) {
+              console.error(" regseguimientoNetsolin ", data.error);
+              resolve(false);
+            } else {
+               console.log("Datos traer regseguimientoNetsolin ",data);
+              resolve(true);
+            }
+            // console.log(" actualizaimagenDirclienteNetsolin 4");
+          });
+        });
+      }
+    
   
 
 }

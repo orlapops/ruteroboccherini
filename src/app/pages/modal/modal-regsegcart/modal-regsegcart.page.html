@@ -1,0 +1,50 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>Actualizar Datos Cliente</ion-title>
+        <ion-buttons slot="end">
+            <ion-button size="small" shape="round" (click)="cerrarModal()" color="tertiary">
+                <ion-icon slot="start" name="close"></ion-icon> Cerrar
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <!-- <ion-toolbar color="primary">
+        <ion-searchbar type="text" placeholder="Find location" animated="true" (ionInput)="setFilteredItems($event)"></ion-searchbar>
+    </ion-toolbar> -->
+</ion-header>
+
+
+<ion-content padding>
+    <ion-card>
+        <ion-card-header>
+            <ion-text color="primary text-align">
+                <h6 class="headerdirec">
+                    <ion-icon size="medium" color="dark" name="contact"></ion-icon>{{ _clientes.clienteActual.cliente }}</h6>
+                    <p>Registrar Seguimiento Cartera</p>
+                    <!-- <h6 color="light" margin-bottom class="headerdirec">
+                    <ion-icon size="medium" color="dark" name="locate"></ion-icon>{{_visitas.direc_actual.ciudad +' '+ _visitas.direc_actual.direccion}}</h6> -->
+            </ion-text>
+        </ion-card-header>
+        <form [formGroup]="onActclieForm" class="list-form">
+            <ion-item no-padding class="itemcaptura animated fadeInUp">
+                <ion-label>Factura</ion-label>
+                <ion-select formControlName="num_obliga">
+                  <ion-select-option *ngFor="let obl of _clientes.clienteActual.cartera">{{obl.num_obliga}}</ion-select-option>
+                </ion-select>
+                <ion-label position="floating">
+                    <ion-icon name="add" item-start></ion-icon>
+                    Notas seguimiento</ion-label>
+                    <ion-textarea clearOnEdit="true" formControlName="notas"></ion-textarea>
+                <!-- <ion-input color="secondary" type="text" formControlName="notas"></ion-input> -->
+            </ion-item>
+            <p ion-text class="text08" *ngIf="onActclieForm.get('notas').touched && onActclieForm.get('notas').hasError('required')">
+                <ion-text color="danger">
+                    Este campo es obligatorio
+                </ion-text>
+            </p>
+
+        </form>
+      <ion-button *ngIf="activaract_direccion" icon-left size="small" shape="round" [disabled]="!onActclieForm.valid" color="tertiary" (click)="actualiza_seg()">
+                Adicionar
+        </ion-button>
+    </ion-card>
+</ion-content>

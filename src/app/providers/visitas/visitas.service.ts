@@ -336,9 +336,12 @@ cargaPeriodoUsuar(pcod_usuar){
                 this._cliente.guardarClienteFb(cod_tercer).then(res => {
                     // console.log('Guardoclientefb res', res, this._cliente.clienteActual.direcciones);
                     this._cliente.guardardireccionesClienteFb(cod_tercer, this._cliente.clienteActual.direcciones).then(() => {
+                      // resolve(true);
+                      this._cliente.guardarSegCarteraClienteFb(cod_tercer, this._cliente.clienteActual.segcartera).then(() => {
                         resolve(true);
                     });
-                })
+                  });
+              })
                 .catch(() => {
                     console.log('error en actualizarclientenetsolinFb guardarClienteFb');
                     resolve(false);

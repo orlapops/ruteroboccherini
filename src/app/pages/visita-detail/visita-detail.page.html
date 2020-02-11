@@ -44,6 +44,9 @@
                 <ion-segment-button size="small" *ngIf="_parEmpre.usuario.recauda" class="buttonult" value="actividades">
                     <ion-label>Actividades</ion-label>
                 </ion-segment-button>
+                <ion-segment-button size="small" *ngIf="_parEmpre.usuario.recauda" class="buttonult" value="segcartera">
+                    <ion-label>Seguimiento</ion-label>
+                </ion-segment-button>
                 <!-- class="btcartera-color text-color" -->
                 <!-- <ion-segment-button size="small" *ngIf="_parEmpre.usuario.recauda" class="buttonult" value="cartera">
                     <ion-label>Cartera</ion-label>
@@ -189,7 +192,53 @@
                     </ion-card-content>
                 </ion-card>
             </div>
-
+            <div *ngIf="cargoVisitaActual">
+                <div no-margin *ngSwitchCase="'segcartera'" class="bg-white actividades-padding">
+                    <ion-text color="primary text-align">
+                        <h6>
+                            <ion-icon size="medium" color="dark" name="contact"></ion-icon>{{ visitaAct.nombre }}</h6>
+                        <hr *ngIf="visita.data.estado === 'A'" class="hrvisitaabierta">
+                        <hr *ngIf="visita.data.estado === 'C'" class="hrvisitacerrada">
+                        <hr *ngIf="visita.data.estado === 'L'" class="hrvisitallamada">
+                        <hr *ngIf="visita.data.estado != 'A' && visita.data.estado != 'C' && visita.data.estado != 'L'" class="hrvisitanoabierta">
+                        <!-- <h6 color="light" margin-bottom class="h6"> -->
+                    </ion-text>
+                    <hr class="bg-tertiary margin-special">
+                    <!-- <ion-card class="animated fadeIn"> -->
+                        <!-- <ion-card-content no-padding> -->
+                            <ion-item no-margin margin-vertical class="bg-white itemseg"  *ngFor="let item of segcartera">
+                                <ion-label class="labelitemseg">
+                                    <h2 [ngClass]="{'fw700 text-white': !true}">
+                                        <div class="fechavisita">
+                                            <ion-icon name="calendar" slot="start" color="secondary" ></ion-icon>
+                                            <!-- <ion-text color="primary">{{ item.fecha}}</ion-text> -->
+                                            <ion-text color="primary">{{ item.fechahora.toDate() | date: 'medium'}}</ion-text>
+                                        </div>
+                                    </h2>
+                                    <hr>
+                                    <h2 class="clientevisita">
+                                        <ion-text color="dark">{{ item.tipo_segui }}</ion-text>
+                                    </h2>
+                                        <!-- <p class="pseg"> -->
+                                            <ion-textarea>
+                                           {{ item.notas1.trim()+' '+item.notas2.trim() }}
+                                        </ion-textarea>
+                                            <!-- <ion-text color="dark">{{ item.notas1.trim()+'/n'+item.notas2.trim() }}</ion-text> -->
+                                        <!-- </p> -->
+                                </ion-label>
+                            </ion-item>
+                            <ion-fab vertical="top" horizontal="end" slot="fixed">
+                                <ion-fab-button color="success" (click)="crear_segcart()">
+                                    <ion-icon name="add"></ion-icon>
+                                    <!-- <ion-icon name="plus"></ion-icon> -->
+                                </ion-fab-button>
+                            </ion-fab>
+        
+                        <!-- </ion-card-content> -->
+                    <!-- </ion-card> -->
+                    <hr class="bg-tertiary">
+                </div>
+            </div>
             <div *ngIf="cargoVisitaActual">
                 <div no-margin *ngSwitchCase="'actividades'" class="bg-white actividades-padding">
                     <div class="booking-card">

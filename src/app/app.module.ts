@@ -48,6 +48,7 @@ import { File } from "@ionic-native/file/ngx";
 // import { VisitanService } from './providers/visitan.service';
 // import { Network } from '@ionic-native/network';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
+import { ModalRegSegCartPageModule } from './pages/modal/modal-regsegcart/modal-regsegcart.module';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -69,6 +70,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     LocationPageModule,
     ModalActClientePageModule,
     ModalActConsigPageModule,
+    ModalRegSegCartPageModule,
     AngularFireModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

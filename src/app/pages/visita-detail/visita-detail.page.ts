@@ -29,6 +29,7 @@ import { UbicacionProvider } from '../../providers/ubicacion/ubicacion.service';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { File, DirectoryEntry, FileEntry } from "@ionic-native/file/ngx";
+import { ModalRegSegCartPage } from '../modal/modal-regsegcart/modal-regsegcart.page';
 
 
 @Component({
@@ -73,6 +74,7 @@ export class VisitaDetailPage implements OnInit {
   listafotos: any;
   cargo_posicion = false;
   urlimgenfb = '';
+  segcartera:any;
 
   constructor(
     public _parEmpre: ParEmpreService,
@@ -200,11 +202,16 @@ export class VisitaDetailPage implements OnInit {
             if (this.clienteAct.direcciones[i].id_dir === this.visita.data.id_dir) {
               // this.ubicaAct = this.clienteAct.direcciones[i];
               this._cliente.getUbicaActFb(this.visita.data.cod_tercer, this.visita.data.id_dir).subscribe((datosc: any) => {
-                console.log('susc datos cliente fb ', datosc);
+                console.log('susc datos cliente fb ', datosc);                
                 this.ubicaAct = datosc;
                 this._visitas.direc_actual = this.ubicaAct;
-                console.log('encontro ubica act; ', this.ubicaAct);
                 this.cargo_ubicaact = true;
+                console.log('encontro ubica act; ', this.ubicaAct);
+                this._cliente.getSegCarFb(this.visita.data.cod_tercer).subscribe((datosseg: any) => {
+                  console.log('encontro ubica act; ', this.ubicaAct);                  
+                  this.segcartera = datosseg;
+                  console.log('encontro segcartera; ', this.segcartera);                  
+                });
               });
             }
           }
@@ -329,6 +336,14 @@ export class VisitaDetailPage implements OnInit {
     return await modal.present();
   }
 
+  async crear_segcart() {
+    console.log('a crear seguimiento cartera:');
+    const modal = await this.modalCtrl.create({
+      component: ModalRegSegCartPage,
+      componentProps: { coords: this.coords }
+    });
+    return await modal.present();
+  }
 
   async presentImage(image: any, idimg: number) {
     console.log('presentImage imagenimage,idimg,this.urlimgenfb: ',image,idimg,this.urlimgenfb);

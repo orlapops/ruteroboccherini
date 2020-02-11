@@ -55,6 +55,12 @@ export class AppComponent {
         icon: 'book'
       },
       {
+        title: 'Resumen Caja Diario',
+        url: '/resumcaja',
+        direct: 'forward',
+        icon: 'book'
+      },
+      {
         title: 'Clientes Potenciales',
         url: '/clientespoten',
         direct: 'forward',

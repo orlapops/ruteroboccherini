@@ -32,7 +32,18 @@
     text-align: center;
     padding: 10px;
 }
-
+.labelitemseg{
+    // padding: 5px;
+    max-width: 100% !important;
+    overflow: auto;
+}
+.itemseg{
+    margin: auto;
+    color: blue($color: #000000);
+}
+.pseg{
+    text-overflow: clip;
+}
 ion-card.actividadesCard {
     position: relative;
     ion-img {

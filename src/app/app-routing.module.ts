@@ -24,6 +24,7 @@ const routes: Routes = [
   { path: 'verpedido/:id', loadChildren: './pages/verpedidos/verpedido.module#VerpedidoPageModule' },
   { path: 'recibocaja', loadChildren: './pages/recibocaja/recibocaja.module#RecibocajaPageModule' },
   { path: 'consignacion', loadChildren: './pages/consignar/consignar.module#ConsignarPageModule' },
+  { path: 'resumcaja', loadChildren: './pages/resumcaja/resumcaja.module#ResumCajaPageModule' },
   { path: 'ultrecibo', loadChildren: './pages/recibo.ult/ultrecibo.module#UltReciboPageModule' },
   { path: 'recibo-detail/:id', loadChildren: './pages/recibo-detail/recibo-detail.module#ReciboDetailPageModule' },
   { path: 'verrecibo/:id', loadChildren: './pages/verrecibos/verrecibo.module#VerreciboPageModule' },
