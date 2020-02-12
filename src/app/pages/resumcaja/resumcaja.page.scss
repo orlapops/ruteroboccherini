@@ -1,3 +1,15 @@
+// :host {
+//     sc-ion-select-popover-md   {
+//         --font-size: small
+//     }
+//   }
+$radio-md-icon-width: 0;
+$radio-md-icon-height:0;
+$radio-md-icon-border-width:0;
+$radio-md-icon-border-radius:0;
+//   .radio .radio-icon {
+//     display: none;
+//     }
 .itemresum {
     padding: initial;
 }
@@ -29,3 +41,9 @@
     max-width: 50px;
     font-size: 0px;
   }
+  .selectresum2{
+    font-size: 12px;
+    
+  }
+  
+  

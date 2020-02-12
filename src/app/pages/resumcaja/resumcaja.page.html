@@ -25,21 +25,29 @@
         <!-- <ion-card class="bg-primary" no-margin> -->
         <ion-card no-margin>
             <ion-segment [(ngModel)]="vistapagos" color="light">
-                <ion-segment-button value="verefec">
-                    <ion-label color="tertiary">Recibido</ion-label>
+                <ion-segment-button value="verresum">
+                    <ion-label color="danger">Resumen</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="verrecibido">
+                    <ion-label color="success">Recibido</ion-label>
                 </ion-segment-button>
                 <ion-segment-button value="verconsignadas">
-                    <ion-label color="tertiary">Efectuadas</ion-label>
+                    <ion-label color="tertiary">Consignado</ion-label>
                 </ion-segment-button>
             </ion-segment>
             <div class="ccFlags" [ngSwitch]="vistapagos">             
-                <ion-list>
-                    <ion-item class="selectresum">
-                        <ion-label class="selectresum"  color="warning">Efectivo
+                <ion-grid *ngSwitchCase="'verresum'" nopadding>
+                    <ion-list>
+                     <ion-label class="selectresum"  color="danger">Recibido
+                    </ion-label>
+                    <hr class="danger">
+                      <ion-item class="selectresum">
+                        <ion-label class="selectresum"  color="dark">Efectivo
                                 {{totefectivo | currency }}
                         </ion-label>
-                        <ion-select interface="popover" class="selectresum1">
-                            <ion-select-option class="selectresum" *ngFor="let iteme of cierrecajaefe; let i = index;" value="">
+                        <!-- <ion-select interface="popover" class="selectresum1" okText="Ok" cancelText=""> -->
+                        <ion-select interface="action-sheet" class="selectresum1" okText="Ok" cancelText="Ok">
+                                <ion-select-option class="selectresum" *ngFor="let iteme of cierrecajaefe; let i = index;" value="">
                                 {{iteme.cod_docume+'-'+iteme.num_docume }}
                                     {{iteme.valor | currency }}
                             </ion-select-option>
@@ -48,10 +56,10 @@
                 </ion-list>
                 <ion-list>
                     <ion-item class="selectresum">
-                        <ion-label class="selectresum"  color="warning">Cheques
+                        <ion-label class="selectresum"  color="dark">Cheques
                                 {{totalcheques | currency }}
                         </ion-label>
-                        <ion-select interface="popover" class="selectresum1">
+                        <ion-select interface="action-sheet" class="selectresum1" okText="Ok" cancelText="Ok">
                             <ion-select-option class="selectresum" *ngFor="let itemche of cierrecajachd; let i = index;" value="">
                                 {{itemche.cod_docume+'-'+itemche.num_docume }}
                                     {{itemche.valor | currency }}
@@ -61,10 +69,10 @@
                 </ion-list>
                 <ion-list>
                     <ion-item class="selectresum">
-                        <ion-label class="selectresum"  color="warning">Consig.
+                        <ion-label class="selectresum"  color="dark">Consig.
                                 {{totalconsig | currency }}
                         </ion-label>
-                        <ion-select interface="popover" class="selectresum1">
+                        <ion-select interface="action-sheet" class="selectresum1" okText="Ok" cancelText="Ok">
                             <ion-select-option class="selectresum" *ngFor="let itemcon of cierrecajapbcs; let i = index;" value="">
                                 {{itemcon.cod_docume+'-'+itemcon.num_docume }}
                                     {{itemcon.valor | currency }}
@@ -74,11 +82,11 @@
                 </ion-list>
                 <ion-list>
                     <ion-item class="selectresum">
-                        <ion-label class="selectresum"  color="warning">Trasfer.
+                        <ion-label class="selectresum"  color="dark">Transfer.
                                 {{totaltrasfer | currency }}
                         </ion-label>
-                        <ion-select interface="popover" class="selectresum1">
-                            <ion-select-option class="selectresum" *ngFor="let itemtra of cierrecajapbtr; let i = index;" value="">
+                        <ion-select interface="action-sheet" class="selectresum1" okText="Ok" cancelText="Ok">
+                            <ion-select-option class="selectresum2" *ngFor="let itemtra of cierrecajapbtr; let i = index;" value="">
                                 {{itemtra.cod_docume+'-'+itemtra.num_docume }}
                                     {{itemtra.valor | currency }}
                             </ion-select-option>
@@ -86,69 +94,151 @@
                     </ion-item>
                 </ion-list>
                 <ion-list>
-                        <ion-label class="selectresum"  color="danger">Total Recibido
+                        <ion-label class="selectresum"  color="tertiary">Total Recibido
                                 {{totefectivo+totalcheques+totalconsig+totaltrasfer | currency }}
                         </ion-label>
                 </ion-list>
+                <hr class="danger">
+                <ion-label class="selectresum"  color="danger">Consignado
+                </ion-label>
+                <hr class="danger">
+            <ion-list>
+                    <ion-item class="selectresum">
+                        <ion-label class="selectresum"  color="dark">Consig.
+                                {{totalconsigerealizadas | currency }}
+                        </ion-label>
+                        <ion-select interface="action-sheet" class="selectresum1" okText="Ok" cancelText="Ok">
+                            <ion-select-option class="selectresum2" *ngFor="let itemcsrea of consignacionesresum; let i = index;" value="">
+                                {{itemcsrea.cod_docume+'-'+itemcsrea.num_docume }}
+                                    {{itemcsrea.valor | currency }}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-list>
 
+            </ion-grid>
+            <ion-grid *ngSwitchCase="'verrecibido'">
+                <ion-list>
+                    <ion-label class="selectresum"  color="success">Efectivo
+                    </ion-label>
+                    <ion-item lines="full" *ngFor="let item of cierrecajaefe; let i = index;">
+                        <ion-label class="ion-text-wrap">
+                            <ion-text color="primary">
+                              <h4>{{item.cod_docume+'-'+item.num_docume }}</h4>
+                            </ion-text>
+                            <ion-text color="secondary">
+                              <p>Valor: {{item.valor | currency }}</p>
+                            </ion-text>
+                          </ion-label>
+                    </ion-item>
+                    <ion-item lines="full" >
+                        <ion-label class="ion-text-wrap">                
+                            <ion-text color="secondary">
+                              <p>Total Efec: {{totefectivo | currency }}</p>
+                            </ion-text>
+                          </ion-label>
+                    </ion-item>
+                   </ion-list>
+               <ion-list>
+                <ion-label class="selectresum"  color="success">Cheques
+                </ion-label>
+                <ion-item lines="full" *ngFor="let iteme of cierrecajachd; let i = index;">
+                    <ion-label class="ion-text-wrap">
+                        <ion-text color="primary">
+                          <h4>{{iteme.cod_docume+'-'+iteme.num_docume }}</h4>
+                        </ion-text>
+                        <p>Referencia:{{iteme.referencia}}</p>
+                        <ion-text color="secondary">
+                          <p>Valor: {{iteme.valor | currency }}</p>
+                        </ion-text>
+                      </ion-label>
+                </ion-item>
+                <ion-item lines="full" >
+                    <ion-label class="ion-text-wrap">                
+                        <ion-text color="secondary">
+                          <p>Total Cheq: {{totalcheques | currency }}</p>
+                        </ion-text>
+                      </ion-label>
+                </ion-item>
 
-                <ion-grid *ngSwitchCase="'verefec'" nopadding>
-                    <ion-row>
-                        <ion-col size="12">
-                            <h6 class="htitulo">Efectivo</h6>
-                            <ion-list class="listresum">
-                                <ion-item-sliding *ngFor="let iteme of cierrecajaefe; let i = index;">
-                                    <ion-item class="itemresum bg-white">
-                                        <p>
-                                            {{iteme.cod_docume+'-'+iteme.num_docume }}
-                                        </p>
-                                        <ion-badge slot="end" color="warning">
-                                            {{iteme.valor | currency }}
-                                        </ion-badge>
-                                    </ion-item>
-                                </ion-item-sliding>
-                                <ion-item class="bg-white">
-                                    <p>
-                                        Total Efectivo
-                                    </p>
-                                    <ion-badge slot="end" color="success">
-                                        {{totefectivo | currency }}
-                                    </ion-badge>
-                                </ion-item>
+               </ion-list>
+               <ion-list>
+                <ion-label class="selectresum"  color="success">Consignaciones
+                </ion-label>
+                <ion-item lines="full" *ngFor="let iteme of cierrecajapbcs; let i = index;">
+                    <ion-label class="ion-text-wrap">
+                        <ion-text color="primary">
+                          <h4>{{iteme.cod_docume+'-'+iteme.num_docume }}</h4>
+                        </ion-text>
+                        <p>Referencia:{{iteme.referencia}}</p>
+                        <ion-text color="secondary">
+                          <p>Valor: {{iteme.valor | currency }}</p>
+                        </ion-text>
+                      </ion-label>
+                </ion-item>
+                <ion-item lines="full" >
+                    <ion-label class="ion-text-wrap">                
+                        <ion-text color="secondary">
+                          <p>Total Consig: {{totalconsig | currency }}</p>
+                        </ion-text>
+                      </ion-label>
+                </ion-item>
                         </ion-list>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col size="12">
-                            <h6>Cheques</h6>
-                            <ion-list>
-                                <ion-item-sliding *ngFor="let iteme of cierrecajachd; let i = index;">
-                                    <ion-item class="bg-white">
-                                        <p>
-                                            {{iteme.cod_docume+'-'+iteme.num_docume }}
-                                        </p>
-                                        <ion-badge slot="end" color="warning">
-                                            {{iteme.valor | currency }}
-                                        </ion-badge>
-                                    </ion-item>
-                                </ion-item-sliding>
-                            </ion-list>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-                <ion-grid *ngSwitchCase="'vercheques'" nopadding>
-                    <ion-row>
-                        <ion-col size="12">
+        <ion-list>
+         <ion-label class="selectresum"  color="success">Transferencias
+         </ion-label>
+         <ion-item lines="full" *ngFor="let iteme of cierrecajapbtr; let i = index;">
+             <ion-label class="ion-text-wrap">
+                 <ion-text color="primary">
+                   <h4>{{iteme.cod_docume+'-'+iteme.num_docume }}</h4>
+                 </ion-text>
+                 <p>Referencia:{{iteme.referencia}}</p>
+                 <ion-text color="secondary">
+                   <p>Valor: {{iteme.valor | currency }}</p>
+                 </ion-text>
+               </ion-label>
+         </ion-item>
+         <ion-item lines="full" >
+            <ion-label class="ion-text-wrap">                
+                <ion-text color="secondary">
+                  <p>Total totaltrasfer:: {{totalconsig | currency }}</p>
+                </ion-text>
+              </ion-label>
+        </ion-item>
+ <ion-item lines="full" >
+            <ion-label class="ion-text-wrap">                
+                <ion-text color="danger">
+                  <p>Total: {{totefectivo+totalcheques+totalconsig+totaltrasfer | currency }}</p>
+                </ion-text>
+              </ion-label>
+        </ion-item>
+   </ion-list>
+</ion-grid>
 
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
                 <ion-grid *ngSwitchCase="'verconsignadas'">
-                    <ion-row>
-                        <ion-col size="12" no-margin>
-
-                        </ion-col>
-                    </ion-row>
+                    <ion-list>
+                        <ion-label class="selectresum"  color="success">Consignado
+                        </ion-label>
+                        <ion-item lines="full" *ngFor="let iteme of consignacionesresum; let i = index;">
+                            <ion-label class="ion-text-wrap">
+                                <ion-text color="primary">
+                                  <h4>{{iteme.cod_docume+'-'+iteme.num_docume }}</h4>
+                                </ion-text>
+                                <p>Referencia:{{iteme.referencia}}</p>
+                                <ion-text color="secondary">
+                                  <p>Valor: {{iteme.valor | currency }}</p>
+                                </ion-text>
+                              </ion-label>
+                        </ion-item>
+                        <ion-item lines="full" >
+                            <ion-label class="ion-text-wrap">                
+                                <ion-text color="secondary">
+                                  <p>Total: {{totalconsigerealizadas | currency }}</p>
+                                </ion-text>
+                              </ion-label>
+                        </ion-item>
+        
+                       </ion-list>
                 </ion-grid>
             </div>
         </ion-card>

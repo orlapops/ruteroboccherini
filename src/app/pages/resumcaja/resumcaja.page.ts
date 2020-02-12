@@ -32,36 +32,13 @@ export class ResumCajaPage implements OnInit {
   totalcheques = 0;
   totalconsig = 0;
   totaltrasfer = 0;
+  consignacionesresum: Array<any> = [];
+  cargo_consignacionesresum = false;
+  totalconsigerealizadas = 0;
 /////
 
-  formpagefec: Array<any> = [];
-  formpagcheq: Array<any> = [];
-  consignadas: Array<any> = [];
-  ultconsigna: Array<any> = [];
-  formaspago: Array<any> = [];
-  cargoformpago = false;
-  bancos: any;
-  cargobancos = false;
-  cta_banco = '';
-  regconsig = {
-    cta_banco: "",
-    referencia: "",
-    nota: "",
-    valor: null,
-    ajuste: null,
-    cheques: [],
-    valcheques: 0,
-    link_imgfb: ""
-  };
-
-  grabando_consigna = false;
-  grabo_consigna = false;
   mostrandoresulado = false;
-  vistapagos: String = 'verefec';
-  tomofoto: boolean = false;
-  fototomada: any;
-  imagenPreview: string = "";
-  urlimgenfb ="";
+  vistapagos: String = 'verresum';
   
   constructor(
     public _parEmpre: ParEmpreService,
@@ -82,12 +59,6 @@ export class ResumCajaPage implements OnInit {
     private file: File,
     private webview: WebView
   ) {
-    //cargar bancos de firebase
-    this._parEmpre.getbancosFB().subscribe((datos: any) => {
-      console.log("Cargo en bancos  de firebase datos", datos);
-      this.bancos = datos;
-      this.cargobancos = true;
-    });
   }
 
   ngOnInit() {
@@ -118,6 +89,7 @@ export class ResumCajaPage implements OnInit {
   gen_resumen(){
     const fechabase = new Date(this.fecha_base);
     this.cargo_cierrecajaresum = false;
+    this.cargo_consignacionesresum = false;
     console.log('fecha_base',this.fecha_base,fechabase);
     const ano = fechabase.getFullYear();
     const mes = fechabase.getMonth() + 1;
@@ -132,6 +104,14 @@ export class ResumCajaPage implements OnInit {
       this.cierrecajaresum = datoshis;
       this.clasificaCierre();
     });
+    this.getconsignaresumen("1014236804",resumano,resummes,resumdia)
+      .subscribe((datoshis: any) => {
+      console.log('act consignaciones', datoshis);
+      this.consignacionesresum = datoshis;
+      this.cargo_consignacionesresum = true;
+      this.totalconsigerealizadas=0;
+      this.consignacionesresum.forEach(item=>{ this.totalconsigerealizadas += item.valor});
+    });    
   }
 
   //Trae cierrecaja resumen peronal
@@ -146,7 +126,7 @@ export class ResumCajaPage implements OnInit {
         `/personal/${ppersona}/resumdiario/${ano}/meses/${mes}/dias/${dia}/cierrecaja`
       ).valueChanges();
       }
-      clasificaCierre() {
+  clasificaCierre() {
         this.cierrecajaefe = this.cierrecajaresum.filter(reg => reg.formpago === 'EFE');
         this.cierrecajachd = this.cierrecajaresum.filter(reg => reg.formpago === 'CHD');
         this.cierrecajapbcs = this.cierrecajaresum.filter(reg => reg.formpago === 'PBCS');
@@ -165,8 +145,18 @@ export class ResumCajaPage implements OnInit {
         console.log('this.cierrecajapbcs',this.cierrecajapbcs);
         console.log('this.cierrecajapbtr',this.cierrecajapbtr);
         this.cargo_cierrecajaresum = true;
-      }
+  }
 
-  
+  ///Trae consignaciones
+   public getconsignaresumen(ppersona: string,ano: string,mes: string,dia: string) 
+   {
+    return this.db
+      .collection(
+        `/personal/${ppersona}/resumdiario/${ano}/meses/${mes}/dias/${dia}/consignaciones`
+      ).valueChanges();
+   }
+
+
+
 }
 
