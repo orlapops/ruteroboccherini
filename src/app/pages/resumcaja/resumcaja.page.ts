@@ -97,14 +97,15 @@ export class ResumCajaPage implements OnInit {
     const resumano = ano.toString();
     const resummes = mes.toString();
     const resumdia = dia.toString();    
-    // this.getcierrecajaresumen(this._parEmpre.usuario.cod_usuar,resumano,resummes,resumdia)
-    this.getcierrecajaresumen("1014236804",resumano,resummes,resumdia)
+    // this.getcierrecajaresumen("1014236804",resumano,resummes,resumdia)
+    this.getcierrecajaresumen(this._parEmpre.usuario.cod_usuar,resumano,resummes,resumdia)
       .subscribe((datoshis: any) => {
       console.log('act cierre caja reco x ano', datoshis);
       this.cierrecajaresum = datoshis;
       this.clasificaCierre();
     });
-    this.getconsignaresumen("1014236804",resumano,resummes,resumdia)
+    // this.getconsignaresumen("1014236804",resumano,resummes,resumdia)
+    this.getconsignaresumen(this._parEmpre.usuario.cod_usuar,resumano,resummes,resumdia)
       .subscribe((datoshis: any) => {
       console.log('act consignaciones', datoshis);
       this.consignacionesresum = datoshis;
