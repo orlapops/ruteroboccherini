@@ -207,11 +207,13 @@ export class VisitaDetailPage implements OnInit {
                 this._visitas.direc_actual = this.ubicaAct;
                 this.cargo_ubicaact = true;
                 console.log('encontro ubica act; ', this.ubicaAct);
-                this._cliente.getSegCarFb(this.visita.data.cod_tercer).subscribe((datosseg: any) => {
-                  console.log('encontro ubica act; ', this.ubicaAct);                  
-                  this.segcartera = datosseg;
-                  console.log('encontro segcartera; ', this.segcartera);                  
-                });
+                this.segcartera = this._cliente.segcartera;
+                console.log('segcartera cliente ', this.segcartera);                  
+                // this._cliente.getSegCarFb(this.visita.data.cod_tercer).subscribe((datosseg: any) => {
+                //   console.log('encontro ubica act; ', this.ubicaAct);                  
+                //   this.segcartera = datosseg;
+                //   console.log('encontro segcartera; ', this.segcartera);                  
+                // });
               });
             }
           }

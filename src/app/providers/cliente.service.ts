@@ -140,41 +140,34 @@ export class ClienteProvider {
       });
     }
   
-    public guardarSegCarteraClienteFb(id, seguimientos) {
-      return new Promise((resolve, reject)=>{
-        let segcarFb: AngularFirestoreCollection<any>;
-        segcarFb = this.fbDb.collection(`clientes/${id}/segcartera/`);
-        console.log('segcarFb',segcarFb);
-        this.segcartera.forEach((segc: any) => {
-          console.log('segc',segc,segc.fecha);
-          const idsegf = segc.usuario.trim()+segc.fecha.replace(/[/]/g, '-');
-          console.log('idsegf',idsegf);
+    // public guardarSegCarteraClienteFb(id, seguimientos) {
+    //   return new Promise((resolve, reject)=>{
+    //     let segcarFb: AngularFirestoreCollection<any>;
+    //     segcarFb = this.fbDb.collection(`clientes/${id}/segcartera/`);
+    //     console.log('segcarFb',segcarFb);
+    //     this.segcartera.forEach((segc: any) => {
+    //       console.log('segc',segc,segc.fecha);
+    //       const idsegf = segc.usuario.trim()+segc.fecha.replace(/[/]/g, '-');
+    //       console.log('idsegf',idsegf);
 
-          let anof = segc.fecha.substr(0, 4);
-          console.log('anof',anof);
-          let mesf = segc.fecha.substr(5, 2);
-          let diaf = segc.fecha.substr(8, 2);
-          let horaf = segc.fecha.substr(11, 2);
-          let minf = segc.fecha.substr(14, 2);
-          let segf = segc.fecha.substr(17, 2);
-          let fechaf = new Date(anof, mesf, diaf, horaf, minf, segf, 0);
-          console.log('fechaf',fechaf);
-          segc.fechahora = fechaf;
-      
-          // const dia = segc.fecha.getDate();
-          // const mes = segc.fecha.getMonth() + 1;
-          // const ano = segc.fecha.getFullYear();
-          // const hora = segc.fecha.getHours();
-          // const minutos = segc.fecha.getMinutes();
-          // const id = ano.toString()+mes.toString()+dia.toString();
-          // const fd = new  Date();
-          const idseg = segc.usuario.trim()+fechaf.toLocaleString().replace(/[/]/g, '-');
-          console.log('recorriendo seguimientos :segc, idseg ',segc, idseg.toString());
-          segcarFb.doc(idseg.toString()).set(segc);
-        });
-        resolve(true);
-      });
-    }
+    //       let anof = segc.fecha.substr(0, 4);
+    //       console.log('anof',anof);
+    //       let mesf = segc.fecha.substr(5, 2);
+    //       let diaf = segc.fecha.substr(8, 2);
+    //       let horaf = segc.fecha.substr(11, 2);
+    //       let minf = segc.fecha.substr(14, 2);
+    //       let segf = segc.fecha.substr(17, 2);
+    //       let fechaf = new Date(anof, mesf, diaf, horaf, minf, segf, 0);
+    //       console.log('fechaf',fechaf);
+    //       segc.fechahora = fechaf;
+
+    //       const idseg = segc.usuario.trim()+fechaf.toLocaleString().replace(/[/]/g, '-');
+    //       console.log('recorriendo seguimientos :segc, idseg ',segc, idseg.toString());
+    //       segcarFb.doc(idseg.toString()).set(segc);
+    //     });
+    //     resolve(true);
+    //   });
+    // }
 
     chequeacliente(){
       console.log('cheque cliente this.clienteactualA: ', this.clienteactualA);
@@ -237,7 +230,22 @@ export class ClienteProvider {
                 this.direcciones = data.direcciones;
                 this.segcartera = data.segcartera;
                 console.log('Direcciones traidas',this.direcciones);
-                console.log('Seg. cartera traidos',this.segcartera);
+                // console.log('Seg. cartera traidos',this.segcartera);
+                //Reasignar fecha de caracter a fecha
+                this.segcartera.forEach((segc: any) => {
+                  // console.log('segc',segc,segc.fecha);
+                  let anof = segc.fecha.substr(0, 4);
+                  let mesf = segc.fecha.substr(5, 2);
+                  let diaf = segc.fecha.substr(8, 2);
+                  let horaf = segc.fecha.substr(11, 2);
+                  let minf = segc.fecha.substr(14, 2);
+                  let segf = segc.fecha.substr(17, 2);
+                  let fechaf = new Date(anof, mesf, diaf, horaf, minf, segf, 0);
+                  // console.log('fechaf',fechaf);
+                  segc.fechahora = fechaf;
+                });
+                console.log('Seg. cartera modificados',this.segcartera);
+
                 // console.log('Datos traer cargaClienteNetsolin');
                 // console.log('clieAux: ', clieAux);
                 this.clienteActual = clieAux;

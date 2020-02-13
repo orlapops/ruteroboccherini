@@ -118,13 +118,13 @@
 
             </ion-grid>
             <ion-grid *ngSwitchCase="'verrecibido'">
-                <ion-list>
+                <ion-list *ngIf="cargo_recibosresum">
                     <ion-label class="selectresum"  color="success">Efectivo
                     </ion-label>
                     <ion-item lines="full" *ngFor="let item of cierrecajaefe; let i = index;">
                         <ion-label class="ion-text-wrap">
                             <ion-text color="primary">
-                              <h4>{{item.cod_docume+'-'+item.num_docume }}</h4>
+                                <h6>{{item.cod_docume+'-'+item.num_docume+' '+clienterecibo(item.cod_docume,item.num_docume) }}</h6>
                             </ion-text>
                             <ion-text color="secondary">
                               <p>Valor: {{item.valor | currency }}</p>
@@ -145,7 +145,7 @@
                 <ion-item lines="full" *ngFor="let iteme of cierrecajachd; let i = index;">
                     <ion-label class="ion-text-wrap">
                         <ion-text color="primary">
-                          <h4>{{iteme.cod_docume+'-'+iteme.num_docume }}</h4>
+                            <h6>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</h6>
                         </ion-text>
                         <p>Referencia:{{iteme.referencia}}</p>
                         <ion-text color="secondary">
@@ -168,7 +168,7 @@
                 <ion-item lines="full" *ngFor="let iteme of cierrecajapbcs; let i = index;">
                     <ion-label class="ion-text-wrap">
                         <ion-text color="primary">
-                          <h4>{{iteme.cod_docume+'-'+iteme.num_docume }}</h4>
+                            <h6>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</h6>
                         </ion-text>
                         <p>Referencia:{{iteme.referencia}}</p>
                         <ion-text color="secondary">
@@ -190,7 +190,7 @@
          <ion-item lines="full" *ngFor="let iteme of cierrecajapbtr; let i = index;">
              <ion-label class="ion-text-wrap">
                  <ion-text color="primary">
-                   <h4>{{iteme.cod_docume+'-'+iteme.num_docume }}</h4>
+                   <h6>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</h6>
                  </ion-text>
                  <p>Referencia:{{iteme.referencia}}</p>
                  <ion-text color="secondary">

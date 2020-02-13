@@ -336,10 +336,10 @@ cargaPeriodoUsuar(pcod_usuar){
                 this._cliente.guardarClienteFb(cod_tercer).then(res => {
                     // console.log('Guardoclientefb res', res, this._cliente.clienteActual.direcciones);
                     this._cliente.guardardireccionesClienteFb(cod_tercer, this._cliente.clienteActual.direcciones).then(() => {
-                      // resolve(true);
-                      this._cliente.guardarSegCarteraClienteFb(cod_tercer, this._cliente.clienteActual.segcartera).then(() => {
-                        resolve(true);
-                    });
+                      resolve(true);
+                    //   this._cliente.guardarSegCarteraClienteFb(cod_tercer, this._cliente.clienteActual.segcartera).then(() => {
+                    //     resolve(true);
+                    // });
                   });
               })
                 .catch(() => {
@@ -579,11 +579,11 @@ cargaPeriodoUsuar(pcod_usuar){
                             //recorrer visitas si no tiene campo llamada incluirlo como falso
                             this.visitaTodas.forEach(element => {
                               if (element.data.llamada){
-                                console.log('es llamada ',element);
+                                // console.log('es llamada ',element);
                               } else {
-                                console.log('asigno llamada a falso ',element);
+                                // console.log('asigno llamada a falso ',element);
                                 element.data.llamada = false;
-                                console.log('element',element);
+                                // console.log('element',element);
                               }                              
                             });
 

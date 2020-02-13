@@ -35,6 +35,8 @@ export class ResumCajaPage implements OnInit {
   consignacionesresum: Array<any> = [];
   cargo_consignacionesresum = false;
   totalconsigerealizadas = 0;
+  recibosresum: Array<any> = [];
+  cargo_recibosresum = false;
 /////
 
   mostrandoresulado = false;
@@ -90,6 +92,7 @@ export class ResumCajaPage implements OnInit {
     const fechabase = new Date(this.fecha_base);
     this.cargo_cierrecajaresum = false;
     this.cargo_consignacionesresum = false;
+    this.cargo_recibosresum = false;
     console.log('fecha_base',this.fecha_base,fechabase);
     const ano = fechabase.getFullYear();
     const mes = fechabase.getMonth() + 1;
@@ -104,6 +107,12 @@ export class ResumCajaPage implements OnInit {
       this.cierrecajaresum = datoshis;
       this.clasificaCierre();
     });
+    this.getrecibosresumen(this._parEmpre.usuario.cod_usuar,resumano,resummes,resumdia)
+    .subscribe((datoshis: any) => {
+      console.log('act recibos reco x ano', datoshis);
+      this.recibosresum = datoshis;
+      this.cargo_recibosresum = true;
+    });
     // this.getconsignaresumen("1014236804",resumano,resummes,resumdia)
     this.getconsignaresumen(this._parEmpre.usuario.cod_usuar,resumano,resummes,resumdia)
       .subscribe((datoshis: any) => {
@@ -113,6 +122,22 @@ export class ResumCajaPage implements OnInit {
       this.totalconsigerealizadas=0;
       this.consignacionesresum.forEach(item=>{ this.totalconsigerealizadas += item.valor});
     });    
+  }
+  clienterecibo(pcod_docume,pnum_docume){
+    const lrecibof =this.recibosresum.filter(
+      (item: any) =>
+      item.cod_docume.toLowerCase().indexOf(pcod_docume.toLowerCase()) > -1 &&
+      item.num_docume.toLowerCase().indexOf(pnum_docume.toLowerCase()) > -1
+    )
+    // console.log('de busqueda clienterecibo ',pcod_docume,pnum_docume,lrecibof);
+    // console.log('Retorna:',lrecibof[0].detalle[0].cliente);
+    if (lrecibof.length>0){
+      return lrecibof[0].detalle[0].cliente;
+    } else {
+      // console.log('en busqueda clienterecibo no esta todavia detalle');
+      return '';
+    }
+    
   }
 
   //Trae cierrecaja resumen peronal
@@ -126,7 +151,24 @@ export class ResumCajaPage implements OnInit {
       .collection(
         `/personal/${ppersona}/resumdiario/${ano}/meses/${mes}/dias/${dia}/cierrecaja`
       ).valueChanges();
-      }
+  }
+      //Trae recibos resumen peronal
+      public getrecibosresumen(ppersona: string,ano: string,mes: string,dia: string) 
+      {
+        return this.db
+          .collection(
+            `/personal/${ppersona}/resumdiario/${ano}/meses/${mes}/dias/${dia}/recibos`
+          ).valueChanges();
+        }
+  //Trae un  recibo del resumen 
+      public getunreciboresumen(ppersona: string,ano: string,mes: string,dia: string,doc:string) 
+      {
+        return this.db
+          .collection(
+            `/personal/${ppersona}/resumdiario/${ano}/meses/${mes}/dias/${dia}/recibos`
+          ).doc(doc).valueChanges();
+        }
+        
   clasificaCierre() {
         this.cierrecajaefe = this.cierrecajaresum.filter(reg => reg.formpago === 'EFE');
         this.cierrecajachd = this.cierrecajaresum.filter(reg => reg.formpago === 'CHD');

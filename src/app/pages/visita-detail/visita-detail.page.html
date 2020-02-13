@@ -207,25 +207,18 @@
                     <!-- <ion-card class="animated fadeIn"> -->
                         <!-- <ion-card-content no-padding> -->
                             <ion-item no-margin margin-vertical class="bg-white itemseg"  *ngFor="let item of segcartera">
-                                <ion-label class="labelitemseg">
-                                    <h2 [ngClass]="{'fw700 text-white': !true}">
-                                        <div class="fechavisita">
+                                <ion-label class="ion-text-wrap">
+                                    <ion-text color="primary">
+                                        <div>
                                             <ion-icon name="calendar" slot="start" color="secondary" ></ion-icon>
-                                            <!-- <ion-text color="primary">{{ item.fecha}}</ion-text> -->
-                                            <ion-text color="primary">{{ item.fechahora.toDate() | date: 'medium'}}</ion-text>
+                                            <ion-text color="primary">{{ item.fechahora | date: 'mediumDate'}}</ion-text>
                                         </div>
-                                    </h2>
-                                    <hr>
-                                    <h2 class="clientevisita">
-                                        <ion-text color="dark">{{ item.tipo_segui }}</ion-text>
-                                    </h2>
-                                        <!-- <p class="pseg"> -->
-                                            <ion-textarea>
-                                           {{ item.notas1.trim()+' '+item.notas2.trim() }}
-                                        </ion-textarea>
-                                            <!-- <ion-text color="dark">{{ item.notas1.trim()+'/n'+item.notas2.trim() }}</ion-text> -->
-                                        <!-- </p> -->
-                                </ion-label>
+                                    </ion-text>
+                                    <p>Tipo: {{ item.tipo_segui }}</p>
+                                     <ion-text color="black">
+                                         {{ item.notas1.trim()+' '+item.notas2.trim() }}
+                                      </ion-text>
+                                  </ion-label>                   
                             </ion-item>
                             <ion-fab vertical="top" horizontal="end" slot="fixed">
                                 <ion-fab-button color="success" (click)="crear_segcart()">
