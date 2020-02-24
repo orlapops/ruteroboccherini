@@ -92,7 +92,7 @@
             </ion-card-content>
             <ion-card-content>
                 <ion-row>
-                    <ion-col>
+                    <ion-col *ngIf="cargovisitas">
                         <!-- op mayo 27 19 cambiado para buscar cliente y crear llamada-visita -->
                         <!-- <ion-button icon-left shape="round" size="full" color="primary" (click)="viewVisitas()"> -->
                         <ion-button icon-left shape="call" size="full" color="primary" (click)="viewClientes()">
@@ -101,6 +101,9 @@
                             Buscar Cliente
                             <!-- {{ 'app.button.search' | translate }} -->
                         </ion-button>
+                    </ion-col>
+                    <ion-col *ngIf="!cargovisitas">
+                        <ion-text class="danger">{{menerror}} </ion-text>
                     </ion-col>
                 </ion-row>
             </ion-card-content>

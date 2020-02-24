@@ -189,6 +189,10 @@
                                 <!-- </p> -->
                             </h4>
                         </ion-label>
+                        <section class="full-width">
+                            <header>Full Width</header>
+                            <ion-button expand="full" color="secondary"  (click)='OpenUrl();'>Ir a Monitor Cliente</ion-button>
+                          </section>                        
                     </ion-card-content>
                 </ion-card>
             </div>
@@ -196,13 +200,17 @@
                 <div no-margin *ngSwitchCase="'segcartera'" class="bg-white actividades-padding">
                     <ion-text color="primary text-align">
                         <h6>
-                            <ion-icon size="medium" color="dark" name="contact"></ion-icon>{{ visitaAct.nombre }}</h6>
+                            <ion-icon size="small" color="dark" name="contact"></ion-icon>{{ visitaAct.nombre }}</h6>
                         <hr *ngIf="visita.data.estado === 'A'" class="hrvisitaabierta">
                         <hr *ngIf="visita.data.estado === 'C'" class="hrvisitacerrada">
                         <hr *ngIf="visita.data.estado === 'L'" class="hrvisitallamada">
                         <hr *ngIf="visita.data.estado != 'A' && visita.data.estado != 'C' && visita.data.estado != 'L'" class="hrvisitanoabierta">
                         <!-- <h6 color="light" margin-bottom class="h6"> -->
                     </ion-text>
+                    <!-- <button class="button"  ion-button block (click)='OpenUrl();'>
+                        Monitor
+                        </button> -->
+
                     <hr class="bg-tertiary margin-special">
                     <!-- <ion-card class="animated fadeIn"> -->
                         <!-- <ion-card-content no-padding> -->

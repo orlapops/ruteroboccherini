@@ -120,6 +120,8 @@ cargaPeriodoUsuar(pcod_usuar){
           resolve(true); 
        }
         NetsolinApp.objenvrest.filtro = pcod_usuar;
+        NetsolinApp.objenvrest.usuario = this._parempre.usuario.cod_usuar;
+        console.log('llamado cargaPeriodoUsuar netoslin NetsolinApp.objenvrest:',NetsolinApp.objenvrest);
         let url= this._parempre.URL_SERVICIOS + "netsolin_servirestgo.csvc?VRCod_obj=IDRUTAPERAPP";
         this.http.post( url, NetsolinApp.objenvrest )   
          .subscribe( (data:any) =>{ 
@@ -131,7 +133,8 @@ cargaPeriodoUsuar(pcod_usuar){
              this.cargoidperiodo = false;
              this.cargo_ruta = false;
              this.error_cargarruta = true;
-             this.men_errorcargarruta = data.men_error;
+             this.men_errorcargarruta = data.menerror;
+             console.log('resolve false ',this.men_errorcargarruta);
              resolve(false);
             } else{
                 // this._parempre.reg_log('coer', 'cargaPeriodoUsuar por netsolin ');
@@ -562,7 +565,7 @@ cargaPeriodoUsuar(pcod_usuar){
                             });
                             //su esta abierta y no hay abierta cargarla como abierta
                             const datos = visiData.payload.doc.data();
-                            console.log('recorriendo visitas para verificar abierta', datos);
+                            // console.log('recorriendo visitas para verificar abierta', datos);
                             if (datos.estado === 'A' && !this.visitaabierta){
                               console.log('Esta visita esta abierta ',datos);
                               this.visitaabierta = datos;

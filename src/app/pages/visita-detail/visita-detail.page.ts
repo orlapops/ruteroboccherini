@@ -30,7 +30,7 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { File, DirectoryEntry, FileEntry } from "@ionic-native/file/ngx";
 import { ModalRegSegCartPage } from '../modal/modal-regsegcart/modal-regsegcart.page';
-
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-visita-detail',
@@ -100,6 +100,8 @@ export class VisitaDetailPage implements OnInit {
     public alertCtrl: AlertController,
     private impresora: BluetoothSerial,
     private file: File,
+    private iab: InAppBrowser,
+    public _parempre: ParEmpreService,
     private webview: WebView
   ) {
     platform.ready().then(() => {
@@ -699,5 +701,25 @@ export class VisitaDetailPage implements OnInit {
   }
   public encodestring(pstring) {
     return encodeURIComponent(pstring);
+  }
+  OpenUrl()
+  {
+  // let url= this._parempre.URL_SERVICIOS.replace("NETSOLINAPP","BOCCHERINI") + "EjeConsultaLisn.wss?VRUSUARIO='"+this._parEmpre.usuario.cod_usuar+"',VRCod_obj=MONITORCLIE02&VCAMPO=*E*&VCONDI=Especial&VTEXTO=PVXICOD_TERCER='"+this._visitas.visita_activa_copvdet.cod_tercer+"'";
+  let url= this._parempre.URL_SERVICIOS.replace("NETSOLINAPP","BOCCHERINI") + "EjeConsultaLisn.wss?VRCod_obj=MONITORCLIE02&VCAMPO=*E*&VCONDI=Especial&VTEXTO=PVXICOD_TERCER='"+this._visitas.visita_activa_copvdet.cod_tercer+"'";
+  // const browser = this.iab.create(‘https://ionic.io 262’);
+  console.log('Abrir web externo:',url);
+  const browser = this.iab.create(url);
+  // browser.executeScript(...);
+  
+  // browser.insertCSS(...);
+  // browser.on('loadstop').subscribe(event => {
+  //    browser.insertCSS({ code: "body{color: red;" });
+  // });
+  
+  // browser.close();
+
+  // const browser = this.iab.create(url);
+
+  browser.show()
   }
 }

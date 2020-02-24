@@ -52,6 +52,7 @@ export class HomePage implements OnInit {
   clientelocation: string;
   cargocoordenadas = false;
   messagesrec: Array<any> = [];
+  menerror ='';
 
 
   agmStyles: any[] = environment.agmStyles;
@@ -155,6 +156,7 @@ export class HomePage implements OnInit {
     this._visitas
       .cargaPeriodoUsuar(this._parEmpre.usuario.cod_usuar)
       .then(cargo => {
+        console.log('llega cargaPeriodoUsuar',cargo);
         if (cargo) {
           // console.log(
           //   "cargo periodo datos para cargar visitas: ",
@@ -178,7 +180,9 @@ export class HomePage implements OnInit {
               }
             })
             .catch(() => {
-              console.log("error en homr ngoniti al cargar visitas");
+              this.cargovisitas = false;
+              this.menerror = this._visitas.men_errorcargarruta;
+                  console.error("error en homr ngoniti al cargar visitas",this.menerror);
             });
           //Cargar el Inventario de Firebase suscribirse no por que sobreescribe el de otro usuario
           //se quita mayo 23 19 op
@@ -186,11 +190,13 @@ export class HomePage implements OnInit {
           // this._prods.cargaInventariodFB(this._parEmpre.usuario.bod_factura);
           // this._prods.cargaInventariodFBpedido(this._parEmpre.usuario.bod_pedido);
         } else {
-          console.log("ngOnInit home NO CARGO cargaPeriodoUsuar");
+          this.cargovisitas = false;
+          this.menerror = this._visitas.men_errorcargarruta;
+          console.error("ngOnInit home NO CARGO cargaPeriodoUsuar",this.menerror);
         }
       })
       .catch(error => {
-        console.log("error en cargaPeriodoUsuar ", error);
+        console.error("error en cargaPeriodoUsuar ", error);
       });
   }
 

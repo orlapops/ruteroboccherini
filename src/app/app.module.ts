@@ -49,6 +49,7 @@ import { File } from "@ionic-native/file/ngx";
 // import { Network } from '@ionic-native/network';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
 import { ModalRegSegCartPageModule } from './pages/modal/modal-regsegcart/modal-regsegcart.module';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -118,6 +119,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ClienteProvider,
     CarritoFacturaService,
     WebView,
+    InAppBrowser,
     File
   ],
   bootstrap: [AppComponent]
