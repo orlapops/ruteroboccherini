@@ -707,8 +707,8 @@ export class VisitaDetailPage implements OnInit {
   // let url= this._parempre.URL_SERVICIOS.replace("NETSOLINAPP","BOCCHERINI") + "EjeConsultaLisn.wss?VRUSUARIO='"+this._parEmpre.usuario.cod_usuar+"',VRCod_obj=MONITORCLIE02&VCAMPO=*E*&VCONDI=Especial&VTEXTO=PVXICOD_TERCER='"+this._visitas.visita_activa_copvdet.cod_tercer+"'";
   let url= this._parempre.URL_SERVICIOS.replace("NETSOLINAPP","BOCCHERINI") + "EjeConsultaLisn.wss?VRCod_obj=MONITORCLIE02&VCAMPO=*E*&VCONDI=Especial&VTEXTO=PVXICOD_TERCER='"+this._visitas.visita_activa_copvdet.cod_tercer+"'";
   // const browser = this.iab.create(‘https://ionic.io 262’);
-  console.log('Abrir web externo:',url);
-  const browser = this.iab.create(url);
+  console.log('Abrir web externo:',url,);
+  const browser = this.iab.create(url,'_system');
   // browser.executeScript(...);
   
   // browser.insertCSS(...);
