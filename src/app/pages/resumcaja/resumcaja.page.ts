@@ -14,6 +14,7 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { File, DirectoryEntry, FileEntry } from "@ionic-native/file/ngx";
 import { AngularFirestore } from '@angular/fire/firestore';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-resumcaja',
@@ -37,6 +38,7 @@ export class ResumCajaPage implements OnInit {
   totalconsigerealizadas = 0;
   recibosresum: Array<any> = [];
   cargo_recibosresum = false;
+  mostrarrecibotxt = false;
 /////
 
   mostrandoresulado = false;
@@ -59,6 +61,7 @@ export class ResumCajaPage implements OnInit {
     private imagePicker: ImagePicker,
     private camera: Camera,
     private file: File,
+    private iab: InAppBrowser,
     private webview: WebView
   ) {
   }
@@ -198,7 +201,39 @@ export class ResumCajaPage implements OnInit {
         `/personal/${ppersona}/resumdiario/${ano}/meses/${mes}/dias/${dia}/consignaciones`
       ).valueChanges();
    }
+   public OpenUrl(preg: any)
+  //  EjeConsultaLis.wss?VRCod_obj=MONIDOCCONTA&VCAMPO=*E*&VCONDI=Especial&VTEXTO=PVXICOD_DOCUME=%27RC%27,PVXINUM_DOCUME=%27%20%20%2053314%27,PVXIFECHA=%2705/03/2020%27
+   {
+   let fecha = preg.fecha;
+   let url= this._parEmpre.URL_SERVICIOS.replace("NETSOLINAPP","BOCCHERINI") + "EjeConsultaLisn.wss?VRCod_obj=MONIDOCCONTA&VCAMPO=*E*&VCONDI=Especial&VTEXTO=PVXICOD_DOCUME='"+preg.cod_docume+"',PVXINUM_DOCUME='"+preg.num_docume+"',PVXIFECHA='"+ this.fechacad(fecha)+"'";
+   console.log('Abrir web externo:',url,);
+   const browser = this.iab.create(url,'_system'); 
+   browser.show()
+   }
 
+   public swhitchmostrarrecibo(){
+    if (this.mostrarrecibotxt){
+     this.mostrarrecibotxt = false;
+    }
+    else{
+      this.mostrarrecibotxt = true;
+    }
+   }
+//fecha a string para monitor en netsolin dd/mm/aa
+fechacad(fechaf){
+	console.log(fechaf);	
+	// console.log(typeof(fechaf);	
+	// console.log(fechaf.toDate());	
+	// const fecha= fechaf.toDate();
+	// console.log(fecha);
+	// const dia = fecha.getDate();
+	// const mes = fecha.getMonth() + 1;
+	// const ano = fecha.getFullYear();
+
+  const cfecha = fechaf.substring(8,10) + '/' + fechaf.substring(5,7) + '/' + fechaf.substring(0,4);
+	console.log(cfecha);	
+  return cfecha;
+}
 
 
 }

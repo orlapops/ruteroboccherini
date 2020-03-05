@@ -121,7 +121,7 @@ export class ModalRegSegCartPage implements OnInit {
     const num_obligaseg = this.onActclieForm.controls['num_obliga'].value;
     console.log('Datos act:', anotasseg,num_obligaseg);
     this._clientes.regseguimiento(this._visitas.visita_activa_copvdet.cod_tercer, anotasseg,num_obligaseg);
-    this.presentLoading('Actualizando Seguimiento');
+    this.presentLoading('Actualizando Seguimiento. Recargue el cliente para ver el seguimiento.');
     this.cerrarModal();
   }
 

@@ -121,13 +121,28 @@
                 <ion-list *ngIf="cargo_recibosresum">
                     <ion-label class="selectresum"  color="success">Efectivo
                     </ion-label>
+                    <!-- <ion-button *ngIf="!mostrarrecibotxt" slot="end" shape="round" color="success" (click)="swhitchmostrarrecibo()">
+                        Ver
+                    </ion-button>
+                    <ion-button *ngIf="mostrarrecibotxt" slot="end" shape="round" color="success" (click)="swhitchmostrarrecibo()">
+                        Ocultar
+                    </ion-button> -->
+
                     <ion-item lines="full" *ngFor="let item of cierrecajaefe; let i = index;">
                         <ion-label class="ion-text-wrap">
                             <ion-text color="primary">
-                                <h6>{{item.cod_docume+'-'+item.num_docume+' '+clienterecibo(item.cod_docume,item.num_docume) }}</h6>
+                                <ion-button expand="full" color="secondary"  (click)='OpenUrl(item);'>{{item.cod_docume+'-'+item.num_docume+' '+clienterecibo(item.cod_docume,item.num_docume) }}</ion-button>
+                                <!-- <h6>{{item.cod_docume+'-'+item.num_docume+' '+clienterecibo(item.cod_docume,item.num_docume) }}</h6> -->
                             </ion-text>
-                            <ion-text color="secondary">
+                            <!-- <ion-text>{{item.txt_imp}}</ion-text>
+                                <ion-card class="btrecibotot-color" *ngIf="mostrarrecibotxt">
+                                    <div>
+                                    <textarea class="texto_imprimir">{{item.txt_imp}}</textarea>
+                                </div>
+                            </ion-card>                         -->
+                        <ion-text color="secondary">
                               <p>Valor: {{item.valor | currency }}</p>
+
                             </ion-text>
                           </ion-label>
                     </ion-item>
@@ -145,7 +160,8 @@
                 <ion-item lines="full" *ngFor="let iteme of cierrecajachd; let i = index;">
                     <ion-label class="ion-text-wrap">
                         <ion-text color="primary">
-                            <h6>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</h6>
+                            <!-- <h6>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</h6> -->
+                            <ion-button expand="full" color="secondary"  (click)='OpenUrl(iteme);'>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</ion-button>
                         </ion-text>
                         <p>Referencia:{{iteme.referencia}}</p>
                         <ion-text color="secondary">
@@ -168,7 +184,8 @@
                 <ion-item lines="full" *ngFor="let iteme of cierrecajapbcs; let i = index;">
                     <ion-label class="ion-text-wrap">
                         <ion-text color="primary">
-                            <h6>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</h6>
+                            <!-- <h6>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</h6> -->
+                            <ion-button expand="full" color="secondary"  (click)='OpenUrl(iteme);'>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</ion-button>
                         </ion-text>
                         <p>Referencia:{{iteme.referencia}}</p>
                         <ion-text color="secondary">
@@ -190,8 +207,9 @@
          <ion-item lines="full" *ngFor="let iteme of cierrecajapbtr; let i = index;">
              <ion-label class="ion-text-wrap">
                  <ion-text color="primary">
-                   <h6>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</h6>
-                 </ion-text>
+                   <!-- <h6>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</h6> -->
+                   <ion-button expand="full" color="secondary"  (click)='OpenUrl(iteme);'>{{iteme.cod_docume+'-'+iteme.num_docume+' '+clienterecibo(iteme.cod_docume,iteme.num_docume) }}</ion-button>
+                </ion-text>
                  <p>Referencia:{{iteme.referencia}}</p>
                  <ion-text color="secondary">
                    <p>Valor: {{iteme.valor | currency }}</p>

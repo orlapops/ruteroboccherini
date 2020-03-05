@@ -46,4 +46,26 @@ $radio-md-icon-border-radius:0;
     
   }
   
-  
+  .btrecibo-color {
+    color: #222428;
+    background-color: #e2decb;
+    --btn-background: #e2decb;
+    --btn-border-color: var(--border-color-checked);
+}
+
+.btrecibotot-color {
+    color: #000000;
+    background-color: #ffffff;
+    --btn-background: #ffffff;
+    --btn-border-color: var(--border-color-checked);
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.texto_imprimir {
+    text-align: left;
+    font-size: 10px;
+    width: -webkit-fill-available;
+    height: 400px;
+    background-color: ghostwhite;
+}

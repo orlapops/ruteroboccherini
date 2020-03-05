@@ -17,6 +17,7 @@ export class RecibosService implements OnInit {
   cartera: Array<any> = [];
   recibocajaCounter: number = 0;
   recibocaja: Array<any> = [];
+  idrestrecibo: number = 0;
   formpagoCounter: number = 0;
   formpago: Array<any> = [];
   totformaspago = 0;
@@ -327,7 +328,15 @@ export class RecibosService implements OnInit {
 
     if (!exist) {
       this.recibocajaCounter = this.recibocajaCounter + 1;
+      //asignar idrest para grabación de recibo y verificar si se ha guardado o no
+      if (this.recibocaja.length == 0){
+        this.idrestrecibo = Math.round(Math.random()*9999999999);      
+      } else {
+        this.idrestrecibo = this.recibocaja[0].item.id_erest;
+      }
+      console.log('this.idrestrecibo',this.idrestrecibo);
       const itemAdi = {
+        id_erest: this.idrestrecibo,
         id_visita: this._visitas.visita_activa_copvdet.id_visita,
         num_obliga: item.num_obliga,
         fecha_obl: item.fecha_obl,
@@ -439,7 +448,8 @@ export class RecibosService implements OnInit {
     // let idvisiact = this._visitas.visita_activa.datosgen.id_visita;
     const idruta = this._visitas.visita_activa_copvdet.id_ruta;
     const idvisiact = this._visitas.visita_activa_copvdet.id_visita;
-    let idirecibo = idruta.toString() + idvisiact.toString();
+    let idirecibo = idruta.toString() + idvisiact.toString();    
+    // let idirecibo = idruta.toString() + idvisiact.toString() + this.idrestrecibo.toString();    
     if (this.platform.is("cordova")) {
       // dispositivo
       this.storage.set("itemrecibo" + idirecibo, this.recibocaja);
@@ -454,6 +464,7 @@ export class RecibosService implements OnInit {
   cargar_storage_recibo(idruta, idvisiact) {
     console.log("cargar_storage_recibo 1", this._visitas);
     let idirecibo = idruta.toString() + idvisiact;
+    // let idirecibo = idruta.toString() + idvisiact + this.idrestrecibo.toString();
     console.log("cargar_storage_recibo 4", idirecibo);
     this.recibocaja = [];
     let promesa = new Promise((resolve, reject) => {
@@ -463,6 +474,9 @@ export class RecibosService implements OnInit {
           this.storage.get("itemrecibo" + idirecibo).then(items => {
             if (items) {
               this.recibocaja = items;
+            }
+            if (this.recibocaja.length>0){
+              this.idrestrecibo = this.recibocaja[0].item.id_erest;
             }
             resolve();
           });
@@ -476,6 +490,9 @@ export class RecibosService implements OnInit {
           this.recibocaja = JSON.parse(
             localStorage.getItem("itemrecibo" + idirecibo)
           );
+          if (this.recibocaja.length>0){
+            this.idrestrecibo = this.recibocaja[0].item.id_erest;
+          }
           console.log(
             "carga del storage cargar_storage_recibo 2: ",
             this.recibocaja
@@ -491,7 +508,9 @@ export class RecibosService implements OnInit {
     const idruta = this._visitas.visita_activa_copvdet.id_ruta;
     const idvisiact = this._visitas.visita_activa_copvdet.id_visita;
     const idirecibo = idruta.toString() + idvisiact.toString();
+    // const idirecibo = idruta.toString() + idvisiact.toString()+ this.idrestrecibo.toString();
     this.recibocaja = [];
+    this.idrestrecibo = 0;
     if (this.platform.is("cordova")) {
       // dispositivo
       this.storage.remove("itemrecibo" + idirecibo);
@@ -575,6 +594,10 @@ export class RecibosService implements OnInit {
             this._visitas.visita_activa_copvdet.grb_recibo = true;
             this._visitas.visita_activa_copvdet.resgrb_recibo =
               "Se grabo recibo";
+            if(data.reenviado){
+              this._visitas.visita_activa_copvdet.resgrb_recibo += "Reenvio. Ya estaba grabado. Recibo";
+
+            }
             this._visitas.visita_activa_copvdet.recibo_grabado = data;
             console.log("Datos traer genera_recibo_netsolin ", data);
             const objrecibogfb = {
