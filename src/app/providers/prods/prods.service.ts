@@ -35,6 +35,8 @@ export class ProdsService implements OnInit {
   itemPedido: ItemFact;
   generando_pedido = false;
   generando_factura = false;
+  idrestpedido: number = 0;
+  idrestfactura: number = 0;
 
   constructor(
     public _parempre: ParEmpreService,
@@ -446,7 +448,20 @@ export class ProdsService implements OnInit {
 
     if (!exist) {
       this.facturaCounter = this.facturaCounter + 1;
+      //asignar idrest para grabación de pedido y verificar si se ha guardado o no
+      const idruta = this._visitas.visita_activa_copvdet.id_ruta.toString();
+      const idvisiact = this._visitas.visita_activa_copvdet.id_visita.toString();
+      let lrandom = Math.round(Math.random()*999);
+      let idfactura = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
+      if (this.factura.length == 0){
+        // this.idrestrecibo = Math.round(Math.random()*9999999999);      
+        this.idrestfactura = parseInt(idfactura);
+      } else {
+        this.idrestfactura = this.factura[0].item.id_erest;
+      }
+      console.log('this.idrestrecibo',this.idrestpedido);
       const itemAdi = {
+        id_erest: this.idrestfactura,
         id_visita: this._visitas.visita_activa_copvdet.id_visita,
         cod_ref: item.cod_refinv,
         nombre: item.nombre,
@@ -480,7 +495,21 @@ export class ProdsService implements OnInit {
     }
 
     if (!exist) {
+      //asignar idrest para grabación de pedido y verificar si se ha guardado o no
+      const idruta = this._visitas.visita_activa_copvdet.id_ruta.toString();
+      const idvisiact = this._visitas.visita_activa_copvdet.id_visita.toString();
+      let lrandom = Math.round(Math.random()*999);
+      let idpedido = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
+      if (this.pedido.length == 0){
+        // this.idrestrecibo = Math.round(Math.random()*9999999999);      
+        this.idrestpedido = parseInt(idpedido);
+      } else {
+        this.idrestpedido = this.pedido[0].item.id_erest;
+      }
+      console.log('this.idrestrecibo',this.idrestpedido);
+
       const itemAdi = {
+        id_erest: this.idrestpedido,
         id_visita: this._visitas.visita_activa_copvdet.id_visita,
         cod_ref: item.cod_refinv,
         nombre: item.nombre,
@@ -579,6 +608,7 @@ export class ProdsService implements OnInit {
     const idvisiact = this._visitas.visita_activa_copvdet.id_visita;
     const idiped = idruta.toString() + idvisiact.toString();
     this.pedido = [];
+    this.idrestpedido = 0;
     if (this.platform.is("cordova")) {
       // dispositivo
       this.storage.remove("itemped" + idiped);
@@ -605,6 +635,9 @@ export class ProdsService implements OnInit {
             if (items) {
               this.factura = items;
             }
+            if (this.factura.length>0){
+              this.idrestfactura = this.factura[0].item.id_erest;
+            }
             resolve();
           });
         });
@@ -615,6 +648,9 @@ export class ProdsService implements OnInit {
           //Existe items en el localstorage
           console.log("carga del storage factura 1");
           this.factura = JSON.parse(localStorage.getItem("itemfac" + idifact));
+          if (this.factura.length>0){
+            this.idrestfactura = this.factura[0].item.id_erest;
+          }
           console.log("carga del storage factura 2: ", this.factura);
         }
         resolve();
@@ -628,6 +664,7 @@ export class ProdsService implements OnInit {
     const idvisiact = this._visitas.visita_activa_copvdet.id_visita;
     let idifact = idruta.toString() + idvisiact;
     this.factura = [];
+    this.idrestfactura = 0;
     if (this.platform.is("cordova")) {
       // dispositivo
       this.storage.remove("itemfac" + idifact);
@@ -653,6 +690,9 @@ export class ProdsService implements OnInit {
             if (items) {
               this.pedido = items;
             }
+            if (this.pedido.length>0){
+              this.idrestpedido = this.pedido[0].item.id_erest;
+            }
             resolve();
           });
         });
@@ -663,7 +703,10 @@ export class ProdsService implements OnInit {
           //Existe items en el localstorage
           // console.log("carga del storage pedido 1");
           this.pedido = JSON.parse(localStorage.getItem("itemped" + idiped));
-          // console.log("carga del storage pedido 2: ", this.pedido);
+          if (this.pedido.length>0){
+            this.idrestpedido = this.pedido[0].item.id_erest;
+          }
+        // console.log("carga del storage pedido 2: ", this.pedido);
         }
         resolve();
       }

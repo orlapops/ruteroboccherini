@@ -218,7 +218,7 @@
                         <ion-col>
                             <!-- *ngIf="(totefectivo + totalcheques) > 0 && regconsig.cta_banco  && regconsig.referencia  && ((totefectivo + totalcheques) - (regconsig.valor+regconsig.ajuste))===0 && (regconsig.ajuste <= 1000) " -->
                             <div>
-                                <ion-button [disabled]="regconsig.valor==0 || regconsig.valor<regconsig.valcheques|| ajuste >100 || regconsig.referencia ==''|| banco==[]"
+                                <ion-button [disabled]="regconsig.valor==0 || regconsig.valor<regconsig.valcheques|| regconsig.ajuste >100 || regconsig.referencia ==''|| bancos==[]"
                                     style="position:relative; left: 50%; transform: translate(-50%,0);" slot="start"
                                     shape="round" color="success" (click)="realizar_consigna()">
                                     Registrar Consignacón

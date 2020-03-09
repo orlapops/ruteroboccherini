@@ -52,7 +52,7 @@
             <ion-grid>
                 <ion-row>
                     <ion-col size="3">
-                        <ion-button *ngIf="this.cantidad_sol >0 && (this.cantidad_sol <= this.prodshop.existencia)" shape="round" color="success" (click)="addfactura(prodshop, cantidad_sol)">
+                        <ion-button *ngIf="this.cantidad_sol >0 && (this.cantidad_sol <= this.prodshop.existencia)" shape="round" color="success" (click)="addfactura(prodshop)">
                             Agregar
                         </ion-button>
                     </ion-col>

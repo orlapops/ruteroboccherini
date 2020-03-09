@@ -212,9 +212,9 @@ reg_logappusuario(titulo, mensaje, datoslog) {
   let clievendlist: AngularFirestoreCollection<any>;  
   clievendlist = this.fbDb.collection(`/personal/${this.usuario.cod_usuar}/clientes`);
   data.clientes.forEach((cliente: any) => {
-    console.log('recorriendo clientes :cliente ', cliente);
+    // console.log('recorriendo clientes :cliente ', cliente);
     const idcliente   = cliente.cod_tercer + cliente.id_dir.toString();
-    console.log('recorriendo clientes :idcliente ', idcliente);
+    // console.log('recorriendo clientes :idcliente ', idcliente);
     clievendlist.doc(idcliente).set(cliente);
   });
   resolve(true);

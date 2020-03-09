@@ -109,7 +109,7 @@
                             <ion-textarea rows="3" cols="12" inputmode="text" placeholder="Registre las Notas" [(ngModel)]="regpago.nota" [value]="regpago.nota"></ion-textarea>
                         </ion-item>
                         <ion-item>
-                            <ion-button *ngIf="tipocrud == 'A'" size="large" expand="full" color="dark" (click)="addFormapago()">Registrar</ion-button>
+                            <ion-button *ngIf="tipocrud == 'A'" size="large" expand="full" color="dark" (click)="addFormapago(regpago)">Registrar</ion-button>
                             <ion-button *ngIf="tipocrud != 'A'" size="default" color="dark" (click)="modificarFormapago()">Modificar</ion-button>
                             <ion-button *ngIf="tipocrud != 'A'" size="default" color="danger" (click)="eliminarFormapago()">Quitar</ion-button>
                         </ion-item>

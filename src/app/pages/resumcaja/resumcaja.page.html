@@ -15,7 +15,7 @@
         </h6>
     </ion-text>
     <hr class="bg-tertiary">
-    <ion-item *ngIf="!paga_efectivo" class="bg-white">
+    <ion-item  class="bg-white">
         <ion-label color="dark">Fecha Base:</ion-label>
         <ion-datetime slot="end" no-padding no-margin class="text-warning fechacons" displayFormat="MM/DD/YYYY" pickerFormat="YYYY-MM-DD" min="2019" max="2032" (ionChange)="gen_resumen()" [(ngModel)]="fecha_base"></ion-datetime>
     </ion-item>

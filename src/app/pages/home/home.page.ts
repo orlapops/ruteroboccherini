@@ -23,6 +23,7 @@ import { UbicacionProvider } from '../../providers/ubicacion/ubicacion.service';
 import { ActividadesService } from '../../providers/actividades/actividades.service';
 import { VisitasProvider } from '../../providers/visitas/visitas.service';
 import { MessageService } from '../../providers/message/message.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Injectable({
   providedIn: "root"
@@ -95,6 +96,14 @@ export class HomePage implements OnInit {
       // La plataforma esta lista y ya tenemos acceso a los plugins.
       // this._parEmpre.reg_log('Home', 'Dispositivo listo');
       // this.obtenerPosicion();
+      //inicializar 
+      // this.cargovisitas = false;
+      this._visitas.visitaTodas = [];
+      this._visitas.visitas_cumplidas = [];
+      this._visitas.visitas_pendientes = [];
+      this._visitas.visitas_xllamada = [];
+      // this._visitas.visitaabierta = null;
+      // this._visitas.cargo_ruta = false;
       this._ubicacionService.iniciarGeoLocalizacion();
       this._ubicacionService.inicializarUsuario()
         .then(()=>{
@@ -109,7 +118,7 @@ export class HomePage implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
 
     // console.log(this._visitas.visitaTodas);
     //Actualizar Inventario para factura y pedido a Firebase
@@ -153,7 +162,8 @@ export class HomePage implements OnInit {
     // this._visitas.userId = '1014236804';
     // this._visitas.cargaPeriodoUsuar(this._visitas.userId).then(cargo => {
     console.log("home antes cargar visitas _parempre:",this._parEmpre,this._visitas);
-    this._visitas
+    this._visitas.cargoidperiodo = false;
+    await this._visitas
       .cargaPeriodoUsuar(this._parEmpre.usuario.cod_usuar)
       .then(cargo => {
         console.log('llega cargaPeriodoUsuar',cargo);

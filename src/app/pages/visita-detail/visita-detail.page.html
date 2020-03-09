@@ -69,7 +69,7 @@
                         <ion-grid class="size-col">
                             <ion-row>
                                 <ion-col size="3">
-                                    <ion-avatar class="cliente-avatar" (click)="presentImage(ubicaAct.link_foto,'')">
+                                    <ion-avatar class="cliente-avatar" (click)="presentImage(ubicaAct.link_foto,0)">
                                         <!-- <img *ngIf="_visitas.direc_actual != null" [src]="_DomSanitizer.bypassSecurityTrustUrl(_visitas.direc_actual.link_foto)" /> -->
                                         <img *ngIf="cargo_ubicaact && ubicaAct.link_foto" [src]="_DomSanitizer.bypassSecurityTrustUrl(ubicaAct.link_foto)" />
                                         <img *ngIf="cargo_ubicaact && !ubicaAct.link_foto" src="assets/img/imagennodisponible.jpg" />

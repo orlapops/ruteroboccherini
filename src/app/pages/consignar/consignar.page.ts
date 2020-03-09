@@ -162,10 +162,12 @@ export class ConsignarPage implements OnInit {
 
   realizar_consigna() {
     if (this._consigna.generando_consigna) {
-      console.log('Ya se esta generando un pedido. Espere');
+      console.log('Ya se esta generando una consignación. Espere');
     }
     this.grabando_consigna = true;
+    // let pid_erest = Math.round(Math.random()*9999999999);
 
+    // this._consigna.genera_controlgrabaconsigfb(pid_erest);
     if (!this.regconsig.ajuste) {
       this.regconsig.ajuste = 0;
     }

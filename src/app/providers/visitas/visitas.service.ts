@@ -117,6 +117,7 @@ export class VisitasProvider {
 cargaPeriodoUsuar(pcod_usuar){
     return new Promise((resolve,reject)=>{
       if (this.cargoidperiodo){
+          console.log('cargaPeriodoUsuar retor por cargoidperiodo',this.cargoidperiodo);
           resolve(true); 
        }
         NetsolinApp.objenvrest.filtro = pcod_usuar;
@@ -127,8 +128,8 @@ cargaPeriodoUsuar(pcod_usuar){
          .subscribe( (data:any) =>{ 
            if (data){
              console.log('cargo periodo en netsolin', data);
-          if( data.error){
-              console.error(" cargaPeriodoUsuar ", data.error);
+              if( data.error){
+              console.error(" cargaPeriodoUsuar error", data.error);
             //   this._parempre.reg_log('Error en cargaPeriodoUsuar por netsolin ', 'data.error');
              this.cargoidperiodo = false;
              this.cargo_ruta = false;
@@ -136,14 +137,15 @@ cargaPeriodoUsuar(pcod_usuar){
              this.men_errorcargarruta = data.menerror;
              console.log('resolve false ',this.men_errorcargarruta);
              resolve(false);
-            } else{
+              } else{
+                console.log('cargo periodo retorna true',data.datos_ruta[0]);
                 // this._parempre.reg_log('coer', 'cargaPeriodoUsuar por netsolin ');
                 this.cargoidperiodo = true;
               this.id_ruta = data.datos_ruta[0].id_ruta;
               this.id_periodo = data.datos_periodo[0].id_per;
               resolve(true);
-            }
-          } 
+              }
+           }  
           // else {
           //   this.cargoidperiodo = false;
           //   this.cargo_ruta = false;
@@ -204,7 +206,7 @@ cargaPeriodoUsuar(pcod_usuar){
   public getVisitasidrutper() {
 
       const lruta = `/personal/${this._parempre.usuario.cod_usuar}/rutas/${this.id_ruta}/periodos/${this.id_periodo}/visitas`;
-      console.log(lruta);
+      console.log('getVisitasidrutper:',lruta);
     //   this._parempre.reg_log('getVisitasidrutper lruta ', lruta);
     return this.fbDb
     .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this.id_ruta}/periodos/${this.id_periodo}/visitas`)
@@ -535,17 +537,17 @@ cargaPeriodoUsuar(pcod_usuar){
 //         });
 //   }
   cargaVisitas(){
-    // console.log('Ingreso a cargo visitas');
+    console.log('Ingreso a cargo visitas');
     return new Promise( (resolve, reject) => {
-        // console.log('cargaVisitas 1');
+        console.log('cargaVisitas 1');
         this.getVisitasidrutper().subscribe((datosv: any) => {
-                    //   console.log('lo que llega de visitas de un id de fecha');
-                    //   console.log(datosv);
+                      console.log('lo que llega de visitas de un id de fecha');
+                      console.log(datosv);
                     // this._parempre.reg_log('cargaVisitas 1 ', 'datosv');
                     if(datosv.length > 0) {
                         // this._parempre.reg_log('cargaVisitas 2 ', 'datosv1');
                         let itemdato = datosv[0];
-                        // console.log(itemdato);
+                        console.log(itemdato);
                         // console.log(itemdato.payload);
                         // console.log(itemdato.payload.doc);
                         // console.log(itemdato.payload.doc.data());

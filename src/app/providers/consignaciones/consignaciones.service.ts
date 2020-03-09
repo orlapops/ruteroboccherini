@@ -58,6 +58,12 @@ export class ConsignacionesService implements OnInit {
       .doc(id).valueChanges();
   }
 
+  public getcontrolconsigna(id) {
+    return this.fbDb
+      .collection(`/personal/${this._parempre.usuario.cod_usuar}/cont_consigna`, ref => 
+      ref.where('terminada', '==', false)
+      .limit(1)).valueChanges();  
+    }
   genera_consigna_netsolin(obj_graba, fototomada) {
     if (this.generando_consigna) {
       console.error('Ya se esta generando un recibo');
@@ -142,7 +148,18 @@ export class ConsignacionesService implements OnInit {
       });
     });
   }
-
+  //genera un control cuando se envia a grabar a netsolin con id_erest
+  genera_controlgrabaconsigfb(pid_erest){
+    const now = new Date();
+    this.fbDb
+      .collection(`/personal/${this._parempre.usuario.cod_usuar}/cont_consigna`)
+      .doc(pid_erest.toString())
+      .set({ id_erest: pid_erest.toString(),
+        fecha: now,
+        terminada: false,
+        cod_docume:'',
+        num_docume:'' });
+  }
   //Guardar para el vendedor o usuario datos para cierre, recibo y formas de pago
   guardarFb(id, objconsig) {
     const now = new Date(objconsig.fecha);
