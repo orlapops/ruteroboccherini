@@ -98,10 +98,10 @@ export class HomePage implements OnInit {
       // this.obtenerPosicion();
       //inicializar 
       // this.cargovisitas = false;
-      this._visitas.visitaTodas = [];
-      this._visitas.visitas_cumplidas = [];
-      this._visitas.visitas_pendientes = [];
-      this._visitas.visitas_xllamada = [];
+      // this._visitas.visitaTodas = [];
+      // this._visitas.visitas_cumplidas = [];
+      // this._visitas.visitas_pendientes = [];
+      // this._visitas.visitas_xllamada = [];
       // this._visitas.visitaabierta = null;
       // this._visitas.cargo_ruta = false;
       this._ubicacionService.iniciarGeoLocalizacion();
