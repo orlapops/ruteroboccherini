@@ -101,11 +101,20 @@
                             </ion-row>
                         </ion-grid>
                     </ion-item>
-                    <ion-card-content no-padding>
+                    <ion-buttons slot="start">
+                        <ion-button  (click)="openMap()">
+                              <!-- <ion-icon color="orange" slot="icon-only" name="ios-pin-outline" ></ion-icon> -->                      
+                                <ion-icon size="small" color="blue" name="map"></ion-icon> 
+                        </ion-button>
+                                    <!-- <h4>  Ver Mapa</h4> -->
+                        </ion-buttons>
+                
+        
+                    <!-- <ion-card-content no-padding>
                         <agm-map [latitude]="visitaAct.latitud" [longitude]="visitaAct.longitud" [zoom]="14" [zoomControl]="false" [styles]="agmStyles" [streetViewControl]="false">
                             <agm-marker [latitude]="visitaAct.latitud" [longitude]="visitaAct.longitud"></agm-marker>
                         </agm-map>
-                    </ion-card-content>
+                    </ion-card-content> -->
                     <ion-fab *ngIf="visitaAct.estado == '' || visitaAct.estado == 'P'" vertical="top" horizontal="end" slot="fixed">
                         <ion-fab-button color="success" (click)="registrarIngresoVisita()">
                             <ion-icon name="log-in"></ion-icon>

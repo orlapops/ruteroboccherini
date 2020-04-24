@@ -17,10 +17,12 @@ export class RecibocajaPage implements OnInit {
   recibocaja: Array<any> = [];
   formaspago: Array<any> = [];
   total_recibo = 0;
-  tdcto_dchban = 0;
-  tdcto_dchef = 0;
-  tdcto_otrban = 0;
-  tdcto_otref = 0;
+  tdcto_15dias = 0;
+  tdcto_30dias = 0;
+  // tdcto_dchban = 0;
+  // tdcto_dchef = 0;
+  // tdcto_otrban = 0;
+  // tdcto_otref = 0;
   totros_desc = 0;
   tretencion = 0;
   tneto_recibir = 0;
@@ -137,10 +139,12 @@ export class RecibocajaPage implements OnInit {
   actualizar_totalrecibo(){
     return new Promise((resolve, reject) => {
     this.total_recibo = 0;
-    this.tdcto_dchban = 0;
-    this.tdcto_dchef = 0;
-    this.tdcto_otrban = 0;
-    this.tdcto_otref = 0;
+    this.tdcto_15dias = 0;
+    this.tdcto_30dias = 0;
+    // this.tdcto_dchban = 0;
+    // this.tdcto_dchef = 0;
+    // this.tdcto_otrban = 0;
+    // this.tdcto_otref = 0;
     this.totros_desc = 0;
     this.tretencion = 0;
     this.tneto_recibir = 0;
@@ -152,10 +156,12 @@ export class RecibocajaPage implements OnInit {
     for( const itemr of this.recibocaja ){
       console.log(itemr);
       this.total_recibo += itemr.item.abono;
-      this.tdcto_dchban += itemr.item.dcto_dchban;
-      this.tdcto_dchef += itemr.item.dcto_dchef;
-      this.tdcto_otrban += itemr.item.dcto_otrban;
-      this.tdcto_otref += itemr.item.dcto_otref;
+      this.tdcto_15dias += itemr.item.dcto_15dias;
+      this.tdcto_30dias += itemr.item.dcto_30dias;
+      // this.tdcto_dchban += itemr.item.dcto_dchban;
+      // this.tdcto_dchef += itemr.item.dcto_dchef;
+      // this.tdcto_otrban += itemr.item.dcto_otrban;
+      // this.tdcto_otref += itemr.item.dcto_otref;
       this.totros_desc += itemr.item.otros_desc;
       this.tretencion += itemr.item.retencion;
       this.tneto_recibir += itemr.item.neto_recibir;
@@ -192,8 +198,10 @@ export class RecibocajaPage implements OnInit {
     }
     this.grabando_recibo = true;
     console.log('a generar recibo ', this.recibocaja,  this._recibos.recibocaja ,  this._recibos.formpago);
-    this._recibos.genera_recibo_netsolin(this.total_recibo, this.tdcto_dchban, this.tdcto_otrban, 
-      this.tdcto_dchef, this.tdcto_otref, this.totros_desc,
+    // this._recibos.genera_recibo_netsolin(this.total_recibo, this.tdcto_dchban, this.tdcto_otrban, 
+    //   this.tdcto_dchef, this.tdcto_otref, this.totros_desc,
+    this._recibos.genera_recibo_netsolin(this.total_recibo, this.tdcto_15dias, this.tdcto_30dias, 
+      this.totros_desc,
       this.tretencion, this.tneto_recibir, this._recibos.formpago)
       // this.pag_efectivo, this.pag_bancos, this.pag_cheq1, this.pag_ch1banco, this.pag_ch1cuenta, this.pag_numcheq1, this.pag_fechach1,
       //  this.pag_cheq2, this.pag_ch2banco, this.pag_ch2cuenta, this.pag_numcheq2, this.pag_fechach2)

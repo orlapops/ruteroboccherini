@@ -24,6 +24,8 @@ import { ActividadesService } from '../../providers/actividades/actividades.serv
 import { VisitasProvider } from '../../providers/visitas/visitas.service';
 import { MessageService } from '../../providers/message/message.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { HomeMapModalPage } from '../home-map-modal/home-map-modal.page';
+
 
 @Injectable({
   providedIn: "root"
@@ -402,5 +404,17 @@ export class HomePage implements OnInit {
   
       }
   }
+  }
+
+  async openMap() {
+    console.log("openModal");
+    const modal = await this.modalCtrl.create({
+      component: HomeMapModalPage,
+      cssClass: '',
+      componentProps: {
+        llamadodesde: 'Home'
+      }
+    });
+    return await modal.present();
   }
 }

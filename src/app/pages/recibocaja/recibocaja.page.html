@@ -65,8 +65,10 @@
                                                 </h5>
                                                 <ion-text solt="start" color="danger">Descuentos</ion-text>
                                                 <h5>
-                                                    <ion-text solt="start" color="danger">Duchas: {{itemr.item.dcto_dchef + itemr.item.dcto_dchban | currency}}</ion-text>
-                                                    <ion-text slot="end" color="danger"> Otros: {{itemr.item.dcto_otref + itemr.item.dcto_otrban | currency}}</ion-text>
+                                                    <!-- <ion-text solt="start" color="danger">Duchas: {{itemr.item.dcto_dchef + itemr.item.dcto_dchban | currency}}</ion-text>
+                                                    <ion-text slot="end" color="danger"> Otros: {{itemr.item.dcto_otref + itemr.item.dcto_otrban | currency}}</ion-text> -->
+                                                    <ion-text *ngIf="itemr.item.dcto_15dias > 0" solt="start" color="danger">Pago 15 días: {{itemr.item.dcto_15dias | currency}}</ion-text>
+                                                    <ion-text *ngIf="itemr.item.dcto_30dias > 0" slot="end" color="danger"> Pago 30 días: {{itemr.item.dcto_30dias | currency}}</ion-text>
                                                 </h5>
                                                 <h5>
                                                     <ion-text color="danger"> Otros dctos: {{itemr.item.otros_desc | currency}}</ion-text>
@@ -104,7 +106,7 @@
                                             {{total_recibo | currency }}
                                         </ion-badge>
                                     </ion-item>
-                                    <ion-item class="bg-white margentb">
+                                    <!-- <ion-item class="bg-white margentb">
                                         <ion-label>
                                             Dcto Duchas Efectivo:
                                         </ion-label>
@@ -134,6 +136,22 @@
                                         </ion-label>
                                         <ion-badge slot="end" color="danger">
                                             -{{tdcto_otrban | currency }}
+                                        </ion-badge>
+                                    </ion-item> -->
+                                    <ion-item *ngIf="tdcto_15dias > 0" class="bg-white margentb">
+                                        <ion-label>
+                                            Dcto 15 días:
+                                        </ion-label>
+                                        <ion-badge slot="end" color="danger">
+                                            -{{tdcto_15dias | currency }}
+                                        </ion-badge>
+                                    </ion-item>
+                                    <ion-item *ngIf="tdcto_30dias > 0" class="bg-white margentb">
+                                        <ion-label>
+                                            Dcto 30 días:
+                                        </ion-label>
+                                        <ion-badge slot="end" color="danger">
+                                            -{{tdcto_30dias | currency }}
                                         </ion-badge>
                                     </ion-item>
                                     <ion-item class="bg-white margentb">

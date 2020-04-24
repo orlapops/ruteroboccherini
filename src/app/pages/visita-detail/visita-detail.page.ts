@@ -31,6 +31,7 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { File, DirectoryEntry, FileEntry } from "@ionic-native/file/ngx";
 import { ModalRegSegCartPage } from '../modal/modal-regsegcart/modal-regsegcart.page';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { HomeMapModalPage } from '../home-map-modal/home-map-modal.page';
 
 @Component({
   selector: 'app-visita-detail',
@@ -722,4 +723,16 @@ export class VisitaDetailPage implements OnInit {
 
   browser.show()
   }
+  async openMap() {
+    console.log("openModal");
+    const modal = await this.modalCtrl.create({
+      component: HomeMapModalPage,
+      cssClass: '',
+      componentProps: {
+        llamadodesde: 'Visita'
+      }
+    });
+    return await modal.present();
+  }
+
 }

@@ -86,21 +86,37 @@
                 </ion-text>
             </h3>
             <h3 class="hdatobliga">
-                <ion-text>
+                <!-- ANT ABRIL 23 2020 NUOS DESC FINANCIEROS -->
+                <!-- <ion-text>
                     Duchas: {{ oblshop.tot_duchas | currency }} Otros: {{ oblshop.tot_otros | currency }} Total: {{ oblshop.valor_neto | currency }}
+                </ion-text> -->
+                <ion-text>
+                    Mcia: {{ oblshop.valor_neto | currency }} +Iva: {{ oblshop.iva | currency }} -Retención: {{ oblshop.retencion+oblshop.ret_indyci | currency }} total: {{ oblshop.valor_neto +oblshop.iva - oblshop.retencion - oblshop.ret_indyci | currency }}
                 </ion-text>
             </h3>
-            <h3 class="hdatobliga">
+            <!-- <h3 class="hdatobliga">
                 <ion-text>
                     +Iva: {{ oblshop.iva | currency }} -Retención: {{ oblshop.retencion+oblshop.ret_indyci | currency }} total: {{ oblshop.valor_neto +oblshop.iva - oblshop.retencion - oblshop.ret_indyci | currency }}
                 </ion-text>
-            </h3>
+            </h3> -->
             <h3 class="hdatobliga">
-                <ion-text *ngIf="!apli_desc" color="danger">
+                <!-- <ion-text *ngIf="!apli_desc" color="danger">
                     No aplica Descuentos vencieron el {{ oblshop.fec_limdesc | date}}
                 </ion-text>
                 <ion-text *ngIf="apli_desc" color="success">
                     Descuentos hasta: {{ oblshop.fec_limdesc | date}}
+                </ion-text> -->
+                <ion-text *ngIf="!apli_des15 && !apli_des30 && oblshop.tot_30dias===0" color="danger">
+                    No aplica Descuentos vencieron el {{ oblshop.fec_limde15 | date}}
+                </ion-text>
+                <ion-text *ngIf="!apli_des15 && !apli_des30 && oblshop.tot_30dias != 0" color="danger">
+                    No aplica Descuentos vencieron el {{ oblshop.fec_limde30 | date}}
+                </ion-text>
+                <ion-text *ngIf="apli_des15" color="success">
+                    Descuentos hasta: {{ oblshop.fec_limde15 | date}} {{dcto_15dias | currency }}
+                </ion-text>
+                <ion-text *ngIf="apli_des30" color="success">
+                    Descuentos hasta: {{ oblshop.fec_limde30 | date}} {{dcto_30dias | currency }}
                 </ion-text>
             </h3>
         </ion-card-content>
@@ -144,7 +160,7 @@
                 {{oblshop.saldo - valor_abono | currency }}
             </ion-badge>
         </ion-item>
-        <ion-item class="bg-white" *ngIf="apli_desc && (dcto_dchef>0 || dcto_dchban>0)">
+        <!-- <ion-item class="bg-white" *ngIf="apli_desc && (dcto_dchef>0 || dcto_dchban>0)">
             <p *ngIf="paga_efectivo">
                 Descuento Duchas {{oblshop.pord_duefec}}%:
             </p>
@@ -171,7 +187,24 @@
             <ion-badge slot="end" color="danger" *ngIf="!paga_efectivo">
                 -{{dcto_otrban | currency }}
             </ion-badge>
+        </ion-item> -->
+        <ion-item class="bg-white" *ngIf="apli_des15 && (dcto_15dias>0)">
+            <p>
+                Descuento Pago 15 Días 
+            </p>
+            <ion-badge slot="end" color="danger" >
+                -{{dcto_15dias | currency }}
+            </ion-badge>
         </ion-item>
+        <ion-item class="bg-white" *ngIf="apli_des30 && (dcto_30dias>0)">
+            <p>
+                Descuento Pago 30 Días 
+            </p>
+            <ion-badge slot="end" color="danger" >
+                -{{dcto_30dias | currency }}
+            </ion-badge>
+        </ion-item>
+
         <ion-item class="bg-white" *ngIf="!abono_total">
             <p>
                 Valor Abonar:
@@ -204,7 +237,8 @@
                 Neto a Recibir:
             </ion-label>
             <ion-badge slot="end" color="success">
-                {{valor_abono - dcto_dchef - dcto_dchban - dcto_otref - dcto_otrban - otros_desc - retencion | currency }}
+                <!-- {{valor_abono - dcto_dchef - dcto_dchban - dcto_otref - dcto_otrban - otros_desc - retencion | currency }} -->
+                {{valor_abono - dcto_15dias - dcto_30dias - otros_desc - retencion | currency }}
             </ion-badge>
         </ion-item>
 

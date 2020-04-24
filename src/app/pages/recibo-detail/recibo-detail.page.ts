@@ -20,12 +20,16 @@ export class ReciboDetailPage implements OnInit {
   dcto_dchban = 0;
   dcto_otref = 0;
   dcto_otrban = 0;
+  dcto_15dias = 0;
+  dcto_30dias = 0;
   otros_desc = 0;
   retencion = 0;
   paga_efectivo = false;
   fecha_base = new Date().toISOString();
   abono_total = true;
   apli_desc = false;
+  apli_des15 = false;
+  apli_des30 = false;
   total_t: number;
   oblenRecibo: any;
   constructor(
@@ -54,46 +58,66 @@ export class ReciboDetailPage implements OnInit {
     const fechabase = new Date(this.fecha_base);
     const diasdifechas = this._parEmpre.diferenciaEntreDiasEnDias(fechaobli, fechabase);
     console.log('Diferencia entre fechas:', diasdifechas, this.fecha_base,fechabase,fechaobli, this.oblshop.dias_desc);
-    if (diasdifechas <= this.oblshop.dias_desc) {
-      this.apli_desc = true;
+    // if (diasdifechas <= this.oblshop.dias_desc) {
+    //   this.apli_desc = true;
+    // }
+
+    if (diasdifechas <= 15) {
+      this.apli_des15 = true;
+      this.apli_des30 = false;
+    } else if (diasdifechas <= 30) 
+    {
+      this.apli_des15 = false;
+      this.apli_des30 = true;
     }
+
 
     console.log('ngonit oblshop,oblenrecibo:',this.oblshop, this.oblenRecibo)
     if (this.oblenRecibo) {
       console.log('encontro en recibo');
       if (this.oblenRecibo.abono === 0){
         this.valor_abono = this.oblenRecibo.saldo;
-        if (this.apli_desc) {
-          if ( this.paga_efectivo) {
-// *            this.dcto_dchef = Math.round(this.oblshop.tot_duchas * this.oblshop.pord_duefec / 100)/100;
-            this.dcto_dchef = this.oblshop.tot_duchas * this.oblshop.pord_duefec / 100;
-            // this.dcto_dchef = Math.round(this.dcto_dchef * 100)/100;
-// Redondeo sin decimales
-            this.dcto_dchef = Math.round(this.dcto_dchef);
-            this.dcto_dchban = 0;
-            this.dcto_otref = this.oblshop.tot_otros * this.oblshop.pord_otrefe / 100;
-            this.dcto_otref = Math.round(this.dcto_otref);
-            this.dcto_otrban = 0;
-          } else {
-            // this.dcto_dchban = Math.round(this.oblshop.tot_duchas * this.oblshop.pord_duban / 100)/100;
-            this.dcto_dchban = this.oblshop.tot_duchas * this.oblshop.pord_duban / 100;
-            this.dcto_dchban = Math.round(this.dcto_dchban);
-            this.dcto_dchef = 0;
-            // this.dcto_otrban = Math.round(this.oblshop.tot_otros * this.oblshop.pord_otrban / 100)/100;
-            this.dcto_otrban = this.oblshop.tot_otros * this.oblshop.pord_otrban / 100;
-            this.dcto_otrban = Math.round(this.dcto_otrban);
-            this.dcto_otref = 0;
-          }
+        // if (this.apli_desc) {
+        //   if ( this.paga_efectivo) {
+        //     this.dcto_dchef = this.oblshop.tot_duchas * this.oblshop.pord_duefec / 100;
+        //     this.dcto_dchef = Math.round(this.dcto_dchef);
+        //     this.dcto_dchban = 0;
+        //     this.dcto_otref = this.oblshop.tot_otros * this.oblshop.pord_otrefe / 100;
+        //     this.dcto_otref = Math.round(this.dcto_otref);
+        //     this.dcto_otrban = 0;
+        //   } else {
+        //     // this.dcto_dchban = Math.round(this.oblshop.tot_duchas * this.oblshop.pord_duban / 100)/100;
+        //     this.dcto_dchban = this.oblshop.tot_duchas * this.oblshop.pord_duban / 100;
+        //     this.dcto_dchban = Math.round(this.dcto_dchban);
+        //     this.dcto_dchef = 0;
+        //     // this.dcto_otrban = Math.round(this.oblshop.tot_otros * this.oblshop.pord_otrban / 100)/100;
+        //     this.dcto_otrban = this.oblshop.tot_otros * this.oblshop.pord_otrban / 100;
+        //     this.dcto_otrban = Math.round(this.dcto_otrban);
+        //     this.dcto_otref = 0;
+        //   }
+        // }
+        //Abril 23 20
+        if (this.apli_des15){
+          this.dcto_15dias = this.oblshop.tot_15dias;
+        } else if (this.apli_des30){
+          this.dcto_30dias = this.oblshop.tot_30dias;
         }
+
         this.otros_desc = 0;
         this.retencion = 0;
       } else {
         this.paga_efectivo = this.oblenRecibo.paga_efectivo;
         this.valor_abono = this.oblenRecibo.abono;
-        this.dcto_dchban = this.oblenRecibo.dcto_dchban;
-        this.dcto_dchef = this.oblenRecibo.dcto_dchef;
-        this.dcto_otrban = this.oblenRecibo.dcto_otrban;
-        this.dcto_otref = this.oblenRecibo.dcto_otref;
+        // this.dcto_dchban = this.oblenRecibo.dcto_dchban;
+        // this.dcto_dchef = this.oblenRecibo.dcto_dchef;
+        // this.dcto_otrban = this.oblenRecibo.dcto_otrban;
+        // this.dcto_otref = this.oblenRecibo.dcto_otref;
+        //Abril 23 20
+        if (this.apli_des15){
+          this.dcto_15dias = this.oblshop.tot_15dias;
+        } else if (this.apli_des30){
+          this.dcto_30dias = this.oblshop.tot_30dias;
+        }
         this.otros_desc = this.oblenRecibo.otros_desc;
         this.retencion = this.oblenRecibo.retencion;
       }
@@ -101,24 +125,30 @@ export class ReciboDetailPage implements OnInit {
     } else {
       this.valor_abono =   this.oblshop.saldo;
       if (this.apli_desc) {
-        if ( this.paga_efectivo) {
-          this.dcto_dchef = this.oblshop.tot_duchas * this.oblshop.pord_duefec / 100;
-          this.dcto_dchef = Math.round(this.dcto_dchef);
-          this.dcto_dchban = 0;
-          this.dcto_otref = this.oblshop.tot_otros * this.oblshop.pord_otrefe / 100;
-          this.dcto_otref = Math.round(this.dcto_otref);
-          this.dcto_otrban = 0;
-        } else {
-          this.dcto_dchban = this.oblshop.tot_duchas * this.oblshop.pord_duban / 100;
-          this.dcto_dchban = Math.round(this.dcto_dchban);
-          this.dcto_dchef = 0;
-          this.dcto_otrban = this.oblshop.tot_otros * this.oblshop.pord_otrban / 100;
-          this.dcto_otrban = Math.round(this.dcto_otrban);
-          this.dcto_otref = 0;
-        }
+        // if ( this.paga_efectivo) {
+        //   this.dcto_dchef = this.oblshop.tot_duchas * this.oblshop.pord_duefec / 100;
+        //   this.dcto_dchef = Math.round(this.dcto_dchef);
+        //   this.dcto_dchban = 0;
+        //   this.dcto_otref = this.oblshop.tot_otros * this.oblshop.pord_otrefe / 100;
+        //   this.dcto_otref = Math.round(this.dcto_otref);
+        //   this.dcto_otrban = 0;
+        // } else {
+        //   this.dcto_dchban = this.oblshop.tot_duchas * this.oblshop.pord_duban / 100;
+        //   this.dcto_dchban = Math.round(this.dcto_dchban);
+        //   this.dcto_dchef = 0;
+        //   this.dcto_otrban = this.oblshop.tot_otros * this.oblshop.pord_otrban / 100;
+        //   this.dcto_otrban = Math.round(this.dcto_otrban);
+        //   this.dcto_otref = 0;
+        // }
       }
-      console.log('this.dcto_dchban',this.dcto_dchban);
-      console.log('this.dcto_otrban',this.dcto_otrban);
+        //Abril 23 20
+        if (this.apli_des15){
+          this.dcto_15dias = this.oblshop.tot_15dias;
+        } else if (this.apli_des30){
+          this.dcto_30dias = this.oblshop.tot_30dias;
+        }
+      console.log('this.dcto_15dias',this.dcto_15dias);
+      console.log('this.dcto_30dias',this.dcto_30dias);
       this.otros_desc = 0;
       this.retencion = 0;
       // this.total_t = this.oblshop.saldo;
@@ -182,43 +212,55 @@ export class ReciboDetailPage implements OnInit {
     console.log(this.apli_desc,this.abono_total,this.paga_efectivo);
     if (this.abono_total) {
       this.valor_abono = this.oblshop.saldo;
-      if (this.apli_desc) {
-        if ( this.paga_efectivo) {
-          this.dcto_dchef = this.oblshop.tot_duchas * this.oblshop.pord_duefec / 100;
-          this.dcto_dchef = Math.round(this.dcto_dchef);
-          this.dcto_dchban = 0;
-          this.dcto_otref = this.oblshop.tot_otros * this.oblshop.pord_otrefe / 100;
-          this.dcto_otref = Math.round(this.dcto_otref);
-          this.dcto_otrban = 0;
-        } else { 
-          this.dcto_dchef = 0;
-          // this.dcto_dchban = Math.round(this.oblshop.tot_duchas * this.oblshop.pord_duban / 100)/100;
-          this.dcto_dchban = this.oblshop.tot_duchas * this.oblshop.pord_duban / 100;
-          console.log('this.dcto_dchban',this.dcto_dchban);
-          this.dcto_dchban = Math.round(this.dcto_dchban);
-          console.log('this.dcto_dchban',this.dcto_dchban);
-          this.dcto_dchef = 0;
-          // this.dcto_otrban = Math.round(this.oblshop.tot_otros * this.oblshop.pord_otrban / 100)/100;
-          this.dcto_otrban = this.oblshop.tot_otros * this.oblshop.pord_otrban / 100;
-          console.log('this.dcto_otrban',this.dcto_otrban);
-          this.dcto_otrban = Math.round(this.dcto_otrban);
-          console.log('this.dcto_otrban',this.dcto_otrban);
-          this.dcto_otref = 0;
+      // if (this.apli_desc) {
+      //   if ( this.paga_efectivo) {
+      //     this.dcto_dchef = this.oblshop.tot_duchas * this.oblshop.pord_duefec / 100;
+      //     this.dcto_dchef = Math.round(this.dcto_dchef);
+      //     this.dcto_dchban = 0;
+      //     this.dcto_otref = this.oblshop.tot_otros * this.oblshop.pord_otrefe / 100;
+      //     this.dcto_otref = Math.round(this.dcto_otref);
+      //     this.dcto_otrban = 0;
+      //   } else { 
+      //     this.dcto_dchef = 0;
+      //     // this.dcto_dchban = Math.round(this.oblshop.tot_duchas * this.oblshop.pord_duban / 100)/100;
+      //     this.dcto_dchban = this.oblshop.tot_duchas * this.oblshop.pord_duban / 100;
+      //     console.log('this.dcto_dchban',this.dcto_dchban);
+      //     this.dcto_dchban = Math.round(this.dcto_dchban);
+      //     console.log('this.dcto_dchban',this.dcto_dchban);
+      //     this.dcto_dchef = 0;
+      //     // this.dcto_otrban = Math.round(this.oblshop.tot_otros * this.oblshop.pord_otrban / 100)/100;
+      //     this.dcto_otrban = this.oblshop.tot_otros * this.oblshop.pord_otrban / 100;
+      //     console.log('this.dcto_otrban',this.dcto_otrban);
+      //     this.dcto_otrban = Math.round(this.dcto_otrban);
+      //     console.log('this.dcto_otrban',this.dcto_otrban);
+      //     this.dcto_otref = 0;
+      //   }
+      // }
+        //Abril 23 20
+        if (this.apli_des15){
+          this.dcto_15dias = this.oblshop.tot_15dias;
+        } else if (this.apli_des30){
+          this.dcto_30dias = this.oblshop.tot_30dias;
         }
-      }
+      
       } else {
-        this.dcto_dchban = 0;
-        this.dcto_otrban = 0;
-        this.dcto_dchef = 0;
-        this.dcto_otref = 0;
+        // this.dcto_dchban = 0;
+        // this.dcto_otrban = 0;
+        // this.dcto_dchef = 0;
+        // this.dcto_otref = 0;
+        this.dcto_15dias = 0;
+        this.dcto_30dias = 0;
       }
+
     this.total_t = this.valor_abono;
     return this.total_t;
   }
 
   async addrecibo(item) {
-    this._recibo.addrecibocaja(item, this.paga_efectivo, this.valor_abono, this.dcto_dchban,
-      this.dcto_otrban, this.dcto_dchef, this.dcto_otref,
+    // this._recibo.addrecibocaja(item, this.paga_efectivo, this.valor_abono, this.dcto_dchban,
+    //   this.dcto_otrban, this.dcto_dchef, this.dcto_otref,
+    this._recibo.addrecibocaja(item, this.paga_efectivo, this.valor_abono, this.dcto_15dias,
+      this.dcto_30dias,
       this.otros_desc, this.retencion).then(async property => {
       const toast = await this.toastCtrl.create({
         showCloseButton: true,

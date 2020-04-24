@@ -50,6 +50,7 @@ import { File } from "@ionic-native/file/ngx";
 import { OneSignal } from '@ionic-native/onesignal/ngx';
 import { ModalRegSegCartPageModule } from './pages/modal/modal-regsegcart/modal-regsegcart.module';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { HomeMapModalPageModule } from './pages/home-map-modal/home-map-modal.module';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -66,6 +67,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     IonicModule.forRoot(environment.config),
     AppRoutingModule,
     HttpModule,
+    HomeMapModalPageModule,
     HttpClientModule,
     ImagePageModule,
     LocationPageModule,

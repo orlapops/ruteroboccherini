@@ -550,7 +550,7 @@ cargaPeriodoUsuar(pcod_usuar){
                         console.log(itemdato);
                         // console.log(itemdato.payload);
                         // console.log(itemdato.payload.doc);
-                        // console.log(itemdato.payload.doc.data());
+                        console.log(itemdato.payload.doc.data());
                         // console.log(itemdato.payload.doc.id);
   
                         // console.log('cambia a cargo ruta');

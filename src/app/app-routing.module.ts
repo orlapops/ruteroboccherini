@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   { path: '', loadChildren: './pages/walkthrough/walkthrough.module#WalkthroughPageModule' },
   { path: 'home', loadChildren: './pages/home/home.module#HomePageModule' },
+  { path: 'home-map-modal', loadChildren: './pages/home-map-modal/home-map-modal.module#HomeMapModalPageModule' },
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
   { path: 'licencia', loadChildren: './pages/licencia/licencia.module#LicenciaPageModule' },
   { path: 'register', loadChildren: './pages/register/register.module#RegisterPageModule' },
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'regcliepoten/:id', loadChildren: './pages/regcliepoten/regcliepoten.module#RegCliepotenPageModule' },
   { path: 'location', loadChildren: './pages/modal/location/location.module#LocationPageModule' },
   { path: 'tabs', loadChildren: './tabs/tabs.module#TabsPageModule' },
+
   
   // { path: 'modalNuevaVisita', loadChildren: './modal/modal-nueva-visita/modal-nueva-visita.module#ModalNuevaVisitaPageModule' },
   // { path: 'modalNuevaVisita', loadChildren: './pages/modal/modal-nueva-visita/modal-nueva-visita.module#ModalNuevaVisitaPageModule' }

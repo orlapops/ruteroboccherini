@@ -108,24 +108,25 @@
                 </ion-row>
             </ion-card-content>
         </ion-card>
+        <!-- <ion-text color="primary"> -->
+                <ion-buttons slot="start">
+                <ion-button  (click)="openMap()">
+                      <!-- <ion-icon color="orange" slot="icon-only" name="ios-pin-outline" ></ion-icon> -->                      
+                        <ion-icon size="small" color="blue" name="map"></ion-icon> 
+                </ion-button>
+                            <h4>  Ver Mapa visitas cerca usted</h4>
+                </ion-buttons>
+        
+            <!-- </ion-text> -->
 
-        <ion-text color="primary">
-            <h3>
-                <ion-icon size="small" color="dark" name="map"></ion-icon> {{ 'app.pages.home.title.nearyou' | translate }}</h3>
-        </ion-text>
-
-        <ion-card class="animated fadeIn">
+        <!-- <ion-card class="animated fadeIn">
             <ion-card-content no-padding>
-                <!-- <agm-map [latitude]="_visitas.visitas_pendientes[0].data.latitud" [longitude]="_visitas.visitas_pendientes[0].data.longitud" [zoom]="10" [zoomControl]="false" [styles]="agmStyles" [streetViewControl]="false"> -->
                 <agm-map [latitude]="coords.lat" [longitude]="coords.lng" [zoom]="15" [zoomControl]="false" [styles]="agmStyles" [streetViewControl]="false">
                     <agm-marker [latitude]="user.latitud" [longitude]="user.longitud"></agm-marker>
 
                     <agm-marker *ngFor="let visita of _visitas.visitas_pendientes" [latitude]="visita.data.latitud" [longitude]="visita.data.longitud">
                         <agm-info-window>
                             <ion-item tappable routerLink="/visita-detail/{{visita.id">
-                                <!-- <ion-thumbnail slot="start">
-                                    <img [src]="hotel.thumb">
-                                </ion-thumbnail> -->
                                 <ion-label>
                                     <h2 [ngClass]="{'fw700 text-white': !true}">
                                         <div class="fechavisita">
@@ -137,7 +138,6 @@
                                             <ion-icon name="time" slot="end" color="tertiary" *ngIf="true"></ion-icon>
                                             <ion-text color="primary"> {{ _parEmpre.cadhoramil(visita.data.hora_in) }}</ion-text>
                                         </div>
-                                        <!-- <ion-text color="primary">Mensaje</ion-text> -->
                                     </h2>
                                     <hr>
                                     <h2 class="clientevisita">
@@ -146,9 +146,7 @@
                                     <h3>
                                         <div class="direcvisita">
                                             <ion-icon name="pin" slot="start" class="direcvisita"></ion-icon>
-                                            <!-- <p [ngClass]="{'text-light': !true}"> -->
                                             <ion-text color="dark"> {{visita.data.direccion}} </ion-text>
-                                            <!-- </p> -->
                                         </div>
                                     </h3>
                                     <h4 class="notavisita">
@@ -163,7 +161,7 @@
                 </agm-map>
 
             </ion-card-content>
-        </ion-card>
+        </ion-card> -->
         <hr class="bg-tertiary">
 
         <ion-text color="primary">

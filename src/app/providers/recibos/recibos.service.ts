@@ -285,16 +285,8 @@ export class RecibosService implements OnInit {
     return Promise.resolve(this.formpago);
   }
   //adiciona un item a recibo
-  addrecibocaja(
-    item,
-    paga_efectivo,
-    abono,
-    dcto_dchban,
-    dcto_otrban,
-    dcto_dchef,
-    dcto_otref,
-    otros_desc,
-    retencion
+  // addrecibocaja(item,paga_efectivo,abono,dcto_dchban,dcto_otrban,dcto_dchef,dcto_otref,otros_desc,retencion
+  addrecibocaja(item,paga_efectivo,abono,dcto_15dias,dcto_30dias,otros_desc,retencion
   ) {
     console.log("add item addrecibocaja item llega:", item);
     let exist = false;
@@ -304,22 +296,18 @@ export class RecibosService implements OnInit {
         if (val.item.num_obliga === item.num_obliga) {
           val.item.abono = abono;
           val.item.paga_efectivo = paga_efectivo;
-          val.item.dcto_dchban = dcto_dchban;
-          val.item.dcto_otrban = dcto_otrban;
-          val.item.dcto_dchef = dcto_dchef;
-          val.item.dcto_otref = dcto_otref;
+          val.item.dcto_15dias = dcto_15dias;
+          val.item.dcto_30dias = dcto_30dias;
+          // val.item.dcto_dchban = dcto_dchban;
+          // val.item.dcto_otrban = dcto_otrban;
+          // val.item.dcto_dchef = dcto_dchef;
+          // val.item.dcto_otref = dcto_otref;
           val.item.otros_desc = otros_desc;
           val.item.retencion = retencion;
           val.item.saldoini = item.saldo;
           val.item.saldo = item.saldo - abono;
-          val.item.neto_recibir =Math.round(
-            abono -
-            dcto_dchban -
-            dcto_otrban -
-            dcto_dchef -
-            dcto_otref -
-            otros_desc -
-            retencion);
+          // val.item.neto_recibir =Math.round(abono -dcto_dchban -dcto_otrban -dcto_dchef -dcto_otref -otros_desc -retencion);
+          val.item.neto_recibir =Math.round(abono -dcto_15dias -dcto_30dias -otros_desc -retencion);
           exist = true;
         }
       });
@@ -348,20 +336,16 @@ export class RecibosService implements OnInit {
         fecha_obl: item.fecha_obl,
         paga_efectivo: paga_efectivo,
         abono: abono,
-        dcto_dchban: dcto_dchban,
-        dcto_otrban: dcto_otrban,
-        dcto_dchef: dcto_dchef,
-        dcto_otref: dcto_otref,
+        dcto_15dias: dcto_15dias,
+        dcto_30dias: dcto_30dias,
+        // dcto_dchban: dcto_dchban,
+        // dcto_otrban: dcto_otrban,
+        // dcto_dchef: dcto_dchef,
+        // dcto_otref: dcto_otref,
         otros_desc: otros_desc,
         retencion: retencion,
-        neto_recibir:Math.round(
-          abono -
-          dcto_dchban -
-          dcto_otrban -
-          dcto_dchef -
-          dcto_otref -
-          otros_desc -
-          retencion),
+        // neto_recibir:Math.round(abono -dcto_dchban -dcto_otrban -dcto_dchef -dcto_otref -otros_desc -retencion),
+        neto_recibir:Math.round(abono -dcto_15dias -dcto_30dias -otros_desc -retencion),
         saldoini: item.saldo,
         saldo: item.saldo - abono,
         dias_venci: item.dias_venci
@@ -526,16 +510,8 @@ export class RecibosService implements OnInit {
     }
   }
 
-  genera_recibo_netsolin(
-    total_recibo,
-    tdcto_dchban,
-    tdcto_otrban,
-    tdcto_dchef,
-    tdcto_otref,
-    totros_desc,
-    tretencion,
-    tneto_recibir,
-    objformpag
+  // genera_recibo_netsolin(total_recibo,tdcto_dchban,tdcto_otrban,tdcto_dchef,tdcto_otref,totros_desc,retencion,tneto_recibir,objformpag
+  genera_recibo_netsolin(total_recibo,tdcto_15dias,tdcto_30dias,totros_desc,retencion,tneto_recibir,objformpag
   ) {
     console.log(
       "dataos para generar recibo this._visitas.visita_activa_copvdet:",
@@ -556,16 +532,18 @@ export class RecibosService implements OnInit {
         datos_gen: this._visitas.visita_activa_copvdet,
         items_recibo: this.recibocaja,
         total_recibo: total_recibo,
-        tdcto_dchban: tdcto_dchban,
-        tdcto_otrban: tdcto_otrban,
-        tdcto_dchef: tdcto_dchef,
-        tdcto_otref: tdcto_otref,
+        tdcto_15dias: tdcto_15dias,
+        tdcto_30dias: tdcto_30dias,
+        // tdcto_dchban: tdcto_dchban,
+        // tdcto_otrban: tdcto_otrban,
+        // tdcto_dchef: tdcto_dchef,
+        // tdcto_otref: tdcto_otref,
         totros_desc: totros_desc,
-        tretencion: tretencion,
+        tretencion: retencion,
         tneto_recibir: tneto_recibir,
         objformpag: objformpag,
         usuario: this._parempre.usuario
-      };
+      }; 
       NetsolinApp.objenvrest.filtro = "";
       NetsolinApp.objenvrest.parametros = paramgrab;
       let url =

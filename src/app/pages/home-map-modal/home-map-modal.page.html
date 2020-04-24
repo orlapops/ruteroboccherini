@@ -1,0 +1,113 @@
+
+<ion-content >
+  <ion-fab vertical="top" horizontal="end" slot="fixed" >
+    <ion-fab-button (click)="close()" color="white">
+      <ion-icon name="ios-close-circle" ></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+    <!--*********** Map wrapper  ***********-->
+  <div *ngIf="llamadodesde==='Home'" id="wrapper">
+  
+      <!-- <agm-map [latitude]="coords.lat" [longitude]="coords.lng" [zoom]="15" [zoomControl]="false" [styles]="agmStyles" [streetViewControl]="false"> -->
+       <agm-map [latitude]="coords.lat" [longitude]="coords.lng" [zoom]="15" [zoomControl]="false"  [streetViewControl]="false">
+        <agm-marker [iconUrl]="iconmaquiestoy" [latitude]="user.latitud" [longitude]="user.longitud">
+          <agm-info-window>
+            <ion-item tappable routerLink="/visita-detail/{{visita.id">
+                <!-- <ion-thumbnail slot="start">
+                    <img [src]="hotel.thumb">
+                </ion-thumbnail> -->
+                <ion-label>
+                    <h2 class="clientevisita">
+                        <ion-text color="dark"> Se encuentra aqui</ion-text>
+                    </h2>
+                </ion-label>
+            </ion-item>
+        </agm-info-window>
+
+        </agm-marker>
+
+        <agm-marker *ngFor="let visita of _visitas.visitas_pendientes" [latitude]="visita.data.latitud" [longitude]="visita.data.longitud">
+            <agm-info-window>
+                <ion-item tappable routerLink="/visita-detail/{{visita.id">
+                    <!-- <ion-thumbnail slot="start">
+                        <img [src]="hotel.thumb">
+                    </ion-thumbnail> -->
+                    <ion-label>
+                        <h2 [ngClass]="{'fw700 text-white': !true}">
+                            <div class="fechavisita">
+                                <ion-icon name="calendar" slot="start" color="secondary" *ngIf="true"></ion-icon>
+                                <ion-icon name="mail-open" slot="start" color="primary" *ngIf="!true"></ion-icon>
+                                <ion-text color="primary">{{ _parEmpre.cadafecha(visita.data.fecha_in) | date: 'shortDate'}}</ion-text>
+                            </div>
+                            <!-- <div class="horavisita">
+                                <ion-icon name="time" slot="end" color="tertiary" *ngIf="true"></ion-icon>
+                                <ion-text color="primary"> {{ _parEmpre.cadhoramil(visita.data.hora_in) }}</ion-text>
+                            </div> -->
+                            <!-- <ion-text color="primary">Mensaje</ion-text> -->
+                        </h2>
+                        <hr>
+                        <h2 class="clientevisita">
+                            <ion-text color="dark"> {{visita.data.nombre}}</ion-text>
+                        </h2>
+                        <h3>
+                            <div class="direcvisita">
+                                <ion-icon name="pin" slot="start" class="direcvisita"></ion-icon>
+                                <!-- <p [ngClass]="{'text-light': !true}"> -->
+                                <ion-text color="dark"> {{visita.data.direccion}} </ion-text>
+                                <!-- </p> -->
+                            </div>
+                        </h3>
+                        <!-- <h4 class="notavisita">
+                            <p [ngClass]="{'text-light': !true}">
+                                <ion-text color="dark">{{ visita.data.notas }}</ion-text>
+                            </p>
+                        </h4> -->
+                    </ion-label>
+                </ion-item>
+            </agm-info-window>
+        </agm-marker>
+    </agm-map>      
+  </div>
+  <div *ngIf="llamadodesde !== 'Home'" id="wrapper">
+                          <agm-map [latitude]="visitaAct.latitud" [longitude]="visitaAct.longitud" [zoom]="14" [zoomControl]="false"  [streetViewControl]="false">
+                            <agm-marker [latitude]="visitaAct.latitud" [longitude]="visitaAct.longitud">
+                              <agm-info-window>
+                                <ion-item tappable routerLink="/visita-detail/{{visitaAct.id">
+                                    <ion-label>
+                                        <h2 [ngClass]="{'fw700 text-white': !true}">
+                                            <div class="fechavisita">
+                                                <ion-icon name="calendar" slot="start" color="secondary" *ngIf="true"></ion-icon>
+                                                <ion-icon name="mail-open" slot="start" color="primary" *ngIf="!true"></ion-icon>
+                                                <ion-text color="primary">{{ _parEmpre.cadafecha(visitaAct.fecha_in) | date: 'shortDate'}}</ion-text>
+                                            </div>
+                                            <!-- <div class="horavisita">
+                                                <ion-icon name="time" slot="end" color="tertiary" *ngIf="true"></ion-icon>
+                                                <ion-text color="primary"> {{ _parEmpre.cadhoramil(visita.data.hora_in) }}</ion-text>
+                                            </div> -->
+                                            <!-- <ion-text color="primary">Mensaje</ion-text> -->
+                                        </h2>
+                                        <hr>
+                                        <h2 class="clientevisita">
+                                            <ion-text color="dark"> {{visitaAct.nombre}}</ion-text>
+                                        </h2>
+                                        <h3>
+                                            <div class="direcvisita">
+                                                <ion-icon name="pin" slot="start" class="direcvisita"></ion-icon>
+                                                <!-- <p [ngClass]="{'text-light': !true}"> -->
+                                                <ion-text color="dark"> {{visitaAct.direccion}} </ion-text>
+                                                <!-- </p> -->
+                                            </div>
+                                        </h3>
+                                        <!-- <h4 class="notavisita">
+                                            <p [ngClass]="{'text-light': !true}">
+                                                <ion-text color="dark">{{ visita.data.notas }}</ion-text>
+                                            </p>
+                                        </h4> -->
+                                    </ion-label>
+                                </ion-item>
+                            </agm-info-window>                              
+                            </agm-marker>
+                        </agm-map>
+  
+  </div>
+</ion-content>
