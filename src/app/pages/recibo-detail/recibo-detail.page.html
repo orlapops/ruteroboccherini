@@ -113,10 +113,10 @@
                     No aplica Descuentos vencieron el {{ oblshop.fec_limde30 | date}}
                 </ion-text>
                 <ion-text *ngIf="apli_des15" color="success">
-                    Descuentos hasta: {{ oblshop.fec_limde15 | date}} {{dcto_15dias | currency }}
+                    Descuentos pago en Bancos hasta: {{ oblshop.fec_limde15 | date}} {{dcto_15dias | currency }}
                 </ion-text>
                 <ion-text *ngIf="apli_des30" color="success">
-                    Descuentos hasta: {{ oblshop.fec_limde30 | date}} {{dcto_30dias | currency }}
+                    Descuentos Pago en Bancos hasta: {{ oblshop.fec_limde30 | date}} {{dcto_30dias | currency }}
                 </ion-text>
             </h3>
         </ion-card-content>

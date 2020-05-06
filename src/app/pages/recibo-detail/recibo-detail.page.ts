@@ -237,11 +237,19 @@ export class ReciboDetailPage implements OnInit {
       //   }
       // }
         //Abril 23 20
+        //Abril 30 20 si es de contado no aplica
+        if (this.paga_efectivo) {
+          this.dcto_15dias = 0;
+          this.dcto_30dias = 0;
+          // this.apli_des15 
+      } else{
         if (this.apli_des15){
           this.dcto_15dias = this.oblshop.tot_15dias;
         } else if (this.apli_des30){
           this.dcto_30dias = this.oblshop.tot_30dias;
         }
+
+      }
       
       } else {
         // this.dcto_dchban = 0;
