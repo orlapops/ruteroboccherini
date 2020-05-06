@@ -267,6 +267,7 @@ export class ReciboDetailPage implements OnInit {
   async addrecibo(item) {
     // this._recibo.addrecibocaja(item, this.paga_efectivo, this.valor_abono, this.dcto_dchban,
     //   this.dcto_otrban, this.dcto_dchef, this.dcto_otref,
+    console.log('addrecibo item', item);
     this._recibo.addrecibocaja(item, this.paga_efectivo, this.valor_abono, this.dcto_15dias,
       this.dcto_30dias,
       this.otros_desc, this.retencion).then(async property => {

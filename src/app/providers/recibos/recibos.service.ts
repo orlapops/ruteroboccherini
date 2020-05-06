@@ -332,6 +332,8 @@ export class RecibosService implements OnInit {
       const itemAdi = {
         id_erest: this.idrestrecibo,
         id_visita: this._visitas.visita_activa_copvdet.id_visita,
+        cod_dfactu: item.cod_dfactu,
+        num_dfactu: item.num_dfactu,
         num_obliga: item.num_obliga,
         fecha_obl: item.fecha_obl,
         paga_efectivo: paga_efectivo,
