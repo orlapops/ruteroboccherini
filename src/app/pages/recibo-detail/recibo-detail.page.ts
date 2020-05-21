@@ -163,9 +163,11 @@ export class ReciboDetailPage implements OnInit {
     this.total_t = 0;
     const fechaobli = new Date(this.oblshop.fecha_obl);
     if (this.paga_efectivo) {
+      console.log('paga en efectivo');
       //si paga efectivo la fecha base es hoy
       this.fecha_base = new Date().toISOString();
     } else {
+      console.log('total fecha base', this.fecha_base);
       //verificar que ha hoy no se den mas de 15 días de diferencia
       const fechahoy = new Date();
       const fechabase1 = new Date(this.fecha_base);
@@ -191,10 +193,21 @@ export class ReciboDetailPage implements OnInit {
     console.log('fechaobli',fechaobli);
     const diasdifechas = this._parEmpre.diferenciaEntreDiasEnDias(fechaobli, fechabase);
     console.log('Diferencia entre fechas:', diasdifechas, this.fecha_base,fechabase,fechaobli, this.oblshop.dias_desc);
-    if (diasdifechas <= this.oblshop.dias_desc) {
-      this.apli_desc = true;
-    } else {
+
+    if (diasdifechas <= 15) {
+      this.apli_des15 = true;
+      this.apli_des30 = false;
+    } else if (diasdifechas <= 30) 
+    {
+      this.apli_des15 = false;
+      this.apli_des30 = true;
     }
+
+
+    // if (diasdifechas <= this.oblshop.dias_desc) {
+    //   this.apli_desc = true;
+    // } else {
+    // }
     if (this.otros_desc>1000) {
       console.error('Descuento maximo 1000');
       const toast = await this.toastCtrl.create({
