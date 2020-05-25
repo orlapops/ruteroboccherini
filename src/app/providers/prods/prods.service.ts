@@ -451,8 +451,10 @@ export class ProdsService implements OnInit {
       //asignar idrest para grabación de pedido y verificar si se ha guardado o no
       const idruta = this._visitas.visita_activa_copvdet.id_ruta.toString();
       const idvisiact = this._visitas.visita_activa_copvdet.id_visita.toString();
-      let lrandom = Math.round(Math.random()*999);
-      let idfactura = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
+      // let lrandom = Math.round(Math.random()*999);
+      // let idfactura = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
+      let lrandom = Math.round(Math.random()*9999999);
+      let idfactura = idruta.toString(0,3) + lrandom.toString();    
       if (this.factura.length == 0){
         // this.idrestrecibo = Math.round(Math.random()*9999999999);      
         this.idrestfactura = parseInt(idfactura);
@@ -498,8 +500,10 @@ export class ProdsService implements OnInit {
       //asignar idrest para grabación de pedido y verificar si se ha guardado o no
       const idruta = this._visitas.visita_activa_copvdet.id_ruta.toString();
       const idvisiact = this._visitas.visita_activa_copvdet.id_visita.toString();
-      let lrandom = Math.round(Math.random()*999);
-      let idpedido = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
+      // let lrandom = Math.round(Math.random()*999);
+      // let idpedido = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
+      let lrandom = Math.round(Math.random()*9999999);
+      let idpedido = idruta.toString(0,3) +  lrandom.toString();    
       if (this.pedido.length == 0){
         // this.idrestrecibo = Math.round(Math.random()*9999999999);      
         this.idrestpedido = parseInt(idpedido);

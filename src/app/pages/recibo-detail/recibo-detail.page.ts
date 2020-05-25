@@ -224,6 +224,7 @@ export class ReciboDetailPage implements OnInit {
 
     console.log(this.apli_desc,this.abono_total,this.paga_efectivo);
     if (this.abono_total) {
+      console.log('total paga  saldo total',this.oblshop.saldo)
       this.valor_abono = this.oblshop.saldo;
       // if (this.apli_desc) {
       //   if ( this.paga_efectivo) {
@@ -252,19 +253,25 @@ export class ReciboDetailPage implements OnInit {
         //Abril 23 20
         //Abril 30 20 si es de contado no aplica
         if (this.paga_efectivo) {
+          console.log('paga en efectivo');
           this.dcto_15dias = 0;
           this.dcto_30dias = 0;
           // this.apli_des15 
       } else{
+        console.log('total abona pga en bancos');
         if (this.apli_des15){
+          this.dcto_30dias = 0;
           this.dcto_15dias = this.oblshop.tot_15dias;
         } else if (this.apli_des30){
+          this.dcto_15dias = 0;
           this.dcto_30dias = this.oblshop.tot_30dias;
         }
+        console.log(this.dcto_15dias,this.dcto_30dias);
 
       }
       
       } else {
+        console.log('abono no descuento');
         // this.dcto_dchban = 0;
         // this.dcto_otrban = 0;
         // this.dcto_dchef = 0;

@@ -319,8 +319,10 @@ export class RecibosService implements OnInit {
       //asignar idrest para grabación de recibo y verificar si se ha guardado o no
       const idruta = this._visitas.visita_activa_copvdet.id_ruta.toString();
       const idvisiact = this._visitas.visita_activa_copvdet.id_visita.toString();
-      let lrandom = Math.round(Math.random()*999);
-      let idirecibo = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
+      // let lrandom = Math.round(Math.random()*999);
+      // let idirecibo = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
+      let lrandom = Math.round(Math.random()*9999999);
+      let idirecibo = idruta.toString(0,3) +  lrandom.toString();    
   
       if (this.recibocaja.length == 0){
         // this.idrestrecibo = Math.round(Math.random()*9999999999);      

@@ -329,7 +329,7 @@
         </ion-button>
     </ion-card>
     <ion-card class="btrecibotot-color" *ngIf="grabando_recibo && grabo_recibo && mostrandoresulado">
-        <ion-text color="green"><strong> {{_visitas.visita_activa_copvdet.recibo_grabado.men_error}}</strong></ion-text>
+        <ion-text *ngIf="_visitas.visita_activa_copvdet.recibo_grabado.men_error" color="green"><strong> {{_visitas.visita_activa_copvdet.recibo_grabado.men_error}}</strong></ion-text>
         <div>
             <textarea class="texto_imprimir">{{_visitas.visita_activa_copvdet.recibo_grabado.txt_imp}}</textarea>
         </div>
