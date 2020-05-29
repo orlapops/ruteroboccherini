@@ -116,7 +116,7 @@ export class ProdsService implements OnInit {
       console.log("cargaInventarioNetsolin url", url);
       console.log("cargaInventarioNetsolin NetsolinApp.objenvrest",NetsolinApp.objenvrest);
       this.http.post(url, NetsolinApp.objenvrest).subscribe((data: any) => {
-        // console.log(" cargaInventarioNetsolin data:", data);
+        console.log(" cargaInventarioNetsolin data:", data);
         if (data){
         if (data.error) {
           console.error(" cargaInventarioNetsolin ", data.error);
@@ -453,8 +453,10 @@ export class ProdsService implements OnInit {
       const idvisiact = this._visitas.visita_activa_copvdet.id_visita.toString();
       // let lrandom = Math.round(Math.random()*999);
       // let idfactura = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
-      let lrandom = Math.round(Math.random()*9999999);
-      let idfactura = idruta.toString(0,3) + lrandom.toString();    
+      const fechabase = new Date();
+      const dia = fechabase.getDate()
+      let lrandom = Math.round(Math.random()*99999);
+      let idfactura = idruta.toString(0,3) + dia.toString().padStart(2,'0') + lrandom.toString();    
       if (this.factura.length == 0){
         // this.idrestrecibo = Math.round(Math.random()*9999999999);      
         this.idrestfactura = parseInt(idfactura);
@@ -502,8 +504,10 @@ export class ProdsService implements OnInit {
       const idvisiact = this._visitas.visita_activa_copvdet.id_visita.toString();
       // let lrandom = Math.round(Math.random()*999);
       // let idpedido = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
-      let lrandom = Math.round(Math.random()*9999999);
-      let idpedido = idruta.toString(0,3) +  lrandom.toString();    
+      const fechabase = new Date();
+      const dia = fechabase.getDate()
+      let lrandom = Math.round(Math.random()*99999);
+      let idpedido = idruta.toString(0,3) + dia.toString().padStart(2,'0') +  lrandom.toString();    
       if (this.pedido.length == 0){
         // this.idrestrecibo = Math.round(Math.random()*9999999999);      
         this.idrestpedido = parseInt(idpedido);

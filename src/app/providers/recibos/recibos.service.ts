@@ -321,8 +321,10 @@ export class RecibosService implements OnInit {
       const idvisiact = this._visitas.visita_activa_copvdet.id_visita.toString();
       // let lrandom = Math.round(Math.random()*999);
       // let idirecibo = idruta.toString(0,3) + idvisiact.substring(0,4)  + lrandom.toString();    
-      let lrandom = Math.round(Math.random()*9999999);
-      let idirecibo = idruta.toString(0,3) +  lrandom.toString();    
+      const fechabase = new Date();
+      const dia = fechabase.getDate()
+      let lrandom = Math.round(Math.random()*99999);
+      let idirecibo = idruta.toString(0,3) + dia.toString().padStart(2,'0')+  lrandom.toString();    
   
       if (this.recibocaja.length == 0){
         // this.idrestrecibo = Math.round(Math.random()*9999999999);      
