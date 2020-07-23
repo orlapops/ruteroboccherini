@@ -128,7 +128,7 @@ cargaPeriodoUsuar(pcod_usuar){
          .subscribe( (data:any) =>{ 
            if (data){
              console.log('cargo periodo en netsolin', data);
-              if( data.error){
+              if( data.isCallbackError){
               console.error(" cargaPeriodoUsuar error", data.error);
             //   this._parempre.reg_log('Error en cargaPeriodoUsuar por netsolin ', 'data.error');
              this.cargoidperiodo = false;
@@ -139,6 +139,17 @@ cargaPeriodoUsuar(pcod_usuar){
              resolve(false);
               } else{
                 console.log('cargo periodo retorna true',data.datos_ruta[0]);
+                //op julio 23 20 asegurarse que este creado en firebase
+                const datosper = data.datos_periodo[0];
+                const datperfb = {
+                  descripcion: datosper.nombre.trim(),
+                  fecha_inicial: datosper.fecha_in,
+                  fecha_final: datosper.fecha_fin
+                }
+                console.log('A grabar en fb',datosper.id_per,datperfb,`/personal/${this._parempre.usuario.cod_usuar}/rutas/${data.datos_ruta[0].id_ruta}/periodos`);
+                this.fbDb
+                .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${data.datos_ruta[0].id_ruta}/periodos`)
+                .doc(datosper.id_per).set(datperfb);
                 // this._parempre.reg_log('coer', 'cargaPeriodoUsuar por netsolin ');
                 this.cargoidperiodo = true;
               this.id_ruta = data.datos_ruta[0].id_ruta;
@@ -362,6 +373,115 @@ cargaPeriodoUsuar(pcod_usuar){
         });
     });
   }
+//Consulta en Netsolin visitas de unusuario y un id de fecha
+cargaVisitasNetsolin(pcod_usuar,pruta,pperiodo){
+  return new Promise((resolve,reject)=>{
+      NetsolinApp.objenvrest.filtro = pcod_usuar;
+      NetsolinApp.objenvrest.usuario = this._parempre.usuario.cod_usuar;
+      let paramOBJ = {
+        // datos_gen: this._visitas.visita_activa_copvdet.datosgen,
+        ruta: pruta,
+        periodo: pperiodo,
+        vendedor:pcod_usuar
+      };
+      NetsolinApp.objenvrest.parametros = paramOBJ;
+      console.log('llamado cargaPeriodoUsuar netoslin NetsolinApp.objenvrest:',NetsolinApp.objenvrest);
+      let url= this._parempre.URL_SERVICIOS + "netsolin_servirestgo.csvc?VRCod_obj=RESTVERIVISITPERRUTA";
+      this.http.post( url, NetsolinApp.objenvrest )   
+       .subscribe( (data:any) =>{ 
+         if (data){
+           console.log('cargo visitas en netsolin', data);
+            if( data.isCallbackError){
+            console.error(" cargavisitas error", data.error);
+           resolve(false);
+            } else{
+              console.log('cargo visitas retorna true',data);
+              //op julio 23 20 asegurarse que este creado en firebase
+              data.datos_ruta.forEach((datvisi: any) => {
+                console.log('datvisi.fecha_fin',datvisi.fecha_fin,typeof(datvisi.fecha_fin));
+                const finis= datvisi.fecha_in.substr(0,4)+datvisi.fecha_in.substr(5,2)+datvisi.fecha_in.substr(8,2)
+                const ffins= datvisi.fecha_fin.substr(0,4)+datvisi.fecha_fin.substr(5,2)+datvisi.fecha_fin.substr(8,2)
+                console.log('ffins',ffins);
+                const visicrear = {
+                  cod_tercer: datvisi.cod_tercer,
+                  direccion: datvisi.direccion,                          
+                  envio_email: false,
+                  error_envemail: '',
+                  errorgrb_factu: false,
+                  errorgrb_pedido:false,
+                  errorgrb_recibo:false,
+                  estado: datvisi.estado,
+                  fecha_fin: ffins,
+                  fecha_in: finis,
+                  fechahora_cierre: '',
+                  fechahora_ingreso: Date(),
+                  latitud: datvisi.latitud,
+                  longitu: datvisi.longitud,
+                  hora_in : 0,
+                  hora_sal : 0,
+                  grb_pedido : false,
+                  resgrb_pedido : '',
+                  pedido_grabado : null,
+                  grb_factu : false,
+                  resgrb_factu : '',
+                  pedido_factu : null,
+                  grb_recibo : false,
+                  resgrb_recibo : '',
+                  pedido_recibo : null,
+                  id_dir: datvisi.id_dir, 
+                  id_reffecha: datvisi.id_reffecha,
+                  id_ruta: datvisi.id_ruta,
+                  id_visita: datvisi.id_visita,
+                  nombre: datvisi.nombre,
+                  llamada: false,
+                  notaing: '',
+                  notas: datvisi.nota_app
+                };
+                this.fbDb
+                .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this.id_ruta}/periodos/${this.id_periodo}/visitas`)
+                .doc(datvisi.id_visita.toString()).set(visicrear);
+            
+              })
+              resolve(true);              
+            }
+         } else{
+          resolve(false);
+         }  
+       });
+     });
+}
+//Actualiza en firebase periodo y visitas si no estan creadas en Firebase
+actualizarvisitasprognetsolinFb(cod_tercer){
+  return new Promise((resolve,reject)=>{
+      this._cliente.cargaClienteNetsolin(cod_tercer).then(cargo =>{            
+          console.log('En actualizarclientenetsolinFb cargo:', cargo);
+          if (cargo) {
+              this.cargo_clienteact = true;
+              //Actualizar en fb
+              this._cliente.guardarClienteFb(cod_tercer).then(res => {
+                  // console.log('Guardoclientefb res', res, this._cliente.clienteActual.direcciones);
+                  this._cliente.guardardireccionesClienteFb(cod_tercer, this._cliente.clienteActual.direcciones).then(() => {
+                    resolve(true);
+                  //   this._cliente.guardarSegCarteraClienteFb(cod_tercer, this._cliente.clienteActual.segcartera).then(() => {
+                  //     resolve(true);
+                  // });
+                });
+            })
+              .catch(() => {
+                  console.log('error en actualizarclientenetsolinFb guardarClienteFb');
+                  resolve(false);
+              });
+          } else {
+              console.log('error en actualizarclientenetsolinFb guardarClienteFb');
+              resolve(false);
+          }
+      })
+      .catch(() => {
+          console.log('error actualizarclientenetsolinFb cargaClienteNetsolin');
+          resolve(false);
+      });
+  });
+}
 
   //Carga la visita activa busca si esta creada en reg_visitas, si no la crea si esta la trae
   //recibe la visita activa con el id busca y carga cartera de netsolin si no lo ha echo

@@ -184,17 +184,22 @@ export class HomePage implements OnInit {
               console.log('Visitas x llamada ',this._visitas.visitas_xllamada);
               // console.log(cargo);
               if (cargo) {
-                // console.log("ngonit home cargo visitas verdadero");
+                console.log("ngonit home cargo visitas verdadero");
                 this.cargovisitas = true;
               } else {
-                // console.log("ngonit home cargo visitas falso");
+                console.log("ngonit home cargo visitas falso");
                 this.cargovisitas = false;
+                // OP JULIO 23 20 SI TIENE VISITAS EN nETSOLIN Y NO EN FIREBASE INTENTA CREARLAS
+                console.log('a crear visitas de netsolin en fb ',this._parEmpre.usuario.cod_usuar,this._visitas.id_ruta,this._visitas.id_periodo);
+                this._visitas.cargaVisitasNetsolin(this._parEmpre.usuario.cod_usuar,this._visitas.id_ruta,this._visitas.id_periodo);
               }
             })
             .catch(() => {
               this.cargovisitas = false;
-              this.menerror = this._visitas.men_errorcargarruta;
+              this.menerror = this._visitas.men_errorcargarruta;              
                   console.error("error en homr ngoniti al cargar visitas",this.menerror);
+              // OP JULIO 23 20 SI TIENE VISITAS EN nETSOLIN Y NO EN FIREBASE INTENTA CREARLAS
+              this._visitas.cargaVisitasNetsolin(this._parEmpre.usuario.cod_usuar,this._visitas.id_ruta,this._visitas.id_periodo);
             });
           //Cargar el Inventario de Firebase suscribirse no por que sobreescribe el de otro usuario
           //se quita mayo 23 19 op

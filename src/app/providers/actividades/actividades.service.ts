@@ -49,7 +49,7 @@ export class ActividadesService implements OnInit {
       // console.log('ingreso a cargaActividadesNetsolin url', url, NetsolinApp.objenvrest);
       this.http.post(url, NetsolinApp.objenvrest).subscribe((data: any) => {
         if (data){
-        // console.log('ingreso a cargaActividadesNetsolin data', data);
+        console.log('ingreso a cargaActividadesNetsolin data', data);
         if (data.error) {
           console.error(" cargaActividadesNetsolin ", data.error);
           this.cargoActividadesNetsolin = false;
