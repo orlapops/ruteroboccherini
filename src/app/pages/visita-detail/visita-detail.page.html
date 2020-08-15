@@ -407,11 +407,19 @@
                                     </ion-col>
 
                                 </ion-row>
-                                <ion-row *ngIf="item.naturaleza == 'D'">
+                                <ion-row *ngIf="item.naturaleza == 'D' && item.saldo>0">
                                     <ion-col>
                                         <ion-button size="small" shape="round" expand="full" color="warning" routerLink="/recibo-detail/{{item.num_obliga}}">
                                             <ion-icon slot="start" name="book"></ion-icon>
                                             Detalle Obligación
+                                        </ion-button>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row *ngIf="item.naturaleza == 'D'  && item.saldo<0">
+                                    <ion-col>
+                                        <ion-button size="small" shape="round" expand="full" color="danger">
+                                            <ion-icon slot="start" name="book"></ion-icon>
+                                            Saldo en Contra
                                         </ion-button>
                                     </ion-col>
                                 </ion-row>
