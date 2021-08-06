@@ -105,9 +105,13 @@ export class UbicacionProvider {
                   const hora = fechat.getHours();
                   const minutos = fechat.getMinutes();
                   const segundos = fechat.getSeconds();
+                  const horaformt = hora.toString().padStart(2,'0')
+                  const minutosformt = minutos.toString().padStart(2,'0')
+                  const segundosformt = segundos.toString().padStart(2,'0')
+                  
                   //completar 0 izq para ordenar cadena
-                  // const id = hora.toString() + ':' + minutos.toString()+':' + segundos.toString();
-                  const id = fechat.toLocaleString();
+                  const id = horaformt + ':' + minutosformt+':' + segundosformt;
+                  // const id = fechat.toLocaleString();
 
     const lruta = `/personal/${this._parEmpre.usuario.cod_usuar}/recorrido/${ano}/meses/${mes}/dias/${dia}/historial`;
                   // /personal/1014236804/recorrido/2019/meses/2/dias/22/historial/h1

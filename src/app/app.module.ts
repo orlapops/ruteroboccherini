@@ -32,7 +32,7 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
 // import { VisitaitemComponent } from './netsolinlibrerias/visitaitem/visitaitem.component';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { BackgroundMode } from '@ionic-native/background-mode';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { CarritoFacturaService } from './providers/carrito.factura.service';
@@ -80,7 +80,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-    
+
     IonicStorageModule.forRoot(),
     // IonicStorageModule.forRoot({
     //   name: '__netsolinapp',
@@ -93,12 +93,12 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-  
+
     AgmCoreModule.forRoot({
       // apiKey: 'AIzaSyD9BxeSvt3u--Oj-_GD-qG2nPr1uODrR0Y'
       // apiKey: 'AIzaSyBCxuyq-qQPZFoWSc7UYY1uCznmZnjfqGI'
       //Abril 25 2019 habilitada facturacion
-      apiKey: 'AIzaSyBSC-DvlUcEskduxwr0LHzjTU_OS4Hea4g'      
+      apiKey: 'AIzaSyBSC-DvlUcEskduxwr0LHzjTU_OS4Hea4g'
     }),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
@@ -110,6 +110,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     TranslateProvider,
     Geolocation,
+    BackgroundMode,
     Camera,
     ImagePicker,
     BluetoothSerial,
@@ -127,4 +128,4 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

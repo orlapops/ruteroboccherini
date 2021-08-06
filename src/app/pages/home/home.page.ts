@@ -15,7 +15,7 @@ import { environment } from '../../../environments/environment';
 import { ParEmpreService } from '../../providers/par-empre.service';
 // import { VisitasProvider } from "../../providers/visitas/visitas.service";
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { BackgroundMode, BackgroundModeOriginal } from '@ionic-native/background-mode';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 // import { VisitanService } from "../../providers/visitan.service";
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -81,7 +81,7 @@ export class HomePage implements OnInit {
     public platform: Platform,
     public modalCtrl: ModalController,
     public geolocation: Geolocation,
-    public backgroundMode: BackgroundModeOriginal,
+    public backgroundMode: BackgroundMode,
     public navCtrl: NavController,
     public alertCtrl: AlertController,
     public menuCtrl: MenuController,
@@ -108,6 +108,15 @@ export class HomePage implements OnInit {
       // this._visitas.visitas_xllamada = [];
       // this._visitas.visitaabierta = null;
       // this._visitas.cargo_ruta = false;
+      console.log('iniciando background and more');
+      // this.backgroundMode.disableWebViewOptimizations();
+      this.backgroundMode.on('activate').subscribe((res)=>{
+        console.log('respuesta de bacground on ->', res);
+        this.backgroundMode.disableWebViewOptimizations();
+        this._ubicacionService.iniciarGeoLocalizacion();
+
+        //El resto de nuestro código aquí.
+      });
       this.backgroundMode.enable();
       this._ubicacionService.iniciarGeoLocalizacion();
       this._ubicacionService.inicializarUsuario()
