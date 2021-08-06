@@ -104,7 +104,10 @@ export class UbicacionProvider {
                   const ano = fechat.getFullYear();
                   const hora = fechat.getHours();
                   const minutos = fechat.getMinutes();
-                  const id = hora.toString() + ':' + minutos.toString();
+                  const segundos = fechat.getSeconds();
+                  //completar 0 izq para ordenar cadena
+                  // const id = hora.toString() + ':' + minutos.toString()+':' + segundos.toString();
+                  const id = fechat.toLocaleString();
 
     const lruta = `/personal/${this._parEmpre.usuario.cod_usuar}/recorrido/${ano}/meses/${mes}/dias/${dia}/historial`;
                   // /personal/1014236804/recorrido/2019/meses/2/dias/22/historial/h1
@@ -125,7 +128,9 @@ export class UbicacionProvider {
     usuariorecorrido.set({
       latitud: data.coords.latitude,
       longitud: data.coords.longitude,
-      hora: id
+      hora: id,
+      fecha: fechat,
+      fechahora: lfechahora
     });
   }
   detenerUbicacion() {

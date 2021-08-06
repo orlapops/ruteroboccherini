@@ -32,6 +32,7 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
 // import { VisitaitemComponent } from './netsolinlibrerias/visitaitem/visitaitem.component';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { CarritoFacturaService } from './providers/carrito.factura.service';
