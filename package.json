@@ -49,7 +49,7 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "angular-animations": "0.0.10",
     "cordova": "^9.0.0",
-    "cordova-android": "^8.0.0",
+    "cordova-android": "8.1.0",
     "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-bluetooth-serial": "^0.4.7",
     "cordova-plugin-camera": "^4.1.0",
@@ -63,7 +63,7 @@
     "cordova-plugin-nativestorage": "^2.3.2",
     "cordova-plugin-network-information": "^3.0.0",
     "cordova-plugin-splashscreen": "^5.0.3",
-    "cordova-plugin-telerik-imagepicker": "^2.3.6",
+    "cordova-plugin-telerik-imagepicker": "^2.3.3",
     "cordova-res": "^0.6.0",
     "cordova-sqlite-storage": "^3.3.0",
     "core-js": "^2.6.5",
@@ -136,12 +136,10 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-telerik-imagepicker": {
-        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "Seleccionar Imagenes"
-      },
       "onesignal-cordova-plugin": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-background-mode": {}
+      "cordova-plugin-background-mode": {},
+      "cordova-plugin-telerik-imagepicker": {}
     },
     "platforms": [
       "android"
