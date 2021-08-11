@@ -16,7 +16,7 @@ import { ParEmpreService } from '../../providers/par-empre.service';
 // import { VisitasProvider } from "../../providers/visitas/visitas.service";
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
-import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
+// import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 // import { VisitanService } from "../../providers/visitan.service";
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -82,7 +82,7 @@ export class HomePage implements OnInit {
     public platform: Platform,
     public modalCtrl: ModalController,
     public geolocation: Geolocation,
-    private backgroundGeolocation: BackgroundGeolocation,
+    // private backgroundGeolocation: BackgroundGeolocation,
     public backgroundMode: BackgroundMode,
     public navCtrl: NavController,
     public alertCtrl: AlertController,
@@ -444,43 +444,43 @@ export class HomePage implements OnInit {
 
   //CONFIGURACION SEGUIMIENTO GPS 2 PLANO
   startBackgroundGeolocation() {
-    const config: BackgroundGeolocationConfig = {
-      desiredAccuracy: 10,
-      distanceFilter: 0, //Filtro de distancia para activar el seguimiento
-      locationProvider:2,
-      interval:3000,
-      debug: true, //  enable this hear sounds for background-geolocation life-cycle.
-      stopOnTerminate: false,   // <-- Allow the background-service to continue tracking when app terminated.
-      startOnBoot: true,        // <-- Auto start tracking when device is powered-up.
+    // const config: BackgroundGeolocationConfig = {
+    //   desiredAccuracy: 10,
+    //   distanceFilter: 0, //Filtro de distancia para activar el seguimiento
+    //   locationProvider:2,
+    //   interval:3000,
+    //   debug: true, //  enable this hear sounds for background-geolocation life-cycle.
+    //   stopOnTerminate: false,   // <-- Allow the background-service to continue tracking when app terminated.
+    //   startOnBoot: true,        // <-- Auto start tracking when device is powered-up.
 
-      //Envio de la localización por JSON
-      url: 'http://190.85.93.218/RESTBOCCHE/netsolin_servirestgo.csvc?VRCod_obj=POSITIONENV',
-      httpHeaders: {
-        'Content-Type': 'application/json'
-      },
-      postTemplate: {
-        lat: '@latitude',
-        lng: '@longitude',
-        test: '1'  //you can also add your own properties
-      }
-    };
+    //   //Envio de la localización por JSON
+    //   url: 'http://190.85.93.218/RESTBOCCHE/netsolin_servirestgo.csvc?VRCod_obj=POSITIONENV',
+    //   httpHeaders: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   postTemplate: {
+    //     lat: '@latitude',
+    //     lng: '@longitude',
+    //     test: '1'  //you can also add your own properties
+    //   }
+    // };
 
-    this.backgroundGeolocation.configure(config)
-    .then(() => {
+    // this.backgroundGeolocation.configure(config)
+    // .then(() => {
 
-    this.backgroundGeolocation.on(BackgroundGeolocationEvents.location).subscribe((location: BackgroundGeolocationResponse) => {
-      console.log(location);
+    // this.backgroundGeolocation.on(BackgroundGeolocationEvents.location).subscribe((location: BackgroundGeolocationResponse) => {
+    //   console.log(location);
 
-      // IMPORTANT:  You must execute the finish method here to inform the native plugin that you're finished,
-      // and the background-task may be completed.  You must do this regardless if your operations are successful or not.
-      // IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
-      this.backgroundGeolocation.finish(); // FOR IOS ONLY
-    });
+    //   // IMPORTANT:  You must execute the finish method here to inform the native plugin that you're finished,
+    //   // and the background-task may be completed.  You must do this regardless if your operations are successful or not.
+    //   // IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
+    //   this.backgroundGeolocation.finish(); // FOR IOS ONLY
+    // });
 
-    });
+    // });
 
-    // start recording location
-    this.backgroundGeolocation.start();
+    // // start recording location
+    // this.backgroundGeolocation.start();
   }
 
   //Activa el seguimiento del GPS
@@ -491,7 +491,7 @@ export class HomePage implements OnInit {
   //Desactiva el seguimiento del GPS
   stopTracking() {
     // If you wish to turn OFF background-tracking, call the #stop method.
-    this.backgroundGeolocation.stop();
+    // this.backgroundGeolocation.stop();
   }
 
 
