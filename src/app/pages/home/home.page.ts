@@ -16,6 +16,7 @@ import { ParEmpreService } from '../../providers/par-empre.service';
 // import { VisitasProvider } from "../../providers/visitas/visitas.service";
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 // import { VisitanService } from "../../providers/visitan.service";
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -81,6 +82,7 @@ export class HomePage implements OnInit {
     public platform: Platform,
     public modalCtrl: ModalController,
     public geolocation: Geolocation,
+    private backgroundGeolocation: BackgroundGeolocation,
     public backgroundMode: BackgroundMode,
     public navCtrl: NavController,
     public alertCtrl: AlertController,
@@ -95,6 +97,7 @@ export class HomePage implements OnInit {
     // this.visitas = this._visitas.cargaRutaActiva();
     // console.log("constructor home");
     // console.log(this._visitas.visitaTodas);
+    this.startBackgroundGeolocation();
     platform.ready().then(() => {
       console.log("En constructor home usuario: " + _parEmpre.usuario.cod_usuar);
       // La plataforma esta lista y ya tenemos acceso a los plugins.
@@ -111,11 +114,13 @@ export class HomePage implements OnInit {
       console.log('iniciando background and more');
       // this.backgroundMode.disableWebViewOptimizations();
       this.backgroundMode.on('activate').subscribe((res)=>{
-        console.log('respuesta de bacground on ->', res);
+        console.log('respuesta de bacground on start tracking ->', res);
         this.backgroundMode.disableWebViewOptimizations();
-        this._ubicacionService.iniciarGeoLocalizacion();
-
-        //El resto de nuestro código aquí.
+        this.initTracking();
+      });
+      this.backgroundMode.on('deactivate').subscribe((res)=>{
+        console.log('stoptracking ->', res);
+        this.stopTracking();
       });
       this.backgroundMode.enable();
       this._ubicacionService.iniciarGeoLocalizacion();
@@ -434,4 +439,63 @@ export class HomePage implements OnInit {
     });
     return await modal.present();
   }
+
+
+
+  //CONFIGURACION SEGUIMIENTO GPS 2 PLANO
+  startBackgroundGeolocation() {
+    const config: BackgroundGeolocationConfig = {
+      desiredAccuracy: 10,
+      distanceFilter: 0, //Filtro de distancia para activar el seguimiento
+      locationProvider:2,
+      interval:3000,
+      debug: true, //  enable this hear sounds for background-geolocation life-cycle.
+      stopOnTerminate: false,   // <-- Allow the background-service to continue tracking when app terminated.
+      startOnBoot: true,        // <-- Auto start tracking when device is powered-up.
+
+      //Envio de la localización por JSON
+      url: 'http://190.85.93.218/RESTBOCCHE/netsolin_servirestgo.csvc?VRCod_obj=POSITIONENV',
+      httpHeaders: {
+        'Content-Type': 'application/json'
+      },
+      postTemplate: {
+        lat: '@latitude',
+        lng: '@longitude',
+        test: '1'  //you can also add your own properties
+      }
+    };
+
+    this.backgroundGeolocation.configure(config)
+    .then(() => {
+
+    this.backgroundGeolocation.on(BackgroundGeolocationEvents.location).subscribe((location: BackgroundGeolocationResponse) => {
+      console.log(location);
+
+      // IMPORTANT:  You must execute the finish method here to inform the native plugin that you're finished,
+      // and the background-task may be completed.  You must do this regardless if your operations are successful or not.
+      // IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
+      this.backgroundGeolocation.finish(); // FOR IOS ONLY
+    });
+
+    });
+
+    // start recording location
+    this.backgroundGeolocation.start();
+  }
+
+  //Activa el seguimiento del GPS
+  initTracking() {
+    this.startBackgroundGeolocation();
+  }
+
+  //Desactiva el seguimiento del GPS
+  stopTracking() {
+    // If you wish to turn OFF background-tracking, call the #stop method.
+    this.backgroundGeolocation.stop();
+  }
+
+
+
+
+
 }

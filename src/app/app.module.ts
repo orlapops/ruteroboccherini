@@ -32,6 +32,7 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
 // import { VisitaitemComponent } from './netsolinlibrerias/visitaitem/visitaitem.component';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
@@ -110,6 +111,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     TranslateProvider,
     Geolocation,
+    BackgroundGeolocation,
     BackgroundMode,
     Camera,
     ImagePicker,
