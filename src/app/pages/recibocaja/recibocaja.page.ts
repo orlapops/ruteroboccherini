@@ -16,6 +16,7 @@ import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 export class RecibocajaPage implements OnInit {
   recibocaja: Array<any> = [];
   formaspago: Array<any> = [];
+  fecha_baserec: any;
   total_recibo = 0;
   tdcto_15dias = 0;
   tdcto_30dias = 0;
@@ -41,7 +42,6 @@ export class RecibocajaPage implements OnInit {
   pag_numcheq2 = 0;
   pag_fechach1 =   new Date().toISOString();
   pag_fechach2 =   new Date().toISOString();
-
   grabando_recibo = false;
   grabo_recibo = false;
   mostrandoresulado = false;
@@ -155,6 +155,7 @@ export class RecibocajaPage implements OnInit {
 
     for( const itemr of this.recibocaja ){
       console.log(itemr);
+      this.fecha_baserec = itemr.item.fecha_base;
       this.total_recibo += itemr.item.abono;
       this.tdcto_15dias += itemr.item.dcto_15dias;
       this.tdcto_30dias += itemr.item.dcto_30dias;
@@ -200,7 +201,7 @@ export class RecibocajaPage implements OnInit {
     console.log('a generar recibo ', this.recibocaja,  this._recibos.recibocaja ,  this._recibos.formpago);
     // this._recibos.genera_recibo_netsolin(this.total_recibo, this.tdcto_dchban, this.tdcto_otrban, 
     //   this.tdcto_dchef, this.tdcto_otref, this.totros_desc,
-    this._recibos.genera_recibo_netsolin(this.total_recibo, this.tdcto_15dias, this.tdcto_30dias, 
+    this._recibos.genera_recibo_netsolin(this.fecha_baserec,this.total_recibo, this.tdcto_15dias, this.tdcto_30dias, 
       this.totros_desc,
       this.tretencion, this.tneto_recibir, this._recibos.formpago)
       // this.pag_efectivo, this.pag_bancos, this.pag_cheq1, this.pag_ch1banco, this.pag_ch1cuenta, this.pag_numcheq1, this.pag_fechach1,

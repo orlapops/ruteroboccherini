@@ -32,6 +32,7 @@ export class ReciboDetailPage implements OnInit {
   apli_des30 = false;
   total_t: number;
   oblenRecibo: any;
+  existefechabaseoitem = false;
   constructor(
     public _parEmpre: ParEmpreService,
     public navCtrl: NavController,
@@ -46,14 +47,22 @@ export class ReciboDetailPage implements OnInit {
     _recibo.inicializaRecibos();
   }
   ngOnInit() {
-    console.log("ngonit recibo detalle num_obliga", this.num_obliga);
+    console.log("ngonit recibo detalle num_obliga, recibo", this.num_obliga,this._recibo.recibocaja);
     this.oblshop = this._recibo.getOblCartera(this.num_obliga);
     console.log("ngonit recibo detalle ", this.oblshop);
     //traer el registro si esta en lista de lo que se va a recibir
     this.oblenRecibo = this._recibo.getitemRecibo(this.num_obliga);
     //verficiar si tiene derecho a descuento
     const now = new Date();
-    this.fecha_base = new Date().toISOString();
+    let fbaseotiemrec = this._recibo.getfechabaseRecibo();
+    console.log('fecha base en recibo:',fbaseotiemrec);
+    if (fbaseotiemrec){
+      this.fecha_base = fbaseotiemrec;
+      this.existefechabaseoitem = true;
+    } else{
+      this.fecha_base = new Date().toISOString();
+      this.existefechabaseoitem = false;
+    }
     const fechaobli = new Date(this.oblshop.fecha_obl);
     const fechabase = new Date(this.fecha_base);
     const diasdifechas = this._parEmpre.diferenciaEntreDiasEnDias(fechaobli, fechabase);
@@ -288,7 +297,7 @@ export class ReciboDetailPage implements OnInit {
     // this._recibo.addrecibocaja(item, this.paga_efectivo, this.valor_abono, this.dcto_dchban,
     //   this.dcto_otrban, this.dcto_dchef, this.dcto_otref,
     console.log('addrecibo item', item);
-    this._recibo.addrecibocaja(item, this.paga_efectivo, this.valor_abono, this.dcto_15dias,
+    this._recibo.addrecibocaja(item, this.fecha_base,this.paga_efectivo, this.valor_abono, this.dcto_15dias,
       this.dcto_30dias,
       this.otros_desc, this.retencion).then(async property => {
       const toast = await this.toastCtrl.create({

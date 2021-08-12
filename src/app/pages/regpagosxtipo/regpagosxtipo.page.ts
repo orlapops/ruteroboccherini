@@ -27,6 +27,7 @@ export class RegPagosxtipoPage implements OnInit {
   actividadAct: any;
   bancos: any;
   cargobancos = false;
+  existefechabaseoitem = false;
   registro: any;
   constructor(
     public _parEmpre: ParEmpreService,
@@ -58,6 +59,17 @@ export class RegPagosxtipoPage implements OnInit {
         })
         .catch(error => alert(JSON.stringify(error)));
       console.log("repagosxtiporeg editar regtraido:", this.regpago);
+      //traer fecha base Ag 12 21
+      let fbaseotiemrec = this._recibo.getfechabaseRecibo();
+      console.log('fecha base para consignacion:',fbaseotiemrec);
+      if (fbaseotiemrec){
+        this.regpago.fecha = fbaseotiemrec;
+        this.existefechabaseoitem = true;
+      } else{
+        this.regpago.fecha = new Date().toISOString();
+        this.existefechabaseoitem = false;
+      }
+  
       // this._actividad.getIdRegActividad(this.idregpago).subscribe((datos:any) =>{
       //     console.log('Editar datos actividad ', datos);
       //     if (datos){
@@ -83,6 +95,16 @@ export class RegPagosxtipoPage implements OnInit {
     console.log("e.detail.value", e.detail.value);
     //  console.log('tipoact:', this.cod_tipoact);
     //  this.nom_tipoact = e.detail.text;
+      //traer fecha base Ag 12 21
+      let fbaseotiemrec = this._recibo.getfechabaseRecibo();
+      console.log('fecha base para consignacion:',fbaseotiemrec);
+      if (fbaseotiemrec){
+        this.regpago.fecha = fbaseotiemrec;
+        this.existefechabaseoitem = true;
+      } else{
+        this.regpago.fecha = new Date().toISOString();
+        this.existefechabaseoitem = false;
+      }
   }
 
   async addFormapago(item) {
@@ -126,6 +148,7 @@ export class RegPagosxtipoPage implements OnInit {
       console.log("validando 6", this.regpago);
       this._recibo.addFormapago(this.regpago).then(async property => {
         console.log('adiciono ', this._recibo.formpago);
+        this.existefechabaseoitem = true;
         const toast = await this.toastCtrl.create({
           showCloseButton: true,
           message: "Item adicionado a forma de pago  del recibo.",
@@ -221,6 +244,7 @@ export class RegPagosxtipoPage implements OnInit {
     this._recibo
       .borraritemformpago(this.idregpago)
       .then(async result => {
+        this.existefechabaseoitem = false;
         if (result) {
           const toast = await this.toastCtrl.create({
             showCloseButton: true,

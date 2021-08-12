@@ -286,7 +286,7 @@ export class RecibosService implements OnInit {
   }
   //adiciona un item a recibo
   // addrecibocaja(item,paga_efectivo,abono,dcto_dchban,dcto_otrban,dcto_dchef,dcto_otref,otros_desc,retencion
-  addrecibocaja(item,paga_efectivo,abono,dcto_15dias,dcto_30dias,otros_desc,retencion
+  addrecibocaja(item,fecha_base,paga_efectivo,abono,dcto_15dias,dcto_30dias,otros_desc,retencion
   ) {
     console.log("add item addrecibocaja item llega:", item);
     let exist = false;
@@ -339,6 +339,7 @@ export class RecibosService implements OnInit {
         cod_dfactu: item.cod_dfactu,
         num_dfactu: item.num_dfactu,
         num_obliga: item.num_obliga,
+        fecha_base: fecha_base,
         fecha_obl: item.fecha_obl,
         paga_efectivo: paga_efectivo,
         abono: abono,
@@ -407,6 +408,17 @@ export class RecibosService implements OnInit {
       }
     }
     return null;
+  }
+  //retorna fecha base si existe en el primer item
+  getfechabaseRecibo() {
+    console.log("buscando fecha base en recibo: ", this.recibocaja.length, this.recibocaja);
+    
+    if (this.recibocaja.length>0){
+      return this.recibocaja[0].item.fecha_base;
+    }
+    else {
+      return null;
+    }
   }
 
   //saca un elemento del recibo
@@ -517,7 +529,7 @@ export class RecibosService implements OnInit {
   }
 
   // genera_recibo_netsolin(total_recibo,tdcto_dchban,tdcto_otrban,tdcto_dchef,tdcto_otref,totros_desc,retencion,tneto_recibir,objformpag
-  genera_recibo_netsolin(total_recibo,tdcto_15dias,tdcto_30dias,totros_desc,retencion,tneto_recibir,objformpag
+  genera_recibo_netsolin(fecha_base,total_recibo,tdcto_15dias,tdcto_30dias,totros_desc,retencion,tneto_recibir,objformpag
   ) {
     console.log(
       "dataos para generar recibo this._visitas.visita_activa_copvdet:",
@@ -536,6 +548,7 @@ export class RecibosService implements OnInit {
     return new Promise((resolve, reject) => {
       let paramgrab = {
         datos_gen: this._visitas.visita_activa_copvdet,
+        fecha_consig: fecha_base,
         items_recibo: this.recibocaja,
         total_recibo: total_recibo,
         tdcto_15dias: tdcto_15dias,

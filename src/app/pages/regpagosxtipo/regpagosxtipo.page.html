@@ -51,7 +51,8 @@
                         </ion-item>
                         <ion-item class="bg-white" *ngIf="regpago.tipopago==='PBCS'">
                             <ion-label color="dark">Fecha:</ion-label>
-                            <ion-datetime slot="end" no-padding no-margin class="text-primary fechacons" displayFormat="MM/DD/YYYY" pickerFormat="YYYY-MM-DD" min="2018" max="2032" [(ngModel)]="regpago.fecha"></ion-datetime>
+                            <ion-datetime *ngIf="!existefechabaseoitem" slot="end" no-padding no-margin class="text-primary fechacons" displayFormat="MM/DD/YYYY" pickerFormat="YYYY-MM-DD" min="2018" max="2032" [(ngModel)]="regpago.fecha"></ion-datetime>
+                            <ion-text *ngIf="existefechabaseoitem" color="danger">   {{regpago.fecha | date: 'shortDate'}}</ion-text>
                         </ion-item>
                         <ion-item class="bg-white" *ngIf="regpago.tipopago==='PBCS'">
                             <ion-label color="dark">Referencia:</ion-label>
@@ -71,8 +72,9 @@
                             </ion-select>
                         </ion-item>
                         <ion-item class="bg-white" *ngIf="regpago.tipopago==='PBTR'">
-                            <ion-label color="dark">Fecha a consignar:</ion-label>
-                            <ion-datetime slot="end" no-padding no-margin class="text-primary fechacons" displayFormat="MM/DD/YYYY" pickerFormat="YYYY-MM-DD" min="2018" max="2032" [(ngModel)]="regpago.fecha"></ion-datetime>
+                            <ion-label color="dark">Fecha consignación:</ion-label>
+                            <ion-datetime *ngIf="!existefechabaseoitem" slot="end" no-padding no-margin class="text-primary fechacons" displayFormat="MM/DD/YYYY" pickerFormat="YYYY-MM-DD" min="2018" max="2032" [(ngModel)]="regpago.fecha"></ion-datetime>
+                            <ion-text *ngIf="existefechabaseoitem" color="danger">   {{regpago.fecha | date: 'shortDate'}}</ion-text>
                         </ion-item>
                         <ion-item class="bg-white" *ngIf="regpago.tipopago==='PBTR'">
                             <ion-label color="dark">Referencia:</ion-label>
@@ -91,8 +93,9 @@
                             </ion-input>
                         </ion-item>
                         <ion-item class="bg-white" *ngIf="regpago.tipopago==='CHD'">
-                            <ion-label color="dark">Fecha a consignar:</ion-label>
-                            <ion-datetime slot="end" no-padding no-margin class="text-primary fechacons" displayFormat="MM/DD/YYYY" pickerFormat="YYYY-MM-DD" min="2018" max="2032" [(ngModel)]="regpago.fecha"></ion-datetime>
+                            <ion-label color="dark">Fecha consignación:</ion-label>
+                            <ion-datetime  *ngIf="!existefechabaseoitem" slot="end" no-padding no-margin class="text-primary fechacons" displayFormat="MM/DD/YYYY" pickerFormat="YYYY-MM-DD" min="2018" max="2032" [(ngModel)]="regpago.fecha"></ion-datetime>
+                            <ion-text *ngIf="existefechabaseoitem" color="danger">   {{regpago.fecha | date: 'shortDate'}}</ion-text>
                         </ion-item>
                         <ion-item class="bg-white" *ngIf="regpago.tipopago==='CHD'">
                             <ion-label color="dark">Núm Cheque:</ion-label>

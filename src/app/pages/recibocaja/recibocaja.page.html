@@ -63,7 +63,8 @@
                                                 <h5 class="asuntomsg">
                                                     <ion-text color="success"> Nuevo Saldo: {{itemr.item.saldo | currency}}</ion-text>
                                                 </h5>
-                                                <ion-text solt="start" color="danger">Descuentos</ion-text>
+                                                <ion-text solt="start" color="danger">Descuentos  </ion-text>
+                                                <ion-text color="danger">  Fecha Consignación: {{itemr.item.fecha_base | date: 'shortDate'}}</ion-text>
                                                 <h5>
                                                     <!-- <ion-text solt="start" color="danger">Duchas: {{itemr.item.dcto_dchef + itemr.item.dcto_dchban | currency}}</ion-text>
                                                     <ion-text slot="end" color="danger"> Otros: {{itemr.item.dcto_otref + itemr.item.dcto_otrban | currency}}</ion-text> -->
@@ -98,6 +99,10 @@
                                             </ion-text>
                                         </h2>
                                     </ion-card-content>
+                                    <ion-item class="bg-white margentb">
+                                        <ion-text color="danger">  Fecha  Consignación: {{fecha_baserec | date: 'shortDate'}}</ion-text>
+                                    </ion-item>
+
                                     <ion-item class="bg-white margentb">
                                         <p>
                                             Total Abonos:
@@ -297,7 +302,7 @@
                                         </ion-row>
                                     </ion-row>
                                     <ion-item>
-                                        <ion-button icon-left color="secondary" routerLink="/regpagosxtipo/0" shape="round" fill="solid">
+                                        <ion-button *ngIf="_recibos.totformaspago===0" icon-left color="secondary" routerLink="/regpagosxtipo/0" shape="round" fill="solid">
                                             <ion-icon name="add"></ion-icon>
                                         </ion-button>
                                         <ion-button *ngIf="(tneto_recibir - _recibos.totformaspago) === 0 && (tneto_recibirban - _recibos.totformpagban) ===0 && (tneto_recibirefe - _recibos.totformpagefec) ===0" slot="start" shape="round" color="success" (click)="realizar_recibo()">
