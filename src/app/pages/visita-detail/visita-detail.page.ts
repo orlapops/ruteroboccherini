@@ -820,5 +820,11 @@ export class VisitaDetailPage implements OnInit {
   }
 
 
+  //EDITAR NOTA DE INGRESO FB
+  updateNotaIngreso(e){
+    console.log(e.detail.value);
+    this._visitas.updateNotaing(this.visitaID, e.detail.value);
+  }
+
 
 }

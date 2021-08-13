@@ -841,6 +841,16 @@ actualizarvisitasprognetsolinFb(cod_tercer){
           }
 
 
+
+
+  updateNotaing(id, data){
+    return this.fbDb
+    .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this.id_ruta}/periodos/${this.id_periodo}/visitas`)
+    .doc(id).update({notaing:data});
+  }
+
+
+
     // getFactura() {
     //     return Promise.resolve(this.factura);
     // }
