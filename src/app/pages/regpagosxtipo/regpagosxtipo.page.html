@@ -111,8 +111,36 @@
                             <ion-label color="dark" position="stacked">Notas:</ion-label>
                             <ion-textarea rows="3" cols="12" inputmode="text" placeholder="Registre las Notas" [(ngModel)]="regpago.nota" [value]="regpago.nota"></ion-textarea>
                         </ion-item>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="6">
+                                    <ion-text color="primary">
+                                        <h3 class="h3">
+                                            <ion-icon size="medium" color="dark" name="images"></ion-icon> Imagen </h3>
+                                    </ion-text>
+                                </ion-col>
+                                <ion-col size="3">
+                                    <ion-button color="secondary" (click)="seleccionarFoto()" shape="round" fill="solid">
+                                        <ion-icon name="folder"></ion-icon>
+                                    </ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                        <hr class="bg-tertiary">
+                        <ion-slides pager="true" margin-bottom class="slide" *ngIf="cargoImagen">
+                            <ion-slide>
+                                    <div class="slide-content">
+                                        <ion-card class="actividadesCard">
+                                            <div class="image-wrap">
+                                                <img [src]="_DomSanitizer.bypassSecurityTrustUrl(imagenPreview)">
+                                            </div>                                                  
+                                        </ion-card>
+                                    </div>
+                            </ion-slide>
+                        </ion-slides>
+                        <hr class="bg-tertiary">
                         <ion-item>
-                            <ion-button *ngIf="tipocrud == 'A'" size="large" expand="full" color="dark" (click)="addFormapago(regpago)">Registrar</ion-button>
+                            <ion-button *ngIf="tipocrud == 'A'" size="large" expand="full" color="dark" (click)="addFormapago(regpago)"  >Registrar</ion-button>
                             <ion-button *ngIf="tipocrud != 'A'" size="default" color="dark" (click)="modificarFormapago()">Modificar</ion-button>
                             <ion-button *ngIf="tipocrud != 'A'" size="default" color="danger" (click)="eliminarFormapago()">Quitar</ion-button>
                         </ion-item>

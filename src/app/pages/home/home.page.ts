@@ -113,16 +113,16 @@ export class HomePage implements OnInit {
       // this._visitas.cargo_ruta = false;
       console.log('iniciando background and more');
       // this.backgroundMode.disableWebViewOptimizations();
-      this.backgroundMode.on('activate').subscribe((res)=>{
-        console.log('respuesta de bacground on start tracking ->', res);
-        this.backgroundMode.disableWebViewOptimizations();
-        this.initTracking();
-      });
-      this.backgroundMode.on('deactivate').subscribe((res)=>{
-        console.log('stoptracking ->', res);
-        this.stopTracking();
-      });
-      this.backgroundMode.enable();
+      // this.backgroundMode.on('activate').subscribe((res)=>{
+      //   console.log('respuesta de bacground on start tracking ->', res);
+      //   this.backgroundMode.disableWebViewOptimizations();
+      //   this.initTracking();
+      // });
+      // this.backgroundMode.on('deactivate').subscribe((res)=>{
+      //   console.log('stoptracking ->', res);
+      //   this.stopTracking();
+      // });
+      // this.backgroundMode.enable();
       this._ubicacionService.iniciarGeoLocalizacion();
       this._ubicacionService.inicializarUsuario()
         .then(()=>{

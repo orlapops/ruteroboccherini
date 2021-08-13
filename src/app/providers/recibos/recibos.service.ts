@@ -26,6 +26,8 @@ export class RecibosService implements OnInit {
   //total formas pago bancos consignacion y trasferencias
   totformpagban = 0;
   generando_recibo = false;
+  //Adicion de id visita para adicion de imagenes en el recaudo
+  visitaID: any = "";
 
   constructor(
     public _parempre: ParEmpreService,

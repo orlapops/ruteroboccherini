@@ -3,6 +3,7 @@ import { NavController, ActionSheetController, ToastController, ModalController,
 import { TranslateProvider } from '../../providers';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImagePage } from './../modal/image/image.page';
+import { VideoPage } from './../modal/video/video.page';
 import { environment } from '../../../environments/environment'
 import { VisitasProvider } from '../../providers/visitas/visitas.service';
 import {
@@ -32,6 +33,10 @@ import { File, DirectoryEntry, FileEntry } from "@ionic-native/file/ngx";
 import { ModalRegSegCartPage } from '../modal/modal-regsegcart/modal-regsegcart.page';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { HomeMapModalPage } from '../home-map-modal/home-map-modal.page';
+//VIDEOCAMARA
+import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions, CaptureVideoOptions } from '@ionic-native/media-capture/ngx';
+
+
 
 @Component({
   selector: 'app-visita-detail',
@@ -73,8 +78,10 @@ export class VisitaDetailPage implements OnInit {
   listaactividades: any;
   imagenPreview: string;
   listafotos: any;
+  listavideos: any;
   cargo_posicion = false;
   urlimgenfb = '';
+  urlvideofb = '';
   segcartera:any;
 
   constructor(
@@ -96,6 +103,7 @@ export class VisitaDetailPage implements OnInit {
     public _DomSanitizer: DomSanitizer,
     public router: Router,
     private camera: Camera,
+    private mediacapture: MediaCapture,
     public loadingCtrl: LoadingController,
     public _ubicacionService: UbicacionProvider,
     public alertCtrl: AlertController,
@@ -120,6 +128,7 @@ export class VisitaDetailPage implements OnInit {
     });
     // console.log('constructor detalle visita');
     console.log('Id visita: ',this.visitaID);
+    this._recibos.visitaID = this.visitaID;
     this.visita = this._visitas.getItem(this.visitaID);
     console.log('this.visita: ',this.visita);
     // console.log('typeof this.visita.data: ',typeof this.visita.data);
@@ -260,6 +269,16 @@ export class VisitaDetailPage implements OnInit {
           this._actividad.getFotosVisitaActual(this.visitaAct).subscribe((datosf: any) => {
             console.log('Fotos de la visita: ', datosf);
             this.listafotos = datosf;
+            // console.log('Fotos de la visita listafotos: ', this.listafotos);
+            // console.log(this.listaactividades.id);
+            // console.log(this.listaactividades.payload.doc);
+            // console.log(this.listaactividades.payload.doc.data());
+            // console.log(this.listaactividades.payload.doc.id);
+          });
+          this.urlvideofb=`/personal/${this._parEmpre.usuario.cod_usuar}/rutas/${this.visitaAct.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${this.visitaAct.id_visita}/fotos`;
+          this._actividad.getVideosVisitaActual(this.visitaAct).subscribe((datosf: any) => {
+            console.log('Videos de la visita: ', datosf);
+            this.listavideos = datosf;
             // console.log('Fotos de la visita listafotos: ', this.listafotos);
             // console.log(this.listaactividades.id);
             // console.log(this.listaactividades.payload.doc);
@@ -734,5 +753,72 @@ export class VisitaDetailPage implements OnInit {
     });
     return await modal.present();
   }
+
+
+
+
+  //Apartado de Video
+
+  tomavideo() {
+    console.log('captura de video');
+    let options: CaptureVideoOptions = {
+      limit:1,
+      duration:30,
+      quality:0
+    }
+    this.mediacapture.captureVideo(options).then((res:MediaFile[])=>{
+      this.presentLoading('Guardando Video');
+      console.log('Data Video -> ', res[0],res[0].fullPath);
+      this.imagenPreview = this.webview.convertFileSrc(res[0].fullPath);
+      this._actividad.actualizavideosVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,
+        this.visitaID, res[0].fullPath).then(() => {
+          this.file.resolveLocalFilesystemUrl(res[0].fullPath).then((fe: FileEntry) => {
+            fe.remove(function () { console.log("se elimino la foto") }, function () { console.log("error al eliminar") });
+          });
+        });
+    }, (err) => {
+      console.log('Error en camara', JSON.stringify(err));
+      // this._parEmpre.reg_logappusuario('tomafoto', 'Tomo foto Error ', { error: JSON.stringify(err) });
+    });
+  }
+
+
+  seleccionarVideo() {
+    console.log('en sele galery video');
+    const optionscam: CameraOptions = {
+      quality: 10,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      sourceType:this.camera.PictureSourceType.PHOTOLIBRARY,
+      mediaType: this.camera.MediaType.VIDEO
+    };
+    // this._parEmpre.reg_logappusuario('tomafoto', 'Ingreso', {});
+    this.camera.getPicture(optionscam).then((videoData) => {
+      videoData = "file://" + videoData;
+      console.log('data videogaleria -> ', videoData);
+      this.presentLoading('Guardando Video');
+      this.imagenPreview = this.webview.convertFileSrc(videoData);
+      this._actividad.actualizavideosVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,
+        this.visitaID, videoData).then(() => {
+          this.file.resolveLocalFilesystemUrl(videoData).then((fe: FileEntry) => {
+            fe.remove(function () { console.log("se elimino video") }, function () { console.log("error al eliminar") });
+          });
+        });
+    }, (err) => {
+      console.log('Error en camara', JSON.stringify(err));
+      // this._parEmpre.reg_logappusuario('tomafoto', 'Tomo foto Error ', { error: JSON.stringify(err) });
+    });
+  }
+
+  async presentVideo(video: any, idvideo: number) {
+    console.log('presentVideo imagenimage,idvideo,this.urlimgenfb: ',video,idvideo,this.urlvideofb);
+
+    const modal = await this.modalCtrl.create({
+      component: VideoPage,
+      componentProps: { value: video, idvideo: idvideo, rutafbi: this.urlvideofb }
+    });
+    return await modal.present();
+  }
+
+
 
 }

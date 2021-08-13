@@ -6,6 +6,13 @@ import { VisitasProvider } from "../../providers/visitas/visitas.service";
 import { RecibosService } from "../../providers/recibos/recibos.service";
 import { ParEmpreService } from "../../providers/par-empre.service";
 
+import { ActividadesService } from '../../providers/actividades/actividades.service';
+
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { File, DirectoryEntry, FileEntry } from "@ionic-native/file/ngx";
+import { DomSanitizer } from '@angular/platform-browser';
+
 @Component({
   selector: "app-regpagosxtiporeg",
   templateUrl: "./regpagosxtipo.page.html",
@@ -20,7 +27,8 @@ export class RegPagosxtipoPage implements OnInit {
     fecha: this.lfecha,
     referencia: "",
     nota: "",
-    valor: 0
+    valor: 0,
+    linkimg_pago:""
   };
   idregpago: any = this.route.snapshot.paramMap.get("id");
   tipocrud = "A";
@@ -29,6 +37,11 @@ export class RegPagosxtipoPage implements OnInit {
   cargobancos = false;
   existefechabaseoitem = false;
   registro: any;
+
+  dataImagen:any;
+  imagenPreview: string;
+  cargoImagen = false;
+
   constructor(
     public _parEmpre: ParEmpreService,
     public navCtrl: NavController,
@@ -37,7 +50,13 @@ export class RegPagosxtipoPage implements OnInit {
     public route: ActivatedRoute,
     public _cliente: ClienteProvider,
     public _visitas: VisitasProvider,
-    public router: Router
+    public router: Router,
+    //Adicion de fotos
+    private imagePicker: ImagePicker,
+    public _actividad: ActividadesService,
+    private webview: WebView,
+    private file: File,
+    public _DomSanitizer: DomSanitizer
   ) {
     //cargar bancos de firebase
     this._parEmpre.getbancosFB().subscribe((datos: any) => {
@@ -145,20 +164,28 @@ export class RegPagosxtipoPage implements OnInit {
       validado = false;
     }
     if (validado) {
-      console.log("validando 6", this.regpago);
-      this._recibo.addFormapago(this.regpago).then(async property => {
-        console.log('adiciono ', this._recibo.formpago);
-        this.existefechabaseoitem = true;
-        const toast = await this.toastCtrl.create({
-          showCloseButton: true,
-          message: "Item adicionado a forma de pago  del recibo.",
-          color: "success",
-          duration: 2000,
-          position: "bottom"
-        });
-        toast.present();
-        // this.regpago.valor = 0;
-        // this.regpago.referencia = "";
+      //subir imagen de forma de pago  13 Agosto 2021
+      this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,this._recibo.visitaID, this.dataImagen).then(() => {
+          console.log('Respuesta de upload img -> ', this._actividad.linktempimg);
+          console.log("validando 6", this.regpago);
+          this.regpago.linkimg_pago = this._actividad.linktempimg;
+          this._recibo.addFormapago(this.regpago).then(async property => {
+            console.log('adiciono ', this._recibo.formpago);
+            this.existefechabaseoitem = true;
+            const toast = await this.toastCtrl.create({
+              showCloseButton: true,
+              message: "Item adicionado a forma de pago  del recibo.",
+              color: "success",
+              duration: 2000,
+              position: "bottom"
+            });
+            toast.present();
+            // this.regpago.valor = 0;
+            // this.regpago.referencia = "";
+          });
+          this.file.resolveLocalFilesystemUrl(this.dataImagen).then((fe: FileEntry) => {
+            fe.remove(function () { console.log("se elimino la foto") }, function () { console.log("error al eliminar") });
+          });
       });
     } else {
       console.log("validando 7");
@@ -262,4 +289,39 @@ export class RegPagosxtipoPage implements OnInit {
     console.log("changeBanco e: ", e);
     console.log("e.detail.value", e.detail.value);
   }
+
+
+
+
+
+  
+  //CAPTURA DE IMAGEN PARA REGISTRO DE TIPOS DE PAGO
+  seleccionarFoto() {
+    const options = {
+      // quality: 100,
+      // outputType: 0
+      width: 200,
+      //height: 200,
+      // quality of resized image, defaults to 100
+      quality: 25,      
+      outputType: 0
+    };
+      console.log('seleccionarFoto 1 options:',options);
+      this.imagePicker.getPictures(options).then((image) => {
+        console.log('seleccionarFoto 2 image:',image);
+      for (var i = 0; i < image.length; i++) {
+        console.log('seleccionarFoto 3 i image[i]:',i,image[i]);
+        this.imagenPreview = this.webview.convertFileSrc(image[i]);
+        this.dataImagen = image[i];
+        this.cargoImagen = true;
+        // this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,
+        //   this._recibo.visitaID, image[i]).then(() => {
+        //     this.file.resolveLocalFilesystemUrl(image[i]).then((fe: FileEntry) => {
+        //       fe.remove(function () { console.log("se elimino la foto") }, function () { console.log("error al eliminar") });
+        //     });
+        //   });
+      }
+    }, (err) => { console.log("error cargando imagenes", JSON.stringify(err)); });
+  }
+
 }

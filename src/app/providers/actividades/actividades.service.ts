@@ -21,7 +21,8 @@ import { File, DirectoryEntry, FileEntry } from "@ionic-native/file/ngx";
 export class ActividadesService implements OnInit {
   private tipos_activ: any;
   cargoActividadesNetsolin = false;
-
+  linktempimg = "";
+  
   constructor(
     public _parempre: ParEmpreService,
     private fbDb: AngularFirestore,
@@ -190,6 +191,7 @@ actualizafotosVisitafirebase(idclie, idvisita, imageURL): Promise<any> {
       // this._parempre.reg_logappusuario('tomafoto','actualizafotosVisitafirebase idclie',{idclie: idclie});
       console.log('a a ctualizar foto cliente visita ', idclie);          
       return storageRef.getDownloadURL().subscribe((linkref: any) => {
+        this.linktempimg = linkref;
           this.fbDb
           .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${idvisita}/fotos`)
           .add({link_foto: linkref});
@@ -201,6 +203,63 @@ actualizafotosVisitafirebase(idclie, idvisita, imageURL): Promise<any> {
       console.log('Error leyendo archivo:', error);
     });
 }      
+
+//ADICION DE VIDEO
+
+public getVideosVisitaActual(ObjVisitaAct) {
+  // tslint:disable-next-line:max-line-length
+  console.log('getVideosVisitaActual:', `/personal/${this._parempre.usuario.cod_usuar}/rutas/${ObjVisitaAct.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${ObjVisitaAct.id_visita}/videos`);
+  return this.fbDb
+  // tslint:disable-next-line:max-line-length
+  .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${ObjVisitaAct.id_visita}/videos`)
+  .snapshotChanges().pipe(
+    map(actions => actions.map(a => {
+      const data = a.payload.doc.data();
+      const id = a.payload.doc.id;
+      return {id, ...data };
+    })
+      )
+  ) 
+} 
+
+actualizavideosVisitafirebase(idclie, idvisita, videoURL): Promise<any> {
+  const now = new Date();
+  const dia = now.getDate();
+  const mes = now.getMonth() + 1;
+  const ano = now.getFullYear();
+  const hora = now.getHours();
+  const minutos = now.getMinutes();
+  const segundos = now.getSeconds();
+  const milisegundos = now.getMilliseconds();
+  const idvideo = ano.toString()+ mes.toString() + dia.toString() + hora.toString() + minutos.toString()+ segundos.toString()+milisegundos;
+  const storageRef: AngularFireStorageReference = this.afStorage.ref(`/video_visitas/${idclie}/visita/${idvisita}/${idvideo}/`);
+  return this.file.resolveLocalFilesystemUrl(videoURL).then((fe:FileEntry)=>{
+    console.log(fe);
+    let { name, nativeURL } = fe;
+    let path = nativeURL.substring(0, nativeURL.lastIndexOf("/"));
+    console.log(path,"   ",name);
+    return this.file.readAsArrayBuffer(path, name);
+  }).then(buffer => {
+      let imgBlob = new Blob([buffer], {
+        type: "video/mp4"
+      });
+    return storageRef.put(imgBlob, {
+        contentType: 'video/mp4',
+    }).then(() => {
+      // this._parempre.reg_logappusuario('tomafoto','actualizafotosVisitafirebase idclie',{idclie: idclie});
+      console.log('a a ctualizar foto cliente visita ', idclie);          
+      return storageRef.getDownloadURL().subscribe((linkref: any) => {
+          this.fbDb
+          .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this._visitas.visita_activa_copvdet.id_ruta}/periodos/${this._visitas.id_periodo}/visitas/${idvisita}/videos`)
+          .add({link_video: linkref});
+        }); 
+      }).catch((error) => {
+        console.log('Error actualizavideoVisitafirebase putString img:', error);
+      });    
+    }).catch((error) => {
+      console.log('Error leyendo archivo:', error);
+    });
+}  
 
 
 }

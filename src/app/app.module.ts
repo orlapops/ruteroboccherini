@@ -21,6 +21,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { TranslateProvider } from './providers';
 // Modal Pages
 import { ImagePageModule } from './pages/modal/image/image.module';
+import { VideoPageModule } from './pages/modal/video/video.module';
 import { LocationPageModule } from './pages/modal/location/location.module';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -35,6 +36,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 // import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+//VIDEOCAMARA
+import { MediaCapture } from '@ionic-native/media-capture/ngx';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { CarritoFacturaService } from './providers/carrito.factura.service';
 import { ClienteProvider } from './providers/cliente.service';
@@ -72,6 +75,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HomeMapModalPageModule,
     HttpClientModule,
     ImagePageModule,
+    VideoPageModule,
     LocationPageModule,
     ModalActClientePageModule,
     ModalActConsigPageModule,
@@ -114,6 +118,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     // BackgroundGeolocation,
     BackgroundMode,
     Camera,
+    MediaCapture,
     ImagePicker,
     BluetoothSerial,
     OneSignal,

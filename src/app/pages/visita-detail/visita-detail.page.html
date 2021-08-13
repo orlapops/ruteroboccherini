@@ -286,11 +286,6 @@
                             </ion-row>
                         </ion-grid>
                         <hr class="bg-tertiary">
-                        <!-- <ion-slides>
-                            <ion-slide *ngFor="let foto of listafotos" (click)="presentImage(foto.link_foto)">
-                                <ion-img [src]="_DomSanitizer.bypassSecurityTrustUrl(foto.link_foto)"></ion-img>
-                            </ion-slide>
-                          </ion-slides> -->
                         <ion-slides pager="true" margin-bottom class="slide">
                             <ion-slide *ngFor="let foto of listafotos" (click)="presentImage(foto.link_foto,foto.id)">
                                     <div class="slide-content">
@@ -300,20 +295,42 @@
                                                           </div>                                                  
                                                 </ion-card>
                                     </div>
-                                <!-- <ion-grid no-padding>
-                                    <ion-row>
-                                        <ion-col size="12">
-                                            <ion-card class="actividadesCard">
-                                                <ion-img [src]="foto.link_foto"></ion-img>
-                                            </ion-card>
-                                        </ion-col>
-                                    </ion-row>
-                                </ion-grid> -->
-
                             </ion-slide>
                         </ion-slides>
                         <hr class="bg-tertiary">
-
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="6">
+                                    <ion-text color="primary">
+                                        <h3 class="h3">
+                                            <ion-icon size="medium" color="dark" name="videocam"></ion-icon> Videos </h3>
+                                    </ion-text>
+                                </ion-col>
+                                <ion-col size="3">
+                                    <ion-button color="secondary" (click)="tomavideo()" shape="round" fill="solid">
+                                        <ion-icon name="videocam"></ion-icon>
+                                    </ion-button>
+                                </ion-col>
+                                <ion-col size="3">
+                                    <ion-button color="secondary" (click)="seleccionarVideo()" shape="round" fill="solid">
+                                        <ion-icon name="folder"></ion-icon>
+                                    </ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                        <hr class="bg-tertiary">
+                        <ion-slides pager="true" margin-bottom class="slide">
+                            <ion-slide *ngFor="let video of listavideos" (click)="presentVideo(video.link_video,video.id)">
+                                    <div class="slide-content">
+                                            <ion-card class="actividadesCard">
+                                                    <div class="image-wrap">
+                                                            <video autoplay height="300px" width="500px" [src]="_DomSanitizer.bypassSecurityTrustUrl(video.link_video)"></video>  
+                                                        </div>                                                  
+                                                </ion-card>
+                                    </div>
+                            </ion-slide>
+                        </ion-slides>
+                        <hr class="bg-tertiary">
                         <ion-grid>
                             <ion-row>
                                 <ion-col size="9">

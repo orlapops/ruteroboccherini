@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button size="small" shape="round" (click)="closeModal()" color="tertiary">
+        <ion-icon slot="start" name="close"></ion-icon> Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- <img [src]="value"> -->
+
+  <ion-card class="actividadesCard">
+      <div class="image-wrap">
+              <video autoplay height="400" [src]="value"></video>  
+            </div>                                                  
+      <ion-card-subtitle *ngIf="idvideo !== '' && rutafbi !== ''">
+        <ion-badge color="danger" (click)="eliminarVideo()">
+        <ion-icon size="small" name="trash" class="trash_icon"></ion-icon>
+      </ion-badge>
+      </ion-card-subtitle>
+  </ion-card>
+
+
+</ion-content>
+
