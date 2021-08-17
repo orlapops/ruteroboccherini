@@ -44,6 +44,10 @@ import { ClienteProvider } from './providers/cliente.service';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ModalActClientePageModule } from './pages/modal/modal-actcliente/modal-actcliente.module';
 import { ModalActConsigPageModule } from './pages/modal/modal-actconsig/modal-actconsig.module';
+//MODAL PARA LISTA DE CARTERA ->
+import { ModalListObligaPageModule } from './pages/modal/modal-listobliga/modal-listobliga.module';
+import { ModalDetalleObligacionPageModule } from './pages/modal/modal-detalleobligacion/modal-detalleobligacion.module';
+
 import { UbicacionProvider } from './providers/ubicacion/ubicacion.service';
 import { ActividadesService } from './providers/actividades/actividades.service';
 import { MessageService } from './providers/message/message.service';
@@ -80,6 +84,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ModalActClientePageModule,
     ModalActConsigPageModule,
     ModalRegSegCartPageModule,
+    ModalListObligaPageModule,
+    ModalDetalleObligacionPageModule,
     AngularFireModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

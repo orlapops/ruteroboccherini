@@ -4,6 +4,13 @@ import { TranslateProvider } from '../../providers';
 import { environment } from '../../../environments/environment';
 import { VisitasProvider } from '../../providers/visitas/visitas.service';
 
+import { PickerController, ModalController } from "@ionic/angular";
+import { PickerOptions } from "@ionic/core";
+
+
+//MODAL DE CARTERA
+import { ModalListObligaPage } from '../modal/modal-listobliga/modal-listobliga.page'
+
 import {
   trigger,
   style,
@@ -17,6 +24,7 @@ import { ClienteProvider } from '../../providers/cliente.service';
 import { HomePage } from '../home/home.page';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ParEmpreService } from '../../providers/par-empre.service';
+
 
 @Component({
   selector: 'app-clientes-list',
@@ -38,6 +46,9 @@ export class ClientesListPage implements OnInit {
   textbus = '';
   fechainibus: any;
   fechafinbus: any;
+  tipoLlamadas: string[] = ["Llamada 1", "Llamada 2", "Llamada 3", "Llamada 4", "Llamada 5"];
+
+
 
   constructor(
     private router: Router,
@@ -48,7 +59,9 @@ export class ClientesListPage implements OnInit {
     public _parEmpre: ParEmpreService,
     public _visitas: VisitasProvider,
     public _clientes: ClienteProvider,
-    public _pagehome: HomePage
+    public _pagehome: HomePage,
+    private pickerController: PickerController,
+    public modalCtrl: ModalController,
     // public visitaService: VisitasProvider
   ) {
     // this.visitas = this.visitaService.getAll();
@@ -122,4 +135,86 @@ export class ClientesListPage implements OnInit {
     }
   }
 
+
+
+  async crearvisitaxllamadatipo(dcliente, tipo) {
+    // console.log('crearvisita');
+    console.log('datos para crear visita del cliente:',dcliente);
+    console.log('datos para crear visita del cliente:',this._visitas);
+    if (!this._visitas.visitaTodas){
+      console.log('No tienes visitas asginadas. Debe por lo menos tener una asignada para poder tomar llamadas');
+      const alert2 = await this.alertCtrl.create({
+        message: 'No tienes visitas asginadas. Debe por lo menos tener una asignada para poder tomar llamadas',
+        buttons: ['Enterado']
+      });
+       await alert2.present();
+      return;
+    }
+    console.log('datos para crear visita del cliente:',this._visitas);
+    const ldatvisi = this._visitas.visitaTodas[0].data;
+// tslint:disable-next-line: triple-equals
+    if (typeof ldatvisi !== undefined){
+      const alert2 = await this.alertCtrl.create({
+        message: 'Creando Visita por llamada',
+        buttons: ['Enterado']
+      });
+       await alert2.present();
+      this._visitas.crearVisitaxllamadaxTipo(dcliente,ldatvisi,tipo)
+      .then(async res => {        
+        this.navCtrl.navigateRoot('/home');
+        // console.log('retorna de crear visita llamada',res);
+      }
+      );      
+    }
+  }
+
+
+
+//CLASIFICACION DE LLAMADAS MEDIANTE PICKER
+async showPicker(cliente) {
+  let options: PickerOptions = {
+    buttons: [
+      {
+        text: "Cancelar",
+        role: 'cancel'
+      },
+      {
+        text:'Seleccionar tipo',
+        handler:(value:any) => {
+          console.log(value);
+          this.crearvisitaxllamadatipo(cliente, value.value);
+        }
+      }
+    ],
+    columns:[{
+      name:'Llamadas',
+      options:this.getColumnOptions()
+    }]
+  };
+
+  let picker = await this.pickerController.create(options);
+  picker.present()
 }
+
+getColumnOptions(){
+  let options = [];
+  this.tipoLlamadas.forEach(x => {
+    options.push({text:x,value:x});
+  });
+  return options;
+}
+
+//Open Modal Cartera
+async verCartera(pcod_tercer) {
+  console.log('Codigo de tercero que llega a ver cartera:', pcod_tercer);
+  const modal = await this.modalCtrl.create({
+    component: ModalListObligaPage,
+    // componentProps: { fromto: fromto, search: this.search }
+    componentProps: { cod_tercer: pcod_tercer }
+  });
+  return await modal.present();
+}
+
+
+}
+

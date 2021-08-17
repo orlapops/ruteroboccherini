@@ -1,0 +1,64 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>Lista de obligaciones del cliente</ion-title>
+        <ion-buttons slot="end">
+            <ion-button size="small" shape="round" (click)="cerrarModal()" color="tertiary">
+                <ion-icon slot="start" name="close"></ion-icon> Cerrar
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-card *ngIf="cargo_clienteact" class="facturaCard">
+        <ion-card-content no-margin margin-vertical class="bg-white" *ngFor="let item of clienteAct.cartera">
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="8">
+                        <ion-icon name="checkbox" color="primary"></ion-icon>Obligación: {{item.num_obliga}}
+                        {{item.cod_dfactu+'/'+item.num_dfactu}}
+                    </ion-col>
+                    <ion-col size="4">
+                        <ion-icon name="alarm" color="primary"></ion-icon>{{item.fecha_obl | date: 'shortDate'}}
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="5">
+                        <ion-badge *ngIf="item.dias_venci>0" color="danger" margin-bottom>{{ item.dias_venci }} días de
+                            vencida</ion-badge>
+                    </ion-col>
+                    <ion-col size="7">
+                        <p class="saldo-cartera">Saldo:{{item.saldo | currency }}</p>
+                    </ion-col>
+
+                </ion-row>
+                <ion-row *ngIf="item.naturaleza == 'D' && item.saldo>0">
+                    <ion-col>
+                        <ion-button size="small" shape="round" expand="full" color="warning"
+                            (click)="detalleObligacion(item.num_obliga)">
+                            <ion-icon slot="start" name="book"></ion-icon>
+                            Detalle Obligación
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="item.naturaleza == 'D'  && item.saldo<0">
+                    <ion-col>
+                        <ion-button size="small" shape="round" expand="full" color="danger">
+                            <ion-icon slot="start" name="book"></ion-icon>
+                            Saldo en Contra
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="item.naturaleza == 'C'">
+                    <ion-col>
+                        <ion-button size="small" shape="round" expand="full" color="danger">
+                            <ion-icon slot="start" name="book"></ion-icon>
+                            Anticipo
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
