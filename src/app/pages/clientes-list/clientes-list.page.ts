@@ -46,7 +46,7 @@ export class ClientesListPage implements OnInit {
   textbus = '';
   fechainibus: any;
   fechafinbus: any;
-  tipoLlamadas: string[] = ["Llamada 1", "Llamada 2", "Llamada 3", "Llamada 4", "Llamada 5"];
+  tipoLlamadas: string[] = ["Retoma de visita", "Añadir visita a la ruta", "Recaudo", "Pedido"];
 
 
 
@@ -179,10 +179,10 @@ async showPicker(cliente) {
         role: 'cancel'
       },
       {
-        text:'Seleccionar tipo',
+        text:'Seleccionar tipo de llamada',
         handler:(value:any) => {
           console.log(value);
-          this.crearvisitaxllamadatipo(cliente, value.value);
+          this.crearvisitaxllamadatipo(cliente, value.Llamadas.value);
         }
       }
     ],
