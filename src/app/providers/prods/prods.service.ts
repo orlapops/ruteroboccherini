@@ -830,6 +830,57 @@ export class ProdsService implements OnInit {
       // .doc(id).set(objpedido);
     }
 
+//op ag 18 21 Genera un pedido temporal para ser llamado posteriormente al crear una llamada
+    genera_pedido_temporal(pid_dir, pnota, pobsequio) {
+      console.log('dataos para generar pedido temporal this._visitas.visita_activa_copvdet:', this._visitas.visita_activa_copvdet);
+      console.log('Pedido a genera this.pedido): ', this.pedido);
+      return new Promise((resolve, reject) => {  
+        if (this.generando_pedido){
+          console.error('Ya se esta generando un pedido');
+          resolve(false);
+        }
+        this.generando_pedido = true;
+        this._visitas.visita_activa_copvdet.grb_pedido = false;
+        this._visitas.visita_activa_copvdet.resgrb_pedido = '';
+        this._visitas.visita_activa_copvdet.pedido_grabado = null;
+        this._visitas.visita_activa_copvdet.errorgrb_pedido = false;
+    
+        let objpedidogfb = {
+          // datos_gen: this._visitas.visita_activa_copvdet.datosgen,
+          datos_gen: this._visitas.visita_activa_copvdet,
+          id_dirdespa: pid_dir,
+          nota: pnota,
+          es_obsequio: pobsequio,
+          cod_usuar : this._parempre.usuario.cod_usuar,
+          id_visita : this._visitas.visita_activa_copvdet.id_visita,
+          cod_tercer : this._visitas.visita_activa_copvdet.cod_tercer,
+          direccion : this._visitas.visita_activa_copvdet.direccion,
+          id_dir : this._visitas.visita_activa_copvdet.id_dir,
+          items_pedido: this.pedido,
+          usuario: this._parempre.usuario
+        };
+        console.log('Guardo pedido en netsolin a guardar en fb objpedidogfb:',objpedidogfb);
+        this.guardarpedidotemporalFb(this._visitas.visita_activa_copvdet.cod_tercer,this._visitas.visita_activa_copvdet.id_visita,objpedidogfb).then(res => {
+          console.log('Pedido guardado en fb res: ', res);
+          // console.log('Pedido guardada res id: ', res.id);
+          this.generando_pedido = false;
+          resolve(true);  
+        })
+        .catch((err) => {
+            console.log('Error guardando pedido en Fb', err);
+            this.generando_pedido = false;
+            resolve(false);
+        });
+
+      });
+    }
+
+    //op ag 18 21 Guardar pedido temporal en fb para ser llamado en otra visita
+    guardarpedidotemporalFb(cod_tercer, id, objpedido) {
+      console.log('guardarpedidotemporalFb cod_tercer, id, objpedido: ',cod_tercer, id, objpedido);
+      return this.fbDb.collection(`/clientes/${cod_tercer}/pedidostemporales/`).doc(""+id+"").set(objpedido);
+    }
+
     genera_factura_netsolin() {
       console.log('dataos para generar factura this._visitas.visita_activa_copvdet:', this._visitas.visita_activa_copvdet);
       console.log('Factura a genera this.pedido): ', this.factura);

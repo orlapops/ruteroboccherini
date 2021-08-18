@@ -108,6 +108,9 @@
             <ion-button *ngIf="!grabando_pedido && !mostrandoresulado" slot="end" shape="round" color="success" (click)="realizar_pedido()">
                 Realizar Pedido
             </ion-button>
+            <ion-button *ngIf="!grabando_pedido && !mostrandoresulado" slot="end" shape="round" color="success" (click)="guardar_pedido_temporal()">
+                Guardar Temporal
+            </ion-button>
         </div>
     </div>
     <ion-card *ngIf="grabando_pedido && !mostrandoresulado">
