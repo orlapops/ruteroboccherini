@@ -23,14 +23,12 @@
                 <ion-item>
                     <ion-label>
                         <h2 [ngClass]="{'fw700 text-white': !true}">
-                            <div class="fechavisita">
+                            <div>
                                 <ion-text color="primary">{{cliente.cod_tercer}}</ion-text>
+                                <ion-text color="blue"> {{cliente.nombre}}</ion-text>
                             </div>
                         </h2>
-                        <hr>
-                        <h2 class="clientevisita">
-                            <ion-text color="blue"> {{cliente.nombre}}</ion-text>
-                        </h2>
+                        <hr  class="hrvisitacerrada">
                         <h3>
                             <div class="direcvisita">
                                 <ion-icon name="pin" slot="start" class="direcvisita"></ion-icon>

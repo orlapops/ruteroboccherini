@@ -17,6 +17,7 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { File, DirectoryEntry, FileEntry } from "@ionic-native/file/ngx";
 
 import { ModalDetalleObligacionPage } from '../modal-detalleobligacion/modal-detalleobligacion.page'
+import { ParEmpreService } from 'src/app/providers/par-empre.service';
 
 
 declare var google: any;
@@ -42,11 +43,12 @@ export class ModalListObligaPage implements OnInit {
     private storage: AngularFireStorage,
     public loadingCtrl: LoadingController,
     private imagePicker: ImagePicker,
-    public _DomSanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer,
     private formBuilder: FormBuilder,
     public _ubicacionService: UbicacionProvider,
     private camera: Camera,
     private file: File,
+    public _parEmpre: ParEmpreService,
     private webview: WebView
   ) {
 
@@ -62,45 +64,42 @@ export class ModalListObligaPage implements OnInit {
 
   cargarCliente() {
     console.log('codigo de cliente a buscar modal obliga -> ', this.cod_tercer);
-    this._cliente.getClienteFb(this.cod_tercer).subscribe((datos: any) => {
-      console.log('Suscribe a clientes fb ', datos);
-      this.clienteAct = datos;
-      this.cargo_clienteact = true;
-      //encontrar ubicacion actual en arreglo
-      this.ubicaAct = null;
-      // this.cargo_ubicaact = false;
-      // console.log('a buscar ubica act ',this.visita.data.cod_tercer, this.visita.data.id_dir);
-      // for (var i = 0; i < this.clienteAct.direcciones.length; i++) {
-      //   if (this.clienteAct.direcciones[i].id_dir === this.visita.data.id_dir) {
-      //     // this.ubicaAct = this.clienteAct.direcciones[i];
-      //     this._cliente.getUbicaActFb(this.cod_tercer, this.visita.data.id_dir).subscribe((datosc: any) => {
-      //       console.log('susc datos cliente fb ', datosc);
-      //       this.ubicaAct = datosc;
-      //       this._visitas.direc_actual = this.ubicaAct;
-      //       this.cargo_ubicaact = true;
-      //       console.log('encontro ubica act; ', this.ubicaAct);
-      //       this.segcartera = this._cliente.segcartera;
-      //       console.log('segcartera cliente ', this.segcartera);
-      //       // this._cliente.getSegCarFb(this.visita.data.cod_tercer).subscribe((datosseg: any) => {
-      //       //   console.log('encontro ubica act; ', this.ubicaAct);                  
-      //       //   this.segcartera = datosseg;
-      //       //   console.log('encontro segcartera; ', this.segcartera);                  
-      //       // });
-      //     });
-      //   }
-      // }
+    this._cliente.cargaClienteNetsolin(this.cod_tercer).then(datoscargo =>{            
+      console.log('En Carga cliente buscado cargo:', datoscargo);
+      if (datoscargo) {
+          this.cargo_clienteact = true;
+          this.clienteAct = this._cliente.clienteActual;
+          console.log('En Carga cliente buscado this.clienteAct:', this.clienteAct,this.clienteAct.cartera);
+      } else {
+          console.log('error en actualizarclientenetsolinFb guardarClienteFb');
+      }
+    })
+    .catch(() => {
+      console.log('error buscar cliente cargaClienteNetsolin');
     });
+  
+    // this._cliente.getClienteFb(this.cod_tercer).subscribe((datos: any) => {
+    //   console.log('Suscribe a clientes fb ', datos);
+    //   this.clienteAct = datos;
+    //   this.cargo_clienteact = true;
+    //   //encontrar ubicacion actual en arreglo
+    //   this.ubicaAct = null;
+      
+    // });
   }
 
-
-  async detalleObligacion(numobliga) {
-    console.log('numero de olbigacion para detalle:', numobliga);
-    const modal = await this.modalCtrl.create({
-      component: ModalDetalleObligacionPage,
-      // componentProps: { fromto: fromto, search: this.search }
-      componentProps: { num_obliga: numobliga, clie_cartera: this.clienteAct }
-    });
-    return await modal.present();
+  colorxEstado(diasvenci) {
+    // console.log('colorxEstado, estado');
+    if (diasvenci>0) {
+      return 'colorvencida';
+      // return 'bg-red';
+    } else {
+        return 'coloraldia';
+      }
+  }
+  
+  cleanURL(oldURL: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(oldURL);
   }
 
 
