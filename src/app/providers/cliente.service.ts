@@ -390,6 +390,19 @@ export class ClienteProvider {
           });
         });
       }
+
+
+
+
+
+  //18 - 08 - 2021 Traer pedidos temporales del cliente 
+  public getCliePedidoTemp(idclie) {
+    console.log('getCliePedidoTemp idclie:' + idclie);    
+    return this.fbDb.collection(`clientes/${idclie}/pedidostemporales`).valueChanges();
+  }
+
+
+
     
   
 

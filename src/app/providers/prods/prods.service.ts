@@ -626,6 +626,25 @@ export class ProdsService implements OnInit {
     }
   }
 
+
+
+  // 18 - 08 - 2021 Cargar pedido de firebase pasandolo al storage - JOSE
+  public cargar_fb_pedido(id_visita, pedido) {
+    const idruta = pedido.datos_gen.id_ruta;
+    const idvisiact = id_visita;
+    const idiped = idruta.toString() + idvisiact.toString();
+    if (this.platform.is("cordova")) {
+      // dispositivo
+      this.storage.set("itemped" + idiped, pedido.items_pedido);
+    } else {
+      // computadora
+      localStorage.setItem("itemped" + idiped, JSON.stringify(pedido.items_pedido));
+    }
+  }
+
+
+
+
   cargar_storage_factura(idruta, idvisiact) {
     // console.log("cargar_storage_factura 1", this._visitas);
     // // let idruta = this._visitas.visita_activa_copvdet.datosgen.id_ruta;

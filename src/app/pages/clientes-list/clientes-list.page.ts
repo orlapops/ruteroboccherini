@@ -24,7 +24,7 @@ import { ClienteProvider } from '../../providers/cliente.service';
 import { HomePage } from '../home/home.page';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ParEmpreService } from '../../providers/par-empre.service';
-
+import { ProdsService } from '../../providers/prods/prods.service';
 
 @Component({
   selector: 'app-clientes-list',
@@ -62,6 +62,7 @@ export class ClientesListPage implements OnInit {
     public _pagehome: HomePage,
     private pickerController: PickerController,
     public modalCtrl: ModalController,
+    private _prodserv: ProdsService
     // public visitaService: VisitasProvider
   ) {
     // this.visitas = this.visitaService.getAll();
@@ -137,7 +138,7 @@ export class ClientesListPage implements OnInit {
 
 
 
-  async crearvisitaxllamadatipo(dcliente, tipo) {
+  async crearvisitaxllamadatipo(dcliente, tipo, pedido) {
     // console.log('crearvisita');
     console.log('datos para crear visita del cliente:',dcliente);
     console.log('datos para crear visita del cliente:',this._visitas);
@@ -160,7 +161,10 @@ export class ClientesListPage implements OnInit {
       });
        await alert2.present();
       this._visitas.crearVisitaxllamadaxTipo(dcliente,ldatvisi,tipo)
-      .then(async res => {        
+      .then(async (res) => {  
+        if(tipo==="Retoma de visita"){
+          this.cargarPedidoTemp(res, pedido);
+        }      
         this.navCtrl.navigateRoot('/home');
         // console.log('retorna de crear visita llamada',res);
       }
@@ -168,6 +172,13 @@ export class ClientesListPage implements OnInit {
     }
   }
 
+
+  //guarda pedido temporal seleccionado
+  cargarPedidoTemp(idvisita, pedidosel){
+    console.log('carga pedido temporal para visita -> ',idvisita, pedidosel);
+    this._prodserv.cargar_fb_pedido(idvisita, pedidosel);
+
+  };
 
 
 //CLASIFICACION DE LLAMADAS MEDIANTE PICKER
@@ -182,13 +193,22 @@ async showPicker(cliente) {
         text:'Seleccionar tipo de llamada',
         handler:(value:any) => {
           console.log(value);
-          this.crearvisitaxllamadatipo(cliente, value.Llamadas.value);
+          if (value.Llamadas.value === 'Retoma de visita') {
+            console.log('Entro a retoma de visita para el cliente -> ', cliente);
+            this._clientes.getCliePedidoTemp(cliente.cod_tercer).subscribe((res) => {
+              console.log('Pedidos temporales de el cliente -> ', res);
+              this.showPickerPedidos(res, cliente, value.Llamadas.value);
+            });
+          } else {
+            this.crearvisitaxllamadatipo(cliente, value.Llamadas.value, []);
+          }
+
         }
       }
     ],
     columns:[{
       name:'Llamadas',
-      options:this.getColumnOptions()
+      options:this.getColumnOptions(this.tipoLlamadas)
     }]
   };
 
@@ -196,24 +216,66 @@ async showPicker(cliente) {
   picker.present()
 }
 
-getColumnOptions(){
-  let options = [];
-  this.tipoLlamadas.forEach(x => {
-    options.push({text:x,value:x});
-  });
-  return options;
+
+//Picker para seleccionar pedidos
+
+async showPickerPedidos(pedidosTemporales, dcliente, tipollamada) {
+  var pedidos = [];
+  var busqueda = [];
+  for(let i of pedidosTemporales){
+    pedidos.push(i.datos_gen.id_visita);
+  }
+  let options: PickerOptions = {
+    buttons: [
+      {
+        text: "Cancelar",
+        role: 'cancel'
+      },
+      {
+        text:'Seleccionar pedido a retornar',
+        handler:(value:any) => {
+          console.log(value);
+          busqueda = pedidosTemporales.filter(x => x.id_visita === value.pedidos.value);
+          console.log('Valor de la busqueda ->  ', busqueda);
+          if(busqueda!=undefined){
+            this.crearvisitaxllamadatipo(dcliente, tipollamada, busqueda[0]);
+          };
+        }
+      }
+    ],
+    columns:[{
+      name:'pedidos',
+      options:this.getColumnOptions(pedidos)
+    }]
+  };
+
+  let picker = await this.pickerController.create(options);
+  picker.present()
 }
 
-//Open Modal Cartera
-async verCartera(pcod_tercer) {
-  console.log('Codigo de tercero que llega a ver cartera:', pcod_tercer);
-  const modal = await this.modalCtrl.create({
-    component: ModalListObligaPage,
-    // componentProps: { fromto: fromto, search: this.search }
-    componentProps: { cod_tercer: pcod_tercer }
-  });
-  return await modal.present();
-}
+
+
+
+
+
+  getColumnOptions(datos) {
+    let options = [];
+    datos.forEach(x => {
+      options.push({ text: x, value: x });
+    });
+    return options;
+  }
+
+  //Open Modal Cartera
+  async verCartera(pcod_tercer) {
+    console.log('Codigo de tercero que llega a ver cartera:', pcod_tercer);
+    const modal = await this.modalCtrl.create({
+      component: ModalListObligaPage,
+      // componentProps: { fromto: fromto, search: this.search }
+      componentProps: { cod_tercer: pcod_tercer }
+    });
+    return await modal.present();
+  }
 
 
 }

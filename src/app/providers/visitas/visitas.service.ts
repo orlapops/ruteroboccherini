@@ -215,51 +215,53 @@ cargaPeriodoUsuar(pcod_usuar){
   }
 
 
-  public  crearVisitaxllamadaxTipo(pdcliente,pdvisita,tipo) {
-    console.log("crearVisitaxllamadaxTipo pdcliente:", pdcliente,pdvisita);
-    const now = new Date();
-    const hora = now.getHours();
-    const minutos = now.getMinutes();
-    const horaing = hora.toString()+minutos.toString()
-    const idvisi = 90000000000000+now.getTime();
-    const visicrear = {
-      cod_tercer: pdcliente.cod_tercer,
-      direccion: pdcliente.direccion,
-      envio_email: false,
-      error_envemail: '',
-      errorgrb_factu: false,
-      errorgrb_pedido:false,
-      errorgrb_recibo:false,
-      estado: '',
-      fecha_fin: pdvisita.fecha_fin,
-      fecha_in: pdvisita.fecha_in,
-      fechahora_cierre: '',
-      fechahora_ingreso: Date(),
-      hora_in : parseInt(horaing),
-      hora_sal : parseInt(horaing),
-      grb_pedido : false,
-      resgrb_pedido : '',
-      pedido_grabado : null,
-      grb_factu : false,
-      resgrb_factu : '',
-      pedido_factu : null,
-      grb_recibo : false,
-      resgrb_recibo : '',
-      pedido_recibo : null,
-      id_dir: pdcliente.id_dir, 
-      id_reffecha: pdvisita.id_reffecha,
-      id_ruta: pdvisita.id_ruta,
-      id_visita: idvisi,
-      nombre: pdcliente.nombre,
-      llamada: true,
-      tipo_llamada: tipo,
-      notaing: '',
-      notas: 'Llamada Cliente tipo ' + tipo
-    };
-    return this.fbDb
-    .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this.id_ruta}/periodos/${this.id_periodo}/visitas`)
-    .doc(idvisi.toString()).set(visicrear);
-  
+  public crearVisitaxllamadaxTipo(pdcliente, pdvisita, tipo) {
+    return new Promise((resolve, reject) => {
+      console.log("crearVisitaxllamadaxTipo pdcliente:", pdcliente, pdvisita);
+      const now = new Date();
+      const hora = now.getHours();
+      const minutos = now.getMinutes();
+      const horaing = hora.toString() + minutos.toString()
+      const idvisi = 90000000000000 + now.getTime();
+      const visicrear = {
+        cod_tercer: pdcliente.cod_tercer,
+        direccion: pdcliente.direccion,
+        envio_email: false,
+        error_envemail: '',
+        errorgrb_factu: false,
+        errorgrb_pedido: false,
+        errorgrb_recibo: false,
+        estado: '',
+        fecha_fin: pdvisita.fecha_fin,
+        fecha_in: pdvisita.fecha_in,
+        fechahora_cierre: '',
+        fechahora_ingreso: Date(),
+        hora_in: parseInt(horaing),
+        hora_sal: parseInt(horaing),
+        grb_pedido: false,
+        resgrb_pedido: '',
+        pedido_grabado: null,
+        grb_factu: false,
+        resgrb_factu: '',
+        pedido_factu: null,
+        grb_recibo: false,
+        resgrb_recibo: '',
+        pedido_recibo: null,
+        id_dir: pdcliente.id_dir,
+        id_reffecha: pdvisita.id_reffecha,
+        id_ruta: pdvisita.id_ruta,
+        id_visita: idvisi,
+        nombre: pdcliente.nombre,
+        llamada: true,
+        tipo_llamada: tipo,
+        notaing: '',
+        notas: 'Llamada Cliente tipo ' + tipo
+      };
+      this.fbDb
+        .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this.id_ruta}/periodos/${this.id_periodo}/visitas`)
+        .doc(idvisi.toString()).set(visicrear).then(() => { resolve(idvisi) }).catch((res) => { resolve("Error:" + res)});
+    });
+
   }
 
 
