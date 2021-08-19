@@ -1,0 +1,108 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="end">
+            <ion-button size="small" shape="round" (click)="cerrarModal()" color="tertiary">
+                <ion-icon slot="start" name="close"></ion-icon> Cerrar
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <ion-col size="9" class="text-align">
+        <hr class="hrvisitacerrada">
+        <ion-text color="dark"> {{pedido.datos_gen.nombre}} </ion-text>
+        <h5 class="idtercer">
+            Id: {{pedido.datos_gen.cod_tercer}}
+        </h5>
+        <hr class="hrvisitacerrada">
+        <ion-icon name="bookmark" ></ion-icon> Informacion de pedido
+        <h6>Fecha:</h6>
+        <h4 class="fechahorahora">
+            <div class="hour fechahora">
+                <ion-icon name="calendar" slot="start" color="secondary" *ngIf="true"></ion-icon>
+                <ion-icon name="mail-open" slot="start" color="primary" *ngIf="!true"></ion-icon>
+                <ion-text color="primary">{{ _parEmpre.cadafecha(pedido.datos_gen.fecha_in) | date: 'shortDate'}}
+                </ion-text>
+            </div>
+            <div class="position fechahora">
+                <ion-icon name="time" slot="end" color="tertiary" *ngIf="true"></ion-icon>
+                <ion-text color="primary"> {{ _parEmpre.cadhoramil(pedido.datos_gen.hora_in) }}</ion-text>
+            </div>
+        </h4>
+        <h6> <ion-icon name="clipboard" ></ion-icon> Nota:</h6>{{pedido.nota}}
+
+    </ion-col>
+</ion-header>
+
+
+<ion-content class="animated fadeIn">
+
+    <hr class="bg-tertiary">
+
+    <ion-card *ngIf="inconsistencia">
+        <ion-text color="danger"> Error captura pedido </ion-text>
+        <ion-item padding class="animated fadeIn fast">
+            <ion-text color="danger"> {{men_inconsisten}}</ion-text>
+        </ion-item>
+    </ion-card>
+
+    <div class="bg-white">
+        <ion-grid class="btpedido-color" *ngIf="cargoitems">
+            <ion-row *ngFor="let itemp of items_pedido; let i = index;">
+                <ion-col size="4">
+                    <img *ngIf="itemp.item.link_imgfb"
+                        [src]="_DomSanitizer.bypassSecurityTrustUrl(itemp.item.link_imgfb)" />
+                    <img *ngIf="!itemp.item.link_imgfb" src="assets/img/imagennodisponible.jpg" />
+                </ion-col>
+                <ion-col>
+                    <ion-row>
+                        <ion-col>
+                            <div>
+                                <ion-text color="primary" slot="start" tappable
+                                    routerLink="/prod-detail.ped/{{encodestring(itemp.item.cod_ref)}}">
+                                    {{itemp.item.cod_ref}} {{itemp.item.nombre}}
+                                </ion-text>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <div>
+                                <ion-text color="success" slot="end">
+                                    Total: {{ itemp.item.total | currency }}
+                                </ion-text>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <hr>
+    </div>
+
+
+</ion-content>
+
+<ion-footer>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <h3>
+                    <strong>Total:</strong>
+                </h3>
+            </ion-col>
+            <ion-col>
+                <h3>
+                    <strong> {{ total_ped | currency }}</strong>
+                </h3>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <div>
+        <ion-button slot="end" shape="round" color="danger" (click)="cerrarModal()">
+            cancelar
+        </ion-button>
+        <ion-button slot="end" shape="round" color="success" (click)="confirmar_pedido()">
+            retomar visita
+        </ion-button>
+
+    </div>
+</ion-footer>

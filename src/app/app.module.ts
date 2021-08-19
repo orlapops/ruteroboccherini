@@ -46,7 +46,7 @@ import { ModalActClientePageModule } from './pages/modal/modal-actcliente/modal-
 import { ModalActConsigPageModule } from './pages/modal/modal-actconsig/modal-actconsig.module';
 //MODAL PARA LISTA DE CARTERA ->
 import { ModalListObligaPageModule } from './pages/modal/modal-listobliga/modal-listobliga.module';
-import { ModalDetalleObligacionPageModule } from './pages/modal/modal-detalleobligacion/modal-detalleobligacion.module';
+import { ModalDetallePedTempPageModule } from './pages/modal/modal-detallepedtemp/modal-detallepedtemp.module';
 
 import { UbicacionProvider } from './providers/ubicacion/ubicacion.service';
 import { ActividadesService } from './providers/actividades/actividades.service';
@@ -85,7 +85,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ModalActConsigPageModule,
     ModalRegSegCartPageModule,
     ModalListObligaPageModule,
-    ModalDetalleObligacionPageModule,
+    ModalDetallePedTempPageModule,
     AngularFireModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

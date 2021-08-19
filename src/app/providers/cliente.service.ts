@@ -401,6 +401,11 @@ export class ClienteProvider {
     return this.fbDb.collection(`clientes/${idclie}/pedidostemporales`).valueChanges();
   }
 
+  public delPedidoTempClie(idclie, idpedtemp) {
+    console.log('delPedidoTempClie datos:', idclie, idpedtemp);    
+    return this.fbDb.collection(`clientes/${idclie}/pedidostemporales`).doc(idpedtemp).delete();
+  }
+
 
 
     

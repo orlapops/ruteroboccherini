@@ -10,6 +10,8 @@ import { PickerOptions } from "@ionic/core";
 
 //MODAL DE CARTERA
 import { ModalListObligaPage } from '../modal/modal-listobliga/modal-listobliga.page'
+//MODAL DETALLE DE PEDIDO TEMPORAL
+import { ModalDetallePedTempPage } from '../modal/modal-detallepedtemp/modal-detallepedtemp.page'
 
 import {
   trigger,
@@ -208,7 +210,7 @@ async showPicker(cliente) {
     ],
     columns:[{
       name:'Llamadas',
-      options:this.getColumnOptions(this.tipoLlamadas)
+      options:this.getColumnOptions(this.tipoLlamadas, false, "")
     }]
   };
 
@@ -238,14 +240,20 @@ async showPickerPedidos(pedidosTemporales, dcliente, tipollamada) {
           busqueda = pedidosTemporales.filter(x => x.id_visita === value.pedidos.value);
           console.log('Valor de la busqueda ->  ', busqueda);
           if(busqueda!=undefined){
-            this.crearvisitaxllamadatipo(dcliente, tipollamada, busqueda[0]);
+            this.verPedidoTemporal(busqueda[0]).then((res)=>{
+              console.log('respuesta en fin de picker -> ', res);
+              if(res){
+                this.crearvisitaxllamadatipo(dcliente, tipollamada, busqueda[0]);
+                this._clientes.delPedidoTempClie(busqueda[0].datos_gen.cod_tercer, ""+busqueda[0].id_visita+"");
+              }
+            });
           };
         }
       }
     ],
     columns:[{
       name:'pedidos',
-      options:this.getColumnOptions(pedidos)
+      options:this.getColumnOptions(pedidos, true, "Pedido - ")
     }]
   };
 
@@ -258,11 +266,17 @@ async showPickerPedidos(pedidosTemporales, dcliente, tipollamada) {
 
 
 
-  getColumnOptions(datos) {
+  getColumnOptions(datos, customtext:boolean, text:string) {
     let options = [];
-    datos.forEach(x => {
-      options.push({ text: x, value: x });
-    });
+    if (customtext) {
+      datos.forEach(x => {
+        options.push({ text: text + x, value: x });
+      });
+    } else {
+      datos.forEach(x => {
+        options.push({ text: x, value: x });
+      });
+    }
     return options;
   }
 
@@ -275,6 +289,20 @@ async showPickerPedidos(pedidosTemporales, dcliente, tipollamada) {
       componentProps: { cod_tercer: pcod_tercer }
     });
     return await modal.present();
+  }
+
+  //Open Modal Cartera
+  async verPedidoTemporal(pedidotemp) {
+    console.log('pedido que llega para visualizar:', pedidotemp);
+    const modal = await this.modalCtrl.create({
+      component: ModalDetallePedTempPage,
+      // componentProps: { fromto: fromto, search: this.search }
+      componentProps: { pedido: pedidotemp }
+    });
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
+    console.log('datos retornados por modal -> ', data);
+    return data;
   }
 
 

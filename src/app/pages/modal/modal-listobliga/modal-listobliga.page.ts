@@ -16,7 +16,6 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { File, DirectoryEntry, FileEntry } from "@ionic-native/file/ngx";
 
-import { ModalDetalleObligacionPage } from '../modal-detalleobligacion/modal-detalleobligacion.page'
 import { ParEmpreService } from 'src/app/providers/par-empre.service';
 
 

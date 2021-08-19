@@ -13,7 +13,9 @@
     text-align: -webkit-right;
     background: whitesmoke;
 }
-
+.picker-opt.picker-opt-selected, .picker-prefix, .picker-suffix {
+    color: #3880ff;
+}
 .alerterror {
     background-color: #f52f2f;
 }

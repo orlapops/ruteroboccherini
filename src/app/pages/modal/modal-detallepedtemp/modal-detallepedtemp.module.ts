@@ -6,12 +6,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ModalDetalleObligacionPage } from './modal-detalleobligacion.page';
+import { ModalDetallePedTempPage } from './modal-detallepedtemp.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ModalDetalleObligacionPage
+    component: ModalDetallePedTempPage
   }
 ];
 
@@ -24,6 +24,6 @@ const routes: Routes = [
     TranslateModule.forChild(),
     RouterModule.forChild(routes)
   ],
-  declarations: [ModalDetalleObligacionPage]
+  declarations: [ModalDetallePedTempPage]
 })
-export class ModalDetalleObligacionPageModule {}
+export class ModalDetallePedTempPageModule {}
