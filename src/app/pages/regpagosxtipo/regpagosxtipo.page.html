@@ -140,7 +140,7 @@
                         </ion-slides>
                         <hr class="bg-tertiary">
                         <ion-item>
-                            <ion-button *ngIf="tipocrud == 'A'" size="large" expand="full" color="dark" (click)="addFormapago(regpago)"  >Registrar</ion-button>
+                            <ion-button *ngIf="tipocrud == 'A'" size="large" expand="full" color="dark" (click)="addFormapago(regpago)" [disabled]="!cargoImagen" >Registrar</ion-button>
                             <ion-button *ngIf="tipocrud != 'A'" size="default" color="dark" (click)="modificarFormapago()">Modificar</ion-button>
                             <ion-button *ngIf="tipocrud != 'A'" size="default" color="danger" (click)="eliminarFormapago()">Quitar</ion-button>
                         </ion-item>

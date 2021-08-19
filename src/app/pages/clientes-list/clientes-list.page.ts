@@ -140,7 +140,7 @@ export class ClientesListPage implements OnInit {
 
 
 
-  async crearvisitaxllamadatipo(dcliente, tipo, pedido) {
+  async crearvisitaxllamadatipo(dcliente, tipo, pedido, id_visita) {
     // console.log('crearvisita');
     console.log('datos para crear visita del cliente:',dcliente);
     console.log('datos para crear visita del cliente:',this._visitas);
@@ -162,7 +162,7 @@ export class ClientesListPage implements OnInit {
         buttons: ['Enterado']
       });
        await alert2.present();
-      this._visitas.crearVisitaxllamadaxTipo(dcliente,ldatvisi,tipo)
+      this._visitas.crearVisitaxllamadaxTipo(dcliente,ldatvisi,tipo, id_visita)
       .then(async (res) => {  
         if(tipo==="Retoma de visita"){
           this.cargarPedidoTemp(res, pedido);
@@ -183,40 +183,75 @@ export class ClientesListPage implements OnInit {
   };
 
 
-//CLASIFICACION DE LLAMADAS MEDIANTE PICKER
-async showPicker(cliente) {
-  let options: PickerOptions = {
-    buttons: [
-      {
-        text: "Cancelar",
-        role: 'cancel'
-      },
-      {
-        text:'Seleccionar tipo de llamada',
-        handler:(value:any) => {
-          console.log(value);
-          if (value.Llamadas.value === 'Retoma de visita') {
-            console.log('Entro a retoma de visita para el cliente -> ', cliente);
-            this._clientes.getCliePedidoTemp(cliente.cod_tercer).subscribe((res) => {
-              console.log('Pedidos temporales de el cliente -> ', res);
-              this.showPickerPedidos(res, cliente, value.Llamadas.value);
-            });
-          } else {
-            this.crearvisitaxllamadatipo(cliente, value.Llamadas.value, []);
+  //CLASIFICACION DE LLAMADAS MEDIANTE PICKER
+  async showPicker(cliente) {
+    let options: PickerOptions = {
+      buttons: [
+        {
+          text: "Cancelar",
+          role: 'cancel'
+        },
+        {
+          text: 'Seleccionar tipo de llamada',
+          handler: (value: any) => {
+            console.log(value);
+            if (value.Llamadas.value === 'Retoma de visita') {
+              console.log('Entro a retoma de visita para el cliente -> ', cliente);
+              this._clientes.getCliePedidoTemp(cliente.cod_tercer).subscribe((res) => {
+                console.log('Pedidos temporales de el cliente -> ', res);
+                this.showPickerPedidos(res, cliente, value.Llamadas.value);
+              });
+            } if (value.Llamadas.value === 'Añadir visita a la ruta') {
+              console.log('Entro a Añadir visita a la ruta para el cliente -> ', cliente);
+              var fechact = new Date();
+              var hora = fechact.getHours()+":"+fechact.getMinutes();
+              var horaf = (fechact.getHours()+1)+":"+fechact.getMinutes();
+              var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+              var visita = {
+                cod_tercer: cliente.cod_tercer,
+                id_dir: cliente.id_dir,
+                cod_person: this._parEmpre.usuario.cod_usuar,
+                id_ruta: this._visitas.id_ruta,
+                id_per: this._visitas.id_periodo,
+                fecha_ini: fechact.toLocaleDateString("es-ES"),
+                fec_visita: fechact.toLocaleDateString("es-ES"),
+                hora_in: hora,
+                fecha_fin: fechact.toLocaleDateString("es-ES"),
+                hora_fin: horaf
+              }
+              console.log('obj visita a enviar ->>>> ', visita);
+              this._visitas.creaVisitaNetsolin(visita).then(async (res:any)=>{
+                console.log('respuesta serv netsolin -> ', res);
+                if(res.error != undefined && res.error == false){
+                  console.log('entro a guardar visita en fb');
+                  this.crearvisitaxllamadatipo(cliente, value.Llamadas.value, [], res.id_visita);
+                }else{
+                  if(res.isCallbackError == true){
+                    const alert2 = await this.alertCtrl.create({
+                      message: res.messages[0].menerror,
+                      buttons: ['Enterado']
+                    });
+                     await alert2.present()
+                  }
+                }
+              });
+
+            } else {
+              this.crearvisitaxllamadatipo(cliente, value.Llamadas.value, [], 0);
+            }
+
           }
-
         }
-      }
-    ],
-    columns:[{
-      name:'Llamadas',
-      options:this.getColumnOptions(this.tipoLlamadas, false, "")
-    }]
-  };
+      ],
+      columns: [{
+        name: 'Llamadas',
+        options: this.getColumnOptions(this.tipoLlamadas, false, "")
+      }]
+    };
 
-  let picker = await this.pickerController.create(options);
-  picker.present()
-}
+    let picker = await this.pickerController.create(options);
+    picker.present()
+  }
 
 
 //Picker para seleccionar pedidos
@@ -243,7 +278,7 @@ async showPickerPedidos(pedidosTemporales, dcliente, tipollamada) {
             this.verPedidoTemporal(busqueda[0]).then((res)=>{
               console.log('respuesta en fin de picker -> ', res);
               if(res){
-                this.crearvisitaxllamadatipo(dcliente, tipollamada, busqueda[0]);
+                this.crearvisitaxllamadatipo(dcliente, tipollamada, busqueda[0],0);
                 this._clientes.delPedidoTempClie(busqueda[0].datos_gen.cod_tercer, ""+busqueda[0].id_visita+"");
               }
             });

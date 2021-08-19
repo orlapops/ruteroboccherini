@@ -215,14 +215,18 @@ cargaPeriodoUsuar(pcod_usuar){
   }
 
 
-  public crearVisitaxllamadaxTipo(pdcliente, pdvisita, tipo) {
+  public crearVisitaxllamadaxTipo(pdcliente, pdvisita, tipo, id_visita) {
     return new Promise((resolve, reject) => {
       console.log("crearVisitaxllamadaxTipo pdcliente:", pdcliente, pdvisita);
       const now = new Date();
       const hora = now.getHours();
       const minutos = now.getMinutes();
       const horaing = hora.toString() + minutos.toString()
-      const idvisi = 90000000000000 + now.getTime();
+      var idvisi = 90000000000000 + now.getTime();
+      //Si es de tipo Añadir visita a la ruta se toma el id que retorna el servicio rest
+      if(tipo == "Añadir visita a la ruta"){
+        idvisi = id_visita;
+      }
       const visicrear = {
         cod_tercer: pdcliente.cod_tercer,
         direccion: pdcliente.direccion,
@@ -941,6 +945,30 @@ actualizarvisitasprognetsolinFb(cod_tercer){
     //     }
     //     return Promise.resolve();
     // }
+
+
+
+
+    //ADICIONAR VISITA DESDE APP A NETSOLIN JUEVES 19 AGOSTO 2021 JOSE
+    creaVisitaNetsolin(datos){
+      return new Promise((resolve,reject)=>{
+          console.log('llamado crear visita datos:',datos);
+          let url= this._parempre.URL_SERVICIOS + "netsolin_servirestgo.csvc?VRCod_obj=CREAVISITAAPPRUTAS";
+          this.http.post( url, datos )   
+           .subscribe( (data:any) =>{ 
+             if (data){
+                console.log('datos que retorna la visita -> ', data);
+                resolve(data);
+             } else{
+              resolve(false);
+             }  
+           });
+         });
+    }
+
+
+
+
 
 
 }
