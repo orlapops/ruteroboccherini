@@ -201,7 +201,7 @@ export class ClientesListPage implements OnInit {
                 console.log('Pedidos temporales de el cliente -> ', res);
                 this.showPickerPedidos(res, cliente, value.Llamadas.value);
               });
-            } if (value.Llamadas.value === 'Añadir visita a la ruta') {
+            }else if (value.Llamadas.value === 'Añadir visita a la ruta') {
               console.log('Entro a Añadir visita a la ruta para el cliente -> ', cliente);
               var fechact = new Date();
               var hora = fechact.getHours()+":"+fechact.getMinutes();
