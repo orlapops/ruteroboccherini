@@ -36,14 +36,6 @@
 <ion-content class="animated fadeIn">
 
     <hr class="bg-tertiary">
-
-    <ion-card *ngIf="inconsistencia">
-        <ion-text color="danger"> Error captura pedido </ion-text>
-        <ion-item padding class="animated fadeIn fast">
-            <ion-text color="danger"> {{men_inconsisten}}</ion-text>
-        </ion-item>
-    </ion-card>
-
     <div class="bg-white">
         <ion-grid class="btpedido-color" *ngIf="cargoitems">
             <ion-row *ngFor="let itemp of items_pedido; let i = index;">
