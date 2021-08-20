@@ -165,7 +165,7 @@ export class RegPagosxtipoPage implements OnInit {
     }
     if (validado) {
       //subir imagen de forma de pago  13 Agosto 2021
-      this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,this._recibo.visitaID, this.dataImagen).then(() => {
+      this._actividad.actualizafotosRecaudoVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,this._recibo.visitaID, this.dataImagen).then(() => {
           console.log('Respuesta de upload img -> ', this._actividad.linktempimg);
           console.log("validando 6", this.regpago);
           this.regpago.linkimg_pago = this._actividad.linktempimg;
