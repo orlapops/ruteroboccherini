@@ -24,7 +24,7 @@
                             <ion-icon name="calendar" slot="start" color="secondary" *ngIf="true"></ion-icon>
                             <!-- <ion-text color="primary">{{ item.fecha_obl | date: 'shortDate'}}</ion-text> -->
                             <a [href]="cleanURL(item.link_fact)" class="list-group-item active">
-                                Obligación: {{ item.num_obliga }} {{ item.cod_dfactu+'/'+item.num_dfactu }} Fecha: {{
+                                Obl: {{ item.num_obliga }} {{ item.cod_dfactu+'/'+item.num_dfactu }}-{{
                                 item.fecha_obl | date }}
                             </a>   
                         </div>
@@ -33,18 +33,23 @@
                     <hr *ngIf="item.dias_venci<=0"  class="hrvisitacerrada">
                     <h3 class="hdatobliga">
                         <ion-text>
-                            Mcia: {{ item.valor_neto | currency }} +Iva: {{ item.iva | currency }} -Retención: {{
-                            item.retencion+item.ret_indyci | currency }} total: {{ item.valor_neto +item.iva -
-                            item.retencion - item.ret_indyci | currency }}
+                            Mcia: {{ item.valor_neto | currency }} +Iva: {{ item.iva | currency }} 
                         </ion-text>
                     </h3>
-                    <h2>
+                    <h3 class="hdatobliga">
+                        <ion-text>
+                            -Retención: {{
+                                item.retencion+item.ret_indyci | currency }} total: {{ item.valor_neto +item.iva -
+                                item.retencion - item.ret_indyci | currency }}
+                        </ion-text>
+                    </h3>
+                    <h3>
                         <ion-text *ngIf="item.dias_venci>0" color="danger" margin-bottom>{{ item.dias_venci }} días de
                             vencida</ion-text>
                         <ion-text>
                             Saldo:{{item.saldo | currency }}
                         </ion-text>
-                    </h2>
+                    </h3>
                     <hr>
                     <h2 *ngIf="item.naturaleza == 'D'  && item.saldo<0">
                         <ion-button size="small" shape="round" expand="full" color="danger">
