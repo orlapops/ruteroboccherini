@@ -43,6 +43,18 @@
                                 item.retencion - item.ret_indyci | currency }}
                         </ion-text>
                     </h3>
+                    <h3 class="hdatobliga">
+                        <ion-text [color]="colorxdescue(item.fec_limde15)">
+                            15: {{item.fec_limde15 | date }} D: {{
+                                item.tot_15dias | currency }} P: {{ item.saldo - item.tot_15dias | currency }}
+                        </ion-text>
+                    </h3>
+                    <h3 class="hdatobliga">
+                        <ion-text [color]="colorxdescue(item.fec_limde30)">
+                            30: {{item.fec_limde30 | date }} D: {{
+                                item.tot_30dias | currency }} P: {{ item.saldo - item.tot_30dias | currency }}
+                        </ion-text>
+                    </h3>
                     <h3>
                         <ion-text *ngIf="item.dias_venci>0" color="danger" margin-bottom>{{ item.dias_venci }} días de
                             vencida</ion-text>

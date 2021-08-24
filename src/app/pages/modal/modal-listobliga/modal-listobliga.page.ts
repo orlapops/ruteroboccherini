@@ -96,6 +96,20 @@ export class ModalListObligaPage implements OnInit {
         return 'coloraldia';
       }
   }
+  colorxdescue(fechalim) {
+    // console.log('colorxdescue, fechalim');
+    const hoy = new Date();
+    const fechalimite = new Date(fechalim)
+    const difdias = this._parEmpre.diferenciaEntreDiasEnDias(fechalimite, hoy);
+    if (difdias<=0) {
+      // console.log('colorxdescue',difdias,'success');
+      return 'success';
+      // return 'bg-red';
+    } else {
+      // console.log('colorxdescue',difdias,'danger');
+        return 'danger';
+      }
+  }
   
   cleanURL(oldURL: string) {
     return this.sanitizer.bypassSecurityTrustUrl(oldURL);
