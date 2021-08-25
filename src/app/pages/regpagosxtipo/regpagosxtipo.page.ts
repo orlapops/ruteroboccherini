@@ -165,10 +165,10 @@ export class RegPagosxtipoPage implements OnInit {
     }
     if (validado) {
       //subir imagen de forma de pago  13 Agosto 2021
-      this._actividad.actualizafotosRecaudoVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,this._recibo.visitaID, this.dataImagen).then(() => {
-          console.log('Respuesta de upload img -> ', this._actividad.linktempimg);
+      this._actividad.actualizafotosRecaudoVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,this._recibo.visitaID, this.dataImagen).then((res) => {
+          console.log('Respuesta de upload img -> ', res);
           console.log("validando 6", this.regpago);
-          this.regpago.linkimg_pago = this._actividad.linktempimg;
+          this.regpago.linkimg_pago = res;
           this._recibo.addFormapago(this.regpago).then(async property => {
             console.log('adiciono ', this._recibo.formpago);
             this.existefechabaseoitem = true;
@@ -300,10 +300,10 @@ export class RegPagosxtipoPage implements OnInit {
     const options = {
       // quality: 100,
       // outputType: 0
-      width: 200,
-      //height: 200,
+      width: 800,
+      height: 600,
       // quality of resized image, defaults to 100
-      quality: 25,      
+      quality: 100,      
       outputType: 0
     };
       console.log('seleccionarFoto 1 options:',options);
