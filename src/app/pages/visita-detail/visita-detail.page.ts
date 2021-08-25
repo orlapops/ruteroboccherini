@@ -667,19 +667,23 @@ export class VisitaDetailPage implements OnInit {
   }
   tomafoto() {
     console.log('en mostrar camara1');
-    const optionscam: CameraOptions = {
-      quality: 30,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    };
+    // const optionscam: CameraOptions = {
+    //   quality: 30,
+    //   destinationType: this.camera.DestinationType.FILE_URI,
+    //   encodingType: this.camera.EncodingType.JPEG,
+    //   mediaType: this.camera.MediaType.PICTURE
+    // };
     // this._parEmpre.reg_logappusuario('tomafoto', 'Ingreso', {});
-    this.camera.getPicture(optionscam).then((imageData) => {
+    let options: CaptureImageOptions = {
+      limit: 1
+    }
+    this.mediacapture.captureImage(options).then((res: MediaFile[]) => {
+      // this.camera.getPicture(optionscam).then((imageData) => {
       this.presentLoading('Guardando Imagen');
-      this.imagenPreview = this.webview.convertFileSrc(imageData);
+      this.imagenPreview = this.webview.convertFileSrc(res[0].fullPath);
       this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,
-        this.visitaID, imageData).then(() => {
-          this.file.resolveLocalFilesystemUrl(imageData).then((fe: FileEntry) => {
+        this.visitaID, res[0].fullPath).then(() => {
+          this.file.resolveLocalFilesystemUrl(res[0].fullPath).then((fe: FileEntry) => {
             fe.remove(function () { console.log("se elimino la foto") }, function () { console.log("error al eliminar") });
           });
         });
