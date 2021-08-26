@@ -413,7 +413,9 @@ export class VisitaDetailPage implements OnInit {
       grb_recibo: false,
       resgrb_recibo: '',
       pedido_recibo: null,
-      errorgrb_recibo: false
+      errorgrb_recibo: false,
+      lat_ingreso: this.coords.lat,
+      long_ingreso: this.coords.lng,
     };
     console.log('registrarIngresoVisita ', this._visitas.visitaabierta);
     if (this._visitas.visitaabierta) {

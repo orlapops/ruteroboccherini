@@ -42,6 +42,8 @@ export class RegPagosxtipoPage implements OnInit {
   imagenPreview: string;
   cargoImagen = false;
 
+  disableRegistro = false;
+
   constructor(
     public _parEmpre: ParEmpreService,
     public navCtrl: NavController,
@@ -112,6 +114,7 @@ export class RegPagosxtipoPage implements OnInit {
   changeFormapago(e) {
     console.log("changeFormapago e: ", e);
     console.log("e.detail.value", e.detail.value);
+    this.validaRegistro();
     //  console.log('tipoact:', this.cod_tipoact);
     //  this.nom_tipoact = e.detail.text;
       //traer fecha base Ag 12 21
@@ -290,7 +293,17 @@ export class RegPagosxtipoPage implements OnInit {
     console.log("e.detail.value", e.detail.value);
   }
 
-
+  //VALIDA REGISTRO
+  validaRegistro() {
+    //Valida si toma imagen o no segun la forma de pago
+    if (this.regpago.tipopago === 'EFE' && this.cargoImagen === false) {
+      this.disableRegistro = false;
+    } else if (this.regpago.tipopago != 'EFE' && this.cargoImagen === true) {
+      this.disableRegistro = false;
+    } else {
+      this.disableRegistro = true;
+    }
+  }
 
 
 
@@ -314,6 +327,7 @@ export class RegPagosxtipoPage implements OnInit {
         this.imagenPreview = this.webview.convertFileSrc(image[i]);
         this.dataImagen = image[i];
         this.cargoImagen = true;
+        this.validaRegistro();
         // this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,
         //   this._recibo.visitaID, image[i]).then(() => {
         //     this.file.resolveLocalFilesystemUrl(image[i]).then((fe: FileEntry) => {

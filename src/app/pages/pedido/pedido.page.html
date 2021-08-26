@@ -14,6 +14,12 @@
             <ion-icon size="small" color="dark" name="cart"></ion-icon>{{_cliente.clienteActual.cliente}}</h6>
     </ion-text>
     <hr class="bg-tertiary">
+    <!-- <div text-center *ngIf="pedido.length === 0 && _visitas.visita_activa_copvdet.tipo_llamada==='Retoma de visita'" class="carrito_vacio">
+        <br> Agregar otro pedido <br>
+        <ion-button color="secondary" shape="round" fill="solid" (click)="selPedTemp()">
+            <ion-icon name="add"></ion-icon>
+        </ion-button>
+    </div> -->
     <div text-center *ngIf="pedido.length === 0" class="carrito_vacio">
 
         <ion-icon name="ios-cart-outline" class="icon-5x"></ion-icon>

@@ -403,7 +403,7 @@ export class ClientesListPage implements OnInit {
     return await modal.present();
   }
 
-  //Open Modal Cartera
+  //Open Modal Pedido Temporal
   async verPedidoTemporal(pedidotemp) {
     console.log('pedido que llega para visualizar:', pedidotemp);
     const modal = await this.modalCtrl.create({
