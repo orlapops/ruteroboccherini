@@ -57,6 +57,25 @@ export class IonicComponentService {
     });
   }
 
+  async presentTimeoutMsjLoading(timeout: number,translucent:boolean, msj:string) {
+    this.isLoading = true;
+    return await this.loadingController.create({
+      spinner: "crescent",
+      duration: timeout,
+      message: msj,
+       translucent: translucent,
+       cssClass: 'loadingDialog'
+      //duration: 5000,
+    }).then(a => {
+      a.present().then(() => {
+        console.log('presented');
+        if (!this.isLoading) {
+          a.dismiss().then(() => console.log('abort presenting'));
+        }
+      });
+    });
+  }
+
   async dismissLoading() {
     this.isLoading = false;
     return await this.loadingController.dismiss().then(() => console.log('dismissed'));

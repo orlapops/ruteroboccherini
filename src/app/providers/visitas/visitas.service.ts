@@ -475,7 +475,7 @@ cargaVisitasNetsolin(pcod_usuar,pruta,pperiodo){
                   fechahora_cierre: '',
                   fechahora_ingreso: Date(),
                   latitud: datvisi.latitud,
-                  longitu: datvisi.longitud,
+                  longitud: datvisi.longitud,
                   hora_in : 0,
                   hora_sal : 0,
                   grb_pedido : false,

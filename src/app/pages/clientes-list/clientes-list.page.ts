@@ -3,7 +3,7 @@ import { NavController, AlertController } from '@ionic/angular';
 import { TranslateProvider } from '../../providers';
 import { environment } from '../../../environments/environment';
 import { VisitasProvider } from '../../providers/visitas/visitas.service';
-
+import { IonicComponentService } from '../../providers/ionic-component.service'
 import { PickerController, ModalController } from "@ionic/angular";
 import { PickerOptions } from "@ionic/core";
 
@@ -64,7 +64,8 @@ export class ClientesListPage implements OnInit {
     public _pagehome: HomePage,
     private pickerController: PickerController,
     public modalCtrl: ModalController,
-    private _prodserv: ProdsService
+    private _prodserv: ProdsService,
+    private _ioncomponents: IonicComponentService
     // public visitaService: VisitasProvider
   ) {
     // this.visitas = this.visitaService.getAll();
@@ -201,12 +202,12 @@ export class ClientesListPage implements OnInit {
                 console.log('Pedidos temporales de el cliente -> ', res);
                 this.showPickerPedidos(res, cliente, value.Llamadas.value);
               });
-            }else if (value.Llamadas.value === 'Añadir visita a la ruta') {
+            } else if (value.Llamadas.value === 'Añadir visita a la ruta') {
               console.log('Entro a Añadir visita a la ruta para el cliente -> ', cliente);
               var fechact = new Date();
-              var hora = fechact.getHours()+":"+fechact.getMinutes();
-              var horaf = (fechact.getHours()+1)+":"+fechact.getMinutes();
-              var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+              var hora = fechact.getHours() + ":" + fechact.getMinutes();
+              var horaf = (fechact.getHours() + 1) + ":" + fechact.getMinutes();
+              var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
               var visita = {
                 cod_tercer: cliente.cod_tercer,
                 id_dir: cliente.id_dir,
@@ -220,18 +221,18 @@ export class ClientesListPage implements OnInit {
                 hora_fin: horaf
               }
               console.log('obj visita a enviar ->>>> ', visita);
-              this._visitas.creaVisitaNetsolin(visita).then(async (res:any)=>{
+              this._visitas.creaVisitaNetsolin(visita).then(async (res: any) => {
                 console.log('respuesta serv netsolin -> ', res);
-                if(res.error != undefined && res.error == false){
+                if (res.error != undefined && res.error == false) {
                   console.log('entro a guardar visita en fb');
                   this.crearvisitaxllamadatipo(cliente, value.Llamadas.value, [], res.id_visita);
-                }else{
-                  if(res.isCallbackError == true){
+                } else {
+                  if (res.isCallbackError == true) {
                     const alert2 = await this.alertCtrl.create({
                       message: res.messages[0].menerror,
                       buttons: ['Enterado']
                     });
-                     await alert2.present()
+                    await alert2.present()
                   }
                 }
               });
@@ -256,45 +257,59 @@ export class ClientesListPage implements OnInit {
 
 //Picker para seleccionar pedidos
 
-async showPickerPedidos(pedidosTemporales, dcliente, tipollamada) {
-  var pedidos = [];
-  var busqueda = [];
-  for(let i of pedidosTemporales){
-    pedidos.push(i.datos_gen.id_visita);
-  }
-  let options: PickerOptions = {
-    buttons: [
-      {
-        text: "Cancelar",
-        role: 'cancel'
-      },
-      {
-        text:'Seleccionar pedido a retornar',
-        handler:(value:any) => {
-          console.log(value);
-          busqueda = pedidosTemporales.filter(x => x.id_visita === value.pedidos.value);
-          console.log('Valor de la busqueda ->  ', busqueda);
-          if(busqueda!=undefined){
-            this.verPedidoTemporal(busqueda[0]).then((res)=>{
-              console.log('respuesta en fin de picker -> ', res);
-              if(res){
-                this.crearvisitaxllamadatipo(dcliente, tipollamada, busqueda[0],0);
-                this._clientes.delPedidoTempClie(busqueda[0].datos_gen.cod_tercer, ""+busqueda[0].id_visita+"");
-              }
-            });
-          };
-        }
+  async showPickerPedidos(pedidosTemporales, dcliente, tipollamada) {
+    var pedidos = [];
+    var busqueda = [];
+    for (let i of pedidosTemporales) {
+      var fecact = new Date();
+      var fecped = new Date(i.datos_gen.fechahora_ingreso);
+      var diff = fecact.getTime() - fecped.getTime();
+      var dias_dif = Math.round(diff / (1000 * 60 * 60 * 24));
+      console.log('diferencia de dias act y ped -> ', dias_dif);
+      if (dias_dif < 8) {  //Arreglo pedido temporal no mas de 8 dias.
+        pedidos.push(i.datos_gen.id_visita);
       }
-    ],
-    columns:[{
-      name:'pedidos',
-      options:this.getColumnOptions(pedidos, true, "Pedido - ")
-    }]
-  };
+    }
+    let options: PickerOptions = {
+      buttons: [
+        {
+          text: "Cancelar",
+          role: 'cancel'
+        },
+        {
+          text: 'Seleccionar pedido a retornar',
+          handler: (value: any) => {
+            console.log(value);
+            busqueda = pedidosTemporales.filter(x => x.id_visita === value.pedidos.value);
+            console.log('Valor de la busqueda ->  ', busqueda);
+            if (busqueda != undefined) {
+              this.verPedidoTemporal(busqueda[0]).then((res) => {
+                console.log('respuesta en fin de picker -> ', res);
+                if (res) {
+                  this.sincroInvPedido(dcliente, busqueda[0]).then((respuestaPedAct)=>{
+                    if(respuestaPedAct != false){
+                      console.log('Sincronizo pedido resp ->', respuestaPedAct);
+                      this.crearvisitaxllamadatipo(dcliente, tipollamada, respuestaPedAct, 0);
+                      this._clientes.delPedidoTempClie(busqueda[0].datos_gen.cod_tercer, "" + busqueda[0].id_visita + "");
+                    }else{
+                      console.log('Error Sincronizando InvPed')
+                    };
+                  });
+                }
+              });
+            };
+          }
+        }
+      ],
+      columns: [{
+        name: 'pedidos',
+        options: this.getColumnOptions(pedidos, true, "Pedido - ")
+      }]
+    };
 
-  let picker = await this.pickerController.create(options);
-  picker.present()
-}
+    let picker = await this.pickerController.create(options);
+    picker.present()
+  }
 
 
 
@@ -313,6 +328,68 @@ async showPickerPedidos(pedidosTemporales, dcliente, tipollamada) {
       });
     }
     return options;
+  }
+
+
+
+
+  //Sincronizar existencias y precio items
+  sincroInvPedido(cod_tercer, pedido) {
+    console.log('Actualizar precio y stock pedido Temporal');
+    this._ioncomponents.presentTimeoutMsjLoading(50000, true, 'Actualizando Pedido...');
+    return new Promise((resolve, reject) => {
+      this.cargarInventarioCliente(cod_tercer).then((resinventario) => {
+        this._ioncomponents.dismissLoading();
+        if (resinventario != false) {
+          console.log('Inventario cargado -> ', resinventario);
+          var pedTemp = this.actPreciosPedTemp(pedido, resinventario);
+          console.log('Pedido Actualizado ->', pedTemp);
+          resolve(pedTemp);
+        } else {
+          console.log('No se pudo cargar el inventario');
+          resolve(false);
+        }
+      });
+    });
+  }
+
+
+
+  //Cargar Inventario de Cliente para Act Ped Temporal
+  async cargarInventarioCliente(cod_tercero) {
+    this._prodserv.cargoInventarioNetsolinPed = false;
+    return new Promise((resolve, reject) => {
+      this._prodserv.cargaInventarioNetsolinPedido(cod_tercero).then(cargo => {
+        if (cargo) {
+          console.log('Inventario Cargado -> ', this._prodserv.inventario);
+          resolve(this._prodserv.inventarioPed);
+        } else {
+          console.log("No pudo cargar inventario de Netsolin");
+          resolve(false);
+        }
+      })
+        .catch(() => {
+          console.log("error en homE ngoniti al cargaInventarioNetsolin");
+          resolve(false);
+        });
+    });
+  }
+  //Actualizar precio y existencias pedidos
+  actPreciosPedTemp(pedidoTemp, inventario) {
+    console.log('pedidoTemp que llega y inventariocliente -> ', pedidoTemp, inventario);
+    var count = 0;
+    for (let i of pedidoTemp.items_pedido) {
+      var busqueda = inventario.filter(x => x.cod_refinv === i.item.cod_ref);
+      if (busqueda != undefined) {
+        console.log('Item de pedido en inventario comparativa (i,ptemp)->', i, busqueda[0]);
+        if (i.item.total != busqueda[0].precio_ven) {
+          pedidoTemp.items_pedido[0].item.precio = busqueda[0].precio_ven;
+          pedidoTemp.items_pedido[0].item.total = busqueda[0].precio_ven * pedidoTemp.items_pedido[0].item.cantidad;
+        }
+      }
+      count++;
+    }
+    return pedidoTemp;
   }
 
   //Open Modal Cartera
