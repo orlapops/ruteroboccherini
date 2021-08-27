@@ -261,6 +261,9 @@ cargaPeriodoUsuar(pcod_usuar){
         notaing: '',
         notas: 'Llamada Cliente tipo ' + tipo
       };
+      if(tipo === "Añadir visita a la ruta"){
+        visicrear.llamada = false
+      }
       this.fbDb
         .collection(`/personal/${this._parempre.usuario.cod_usuar}/rutas/${this.id_ruta}/periodos/${this.id_periodo}/visitas`)
         .doc(idvisi.toString()).set(visicrear).then(() => { resolve(idvisi) }).catch((res) => { resolve("Error:" + res)});

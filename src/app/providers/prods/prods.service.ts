@@ -853,6 +853,8 @@ export class ProdsService implements OnInit {
     genera_pedido_temporal(pid_dir, pnota, pobsequio) {
       console.log('dataos para generar pedido temporal this._visitas.visita_activa_copvdet:', this._visitas.visita_activa_copvdet);
       console.log('Pedido a genera this.pedido): ', this.pedido);
+      var fecact = new Date();
+      var idPedTemp = this._visitas.visita_activa_copvdet.id_visita+"_"+fecact.getMinutes()+""+fecact.getSeconds();
       return new Promise((resolve, reject) => {  
         if (this.generando_pedido){
           console.error('Ya se esta generando un pedido');
@@ -872,6 +874,7 @@ export class ProdsService implements OnInit {
           es_obsequio: pobsequio,
           cod_usuar : this._parempre.usuario.cod_usuar,
           id_visita : this._visitas.visita_activa_copvdet.id_visita,
+          id_pedtemp:idPedTemp,
           cod_tercer : this._visitas.visita_activa_copvdet.cod_tercer,
           direccion : this._visitas.visita_activa_copvdet.direccion,
           id_dir : this._visitas.visita_activa_copvdet.id_dir,
@@ -879,7 +882,7 @@ export class ProdsService implements OnInit {
           usuario: this._parempre.usuario
         };
         console.log('Guardo pedido en netsolin a guardar en fb objpedidogfb:',objpedidogfb);
-        this.guardarpedidotemporalFb(this._visitas.visita_activa_copvdet.cod_tercer,this._visitas.visita_activa_copvdet.id_visita,objpedidogfb).then(res => {
+        this.guardarpedidotemporalFb(this._visitas.visita_activa_copvdet.cod_tercer,idPedTemp,objpedidogfb).then(res => {
           console.log('Pedido guardado en fb res: ', res);
           // console.log('Pedido guardada res id: ', res.id);
           this.generando_pedido = false;

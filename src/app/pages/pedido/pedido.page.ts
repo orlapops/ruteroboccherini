@@ -34,6 +34,8 @@ export class PedidoPage implements OnInit {
   es_obsequio = false;
   inconsistencia = false;
   men_inconsisten = '';
+
+  desactpedi = false; //controla grabarpedido
   constructor(
     public navCtrl: NavController,
     public btCtrl: BluetoothSerial,
@@ -83,6 +85,7 @@ export class PedidoPage implements OnInit {
         console.log('getPedido this._visitas.visita_activa_copvdet', this._visitas.visita_activa_copvdet);
          this.direcdespa = this._visitas.visita_activa_copvdet.id_dir;
          this.pedido = data; 
+         this.evalNoDisp();
          this.actualizar_totalped();
         });
   }
@@ -109,6 +112,19 @@ export class PedidoPage implements OnInit {
     ;
       // console.log("SUMA")
       // console.log (this.total_ped)
+    }
+  }
+  evalNoDisp() {
+    var countnodisp = 0;
+    for (let item of this.pedido) {
+      if (item.item.nodisponible != undefined && item.item.nodisponible === true) {
+        countnodisp++;
+      }
+    }
+    if (countnodisp > 0) { //Desactiva guardado temporal y realizar pedido por tener items no disponibles.
+      this.desactpedi = true;
+    } else {
+      this.desactpedi = false;
     }
   }
   realizar_pedido(){
@@ -259,9 +275,10 @@ export class PedidoPage implements OnInit {
 
   //Adicionar pedido temporal desde apartado pedido
   selPedTemp() {
-    this._cliente.getCliePedidoTemp(this._visitas.visita_activa_copvdet.cod_tercer).subscribe((res) => {
+    var subs = this._cliente.getCliePedidoTemp(this._visitas.visita_activa_copvdet.cod_tercer).subscribe((res) => {
       console.log('Pedidos temporales de el cliente -> ', res);
       this.showPickerPedidos(res, this._visitas.visita_activa_copvdet.cod_tercer, "Retoma de visita");
+      subs.unsubscribe();
     });
   }
   async showPickerPedidos(pedidosTemporales, dcliente, tipollamada) {
@@ -274,7 +291,7 @@ export class PedidoPage implements OnInit {
       var dias_dif = Math.round(diff / (1000 * 60 * 60 * 24));
       console.log('diferencia de dias act y ped -> ', dias_dif);
       if (dias_dif < 8) {  //Arreglo pedido temporal no mas de 8 dias.
-        pedidos.push(i.datos_gen.id_visita);
+        pedidos.push(i.id_pedtemp);
       }
     }
     let options: PickerOptions = {
@@ -287,17 +304,20 @@ export class PedidoPage implements OnInit {
           text: 'Seleccionar pedido a retornar',
           handler: (value: any) => {
             console.log(value);
-            busqueda = pedidosTemporales.filter(x => x.id_visita === value.pedidos.value);
+            busqueda = pedidosTemporales.filter(x => x.id_pedtemp === value.pedidos.value);
             console.log('Valor de la busqueda ->  ', busqueda);
             if (busqueda != undefined) {
               this.verPedidoTemporal(busqueda[0]).then((res) => {
                 console.log('respuesta en fin de picker -> ', res);
                 if (res) {
-                  this.sincroInvPedido(dcliente, busqueda[0]).then((respuestaPedAct) => {
+                  this.sincroInvPedido(dcliente, busqueda[0]).then(async(respuestaPedAct) => {
                     if (respuestaPedAct != false) {
                       console.log('Sincronizo pedido resp ->', respuestaPedAct);
-                      this.crearvisitaxllamadatipo(dcliente, tipollamada, respuestaPedAct, 0);
-                      this._cliente.delPedidoTempClie(busqueda[0].datos_gen.cod_tercer, "" + busqueda[0].id_visita + "");
+                      this.cargarPedidoTemp(this._visitas.visita_activa_copvdet.id_visita, respuestaPedAct);
+                      this._prods.cargar_storage_pedido(this._visitas.visita_activa_copvdet.id_ruta, this._visitas.visita_activa_copvdet.id_visita);
+                      this._cliente.delPedidoTempClie(busqueda[0].datos_gen.cod_tercer, "" + busqueda[0].id_pedtemp + "");
+                      await new Promise(f => setTimeout(f, 1000));
+                      this.ngOnInit();
                     } else {
                       console.log('Error Sincronizando InvPed')
                     };
@@ -340,7 +360,7 @@ export class PedidoPage implements OnInit {
     console.log('Actualizar precio y stock pedido Temporal');
     this._ioncomponents.presentTimeoutMsjLoading(50000, true, 'Actualizando Pedido...');
     return new Promise((resolve, reject) => {
-      this.cargarInventarioCliente(cod_tercer).then((resinventario) => {
+      this.cargarInventarioCliente().then((resinventario) => {
         this._ioncomponents.dismissLoading();
         if (resinventario != false) {
           console.log('Inventario cargado -> ', resinventario);
@@ -358,21 +378,21 @@ export class PedidoPage implements OnInit {
 
 
   //Cargar Inventario de Cliente para Act Ped Temporal
-  async cargarInventarioCliente(cod_tercero) {
+  async cargarInventarioCliente() {
     this._prods.cargoInventarioNetsolinPed = false;
     return new Promise((resolve, reject) => {
-      this._prods.cargaInventarioNetsolinPedido(cod_tercero).then(cargo => {
-        if (cargo) {
-          resolve(this._prods.inventarioPed);
-        } else {
-          console.log("No pudo cargar inventario de Netsolin");
-          resolve(false);
-        }
-      })
-        .catch(() => {
-          console.log("error en homE ngoniti al cargaInventarioNetsolin");
-          resolve(false);
-        });
+      // this._prods.cargaInventarioNetsolinPedido(cod_tercero).then(cargo => {
+      if (this._prods.inventarioPed.length > 0) {
+        resolve(this._prods.inventarioPed);
+      } else {
+        console.log("error en homE ngoniti al cargaInventarioNetsolin");
+        resolve(false);
+      }
+      // })
+      //   .catch(() => {
+      //     console.log("error en homE ngoniti al cargaInventarioNetsolin");
+      //     resolve(false);
+      //   });
     });
   }
   //Actualizar precio y existencias pedidos
@@ -383,9 +403,13 @@ export class PedidoPage implements OnInit {
       var busqueda = inventario.filter(x => x.cod_refinv === i.item.cod_ref);
       if (busqueda != undefined) {
         console.log('Item de pedido en inventario comparativa (i,ptemp)->', i, busqueda[0]);
-        if (i.item.total != busqueda[0].precio_ven) {
-          pedidoTemp.items_pedido[0].item.precio = busqueda[0].precio_ven;
-          pedidoTemp.items_pedido[0].item.total = busqueda[0].precio_ven * pedidoTemp.items_pedido[0].item.cantidad;
+        if (busqueda[0].existencia > i.item.cantidad) {
+          if (i.item.total != busqueda[0].precio_ven) { //VALIDA SI TIENE ALGUN CAMBIO EL PRECIO
+            pedidoTemp.items_pedido[0].item.precio = busqueda[0].precio_ven;
+            pedidoTemp.items_pedido[0].item.total = busqueda[0].precio_ven * pedidoTemp.items_pedido[0].item.cantidad;
+          }
+        } else {
+          i.item['nodisponible'] = true;
         }
       }
       count++;
@@ -408,39 +432,6 @@ export class PedidoPage implements OnInit {
     return data;
   }
 
-  async crearvisitaxllamadatipo(dcliente, tipo, pedido, id_visita) {
-    // console.log('crearvisita');
-    console.log('datos para crear visita del cliente:', dcliente);
-    console.log('datos para crear visita del cliente:', this._visitas);
-    if (!this._visitas.visitaTodas) {
-      console.log('No tienes visitas asginadas. Debe por lo menos tener una asignada para poder tomar llamadas');
-      const alert2 = await this.alertCtrl.create({
-        message: 'No tienes visitas asginadas. Debe por lo menos tener una asignada para poder tomar llamadas',
-        buttons: ['Enterado']
-      });
-      await alert2.present();
-      return;
-    }
-    console.log('datos para crear visita del cliente:', this._visitas);
-    const ldatvisi = this._visitas.visitaTodas[0].data;
-    // tslint:disable-next-line: triple-equals
-    if (typeof ldatvisi !== undefined) {
-      const alert2 = await this.alertCtrl.create({
-        message: 'Creando Visita por llamada',
-        buttons: ['Enterado']
-      });
-      await alert2.present();
-      this._visitas.crearVisitaxllamadaxTipo(dcliente, ldatvisi, tipo, id_visita)
-        .then(async (res) => {
-          if (tipo === "Retoma de visita") {
-            this.cargarPedidoTemp(res, pedido);
-          }
-          this.navCtrl.navigateRoot('/home');
-          // console.log('retorna de crear visita llamada',res);
-        }
-        );
-    }
-  }
 
   //guarda pedido temporal seleccionado
   cargarPedidoTemp(idvisita, pedidosel) {

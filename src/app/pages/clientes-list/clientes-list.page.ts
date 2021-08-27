@@ -198,9 +198,10 @@ export class ClientesListPage implements OnInit {
             console.log(value);
             if (value.Llamadas.value === 'Retoma de visita') {
               console.log('Entro a retoma de visita para el cliente -> ', cliente);
-              this._clientes.getCliePedidoTemp(cliente.cod_tercer).subscribe((res) => {
+              var subs = this._clientes.getCliePedidoTemp(cliente.cod_tercer).subscribe((res) => {
                 console.log('Pedidos temporales de el cliente -> ', res);
                 this.showPickerPedidos(res, cliente, value.Llamadas.value);
+                subs.unsubscribe();
               });
             } else if (value.Llamadas.value === 'Añadir visita a la ruta') {
               console.log('Entro a Añadir visita a la ruta para el cliente -> ', cliente);
@@ -267,7 +268,7 @@ export class ClientesListPage implements OnInit {
       var dias_dif = Math.round(diff / (1000 * 60 * 60 * 24));
       console.log('diferencia de dias act y ped -> ', dias_dif);
       if (dias_dif < 8) {  //Arreglo pedido temporal no mas de 8 dias.
-        pedidos.push(i.datos_gen.id_visita);
+        pedidos.push(i.id_pedtemp);
       }
     }
     let options: PickerOptions = {
@@ -280,7 +281,7 @@ export class ClientesListPage implements OnInit {
           text: 'Seleccionar pedido a retornar',
           handler: (value: any) => {
             console.log(value);
-            busqueda = pedidosTemporales.filter(x => x.id_visita === value.pedidos.value);
+            busqueda = pedidosTemporales.filter(x => x.id_pedtemp === value.pedidos.value);
             console.log('Valor de la busqueda ->  ', busqueda);
             if (busqueda != undefined) {
               this.verPedidoTemporal(busqueda[0]).then((res) => {
@@ -290,7 +291,7 @@ export class ClientesListPage implements OnInit {
                     if(respuestaPedAct != false){
                       console.log('Sincronizo pedido resp ->', respuestaPedAct);
                       this.crearvisitaxllamadatipo(dcliente, tipollamada, respuestaPedAct, 0);
-                      this._clientes.delPedidoTempClie(busqueda[0].datos_gen.cod_tercer, "" + busqueda[0].id_visita + "");
+                      this._clientes.delPedidoTempClie(busqueda[0].datos_gen.cod_tercer, "" + busqueda[0].id_pedtemp + "");
                     }else{
                       console.log('Error Sincronizando InvPed')
                     };
@@ -382,9 +383,13 @@ export class ClientesListPage implements OnInit {
       var busqueda = inventario.filter(x => x.cod_refinv === i.item.cod_ref);
       if (busqueda != undefined) {
         console.log('Item de pedido en inventario comparativa (i,ptemp)->', i, busqueda[0]);
-        if (i.item.total != busqueda[0].precio_ven) {
-          pedidoTemp.items_pedido[0].item.precio = busqueda[0].precio_ven;
-          pedidoTemp.items_pedido[0].item.total = busqueda[0].precio_ven * pedidoTemp.items_pedido[0].item.cantidad;
+        if (busqueda[0].existencia > i.item.cantidad) {
+          if (i.item.total != busqueda[0].precio_ven) { //VALIDA SI TIENE ALGUN CAMBIO EL PRECIO
+            pedidoTemp.items_pedido[0].item.precio = busqueda[0].precio_ven;
+            pedidoTemp.items_pedido[0].item.total = busqueda[0].precio_ven * pedidoTemp.items_pedido[0].item.cantidad;
+          }
+        } else {
+          i.item['nodisponible'] = true;
         }
       }
       count++;
