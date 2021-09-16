@@ -342,7 +342,9 @@ cargaPeriodoUsuar(pcod_usuar){
       .doc(dia.toString())
       .set({ dia: dia.toString() });
       console.log('3');
-  
+    if (this._parempre.usuario.venpersona.length > 0) { //Evalua si tiene un asesorpersona
+      this.guardarcierrevisitaFbasesorpersona(id, datosact);
+    }
     return this.fbDb
     .collection(`/personal/${this._parempre.usuario.cod_usuar}/resumdiario/${ano}/meses/${mes}/dias/${dia}/cierrevisita`)
     .doc(id.toString()).set(datosact);
@@ -971,7 +973,48 @@ actualizarvisitasprognetsolinFb(cod_tercer){
 
 
 
+  //APARTADO ASESOR PERSONA
 
+  //Guardar para el vendedor o usuario datos para cierre, recibo y formas de pago
+  guardarcierrevisitaFbasesorpersona(id, datosact) {
+    console.log("guardarcierrevisitaFb id:", id);
+    console.log("guardarcierrevisitaFb objrecibo:", datosact);
+    //Actualizar
+    const now = new Date();
+    //extraemos el día mes y año
+    const dia = now.getDate();
+    const mes = now.getMonth() + 1;
+    const ano = now.getFullYear();
+    const hora = now.getHours();
+    const minutos = now.getMinutes();
+    console.log('1');
+    //asegurarse que este creado el año, mes y dia
+    this.fbDb
+      .collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario`)
+      .doc(ano.toString())
+      .set({ ano: ano.toString() });
+    //asegurarse que este creado el año, mes y dia
+    this.fbDb
+      .collection(
+        `/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses`
+      )
+      .doc(mes.toString())
+      .set({ mes: mes.toString() });
+    console.log('2');
+    //asegurarse que este creado el año, mes y dia
+    this.fbDb
+      .collection(
+        `/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses/${mes}/dias`
+      )
+      .doc(dia.toString())
+      .set({ dia: dia.toString() });
+    console.log('3');
+
+    return this.fbDb
+      .collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses/${mes}/dias/${dia}/cierrevisita`)
+      .doc(id.toString()).set(datosact);
+
+  }
 
 
 }

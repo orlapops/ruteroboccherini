@@ -136,6 +136,58 @@ export class UbicacionProvider {
       fecha: fechat,
       fechahora: lfechahora
     });
+    //Evalua si esta asociado a un asesor principal (asesorpersona)
+    if(this._parEmpre.usuario.venpersona.length>0){
+      this.actualizarRecorridoAsesorPersona(data, fechat);
+    }
+  }
+
+
+  //ADICION ASESOR PERSONA
+
+  actualizarRecorridoAsesorPersona(data, fechat) {
+    // console.log("Actualizar recorrido");                      
+    //extraemos el día mes y año 
+    const dia = fechat.getDate();
+    // const mes = parseInt(now.getMonth()) + 1;
+    const mes = fechat.getMonth() + 1;
+    const ano = fechat.getFullYear();
+    const hora = fechat.getHours();
+    const minutos = fechat.getMinutes();
+    const segundos = fechat.getSeconds();
+    const horaformt = hora.toString().padStart(2, '0')
+    const minutosformt = minutos.toString().padStart(2, '0')
+    const segundosformt = segundos.toString().padStart(2, '0')
+
+    const id = horaformt + ':' + minutosformt + ':' + segundosformt;
+
+
+    const lruta = `/asesorpersona/${this._parEmpre.usuario.venpersona[0].cod_venper}/recorrido/${ano}/meses/${mes}/dias/${dia}/historial`;
+
+    this.lastUpdateTime = fechat;
+    const lfechahora = fechat.toLocaleString();
+
+    //asegurarse que este creada la descripcion de asesorpersona
+    this.afDB.collection(`/asesorpersona/`).doc(this._parEmpre.usuario.venpersona[0].cod_venper)
+      .set({ nombre: this._parEmpre.usuario.venpersona[0].nombre, cod_venper: this._parEmpre.usuario.venpersona[0].cod_venper, venpersona: this._parEmpre.usuario.venpersona });
+
+    //asegurarse que este creado el año, mes y dia del recorrido
+    this.afDB.collection(`/asesorpersona/${this._parEmpre.usuario.venpersona[0].cod_venper}/recorrido`).doc(ano.toString())
+      .set({ ano: ano.toString() });
+    //asegurarse que este creado el año, mes y dia del recorrido
+    this.afDB.collection(`/asesorpersona/${this._parEmpre.usuario.venpersona[0].cod_venper}/recorrido/${ano}/meses`).doc(mes.toString())
+      .set({ mes: mes.toString() });
+    //asegurarse que este creado el año, mes y dia del recorrido
+    this.afDB.collection(`/asesorpersona/${this._parEmpre.usuario.venpersona[0].cod_venper}/recorrido/${ano}/meses/${mes}/dias`).doc(dia.toString())
+      .set({ dia: dia.toString() });
+    const usuariorecorrido = this.afDB.collection(lruta).doc(id);
+    usuariorecorrido.set({
+      latitud: data.coords.latitude,
+      longitud: data.coords.longitude,
+      hora: id,
+      fecha: fechat,
+      fechahora: lfechahora
+    });
   }
   detenerUbicacion() {
 

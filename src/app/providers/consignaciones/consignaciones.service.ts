@@ -191,6 +191,11 @@ export class ConsignacionesService implements OnInit {
     let lrutafp = `/personal/${this._parempre.usuario.cod_usuar}/resumdiario/${ano}/meses/${mes}/dias/${dia}/consignaciones`;
     console.log(objconsig);
     console.log(id);
+    //Evaluar si tiene asesorpersona
+    if(this._parempre.usuario.venpersona.length>0){
+      this.guardarFbasesorpersona(id, objconsig);
+    }
+
     return this.fbDb
       .collection(lrutafp)
       .doc(id)
@@ -228,6 +233,9 @@ export class ConsignacionesService implements OnInit {
     const dia = now.getDate();
     const mes = now.getMonth() + 1;
     const ano = now.getFullYear();
+    if(this._parempre.usuario.venpersona.length>0){
+      this.actcierreasesorpersona(idcuen, idcons, objact, valorRestante, f); //Actualiza cierre en asesorpersona
+    }
     return this.fbDb
       .collection(`/personal/${this._parempre.usuario.cod_usuar}/resumdiario/${ano}/meses/${mes}/dias/${dia}/cierrecaja/${idcuen}/consignaciones`)
       .doc(idcons)
@@ -281,6 +289,9 @@ export class ConsignacionesService implements OnInit {
             position: 'bottom'
           });
           toast.present();
+          if(this._parempre.usuario.venpersona.length>0){ //Evalua si tiene un asesorpersona
+            this.actualizaFotoConsignafirebaseasesorpersona(idconsig, fec, linkref);
+          }
         });
       }).catch((error) => {
         console.log('Error actualizaimagenConsignacionfirebase putString img:', error);
@@ -289,5 +300,94 @@ export class ConsignacionesService implements OnInit {
       console.log('Error leyendo archivo:', error);
     });
   }
+
+
+
+  //Apartado de asesorpersona
+
+  //Guardar para el vendedor o usuario datos para cierre, recibo y formas de pago
+  guardarFbasesorpersona(id, objconsig) {
+    const now = new Date(objconsig.fecha);
+    const dia = now.getDate();
+    const mes = now.getMonth() + 1;
+    const ano = now.getFullYear();
+    console.log('id');
+    //asegurarse que este creado el año, mes y dia
+    this.fbDb
+      .collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario`)
+      .doc(ano.toString())
+      .set({ ano: ano.toString() });
+    //asegurarse que este creado el año, mes y dia
+    this.fbDb
+      .collection(
+        `/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses`
+      )
+      .doc(mes.toString())
+      .set({ mes: mes.toString() });
+    console.log('2');
+    //asegurarse que este creado el año, mes y dia
+    this.fbDb
+      .collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses/${mes}/dias`)
+      .doc(dia.toString())
+      .set({ dia: dia.toString() });
+    console.log('3');
+
+    //cierre de caja por cada forma de pago
+    let lrutafp = `/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses/${mes}/dias/${dia}/consignaciones`;
+    console.log(objconsig);
+    console.log(id);
+    return this.fbDb
+      .collection(lrutafp)
+      .doc(id)
+      .set(objconsig).then(res => {
+        console.log("primero");
+        this.fbDb
+          .collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/consignaciones`)
+          .doc(id)
+          .set(objconsig);
+      });
+  }
+
+
+  public actcierreasesorpersona(idcuen, idcons, objact, valorRestante, f) {
+    //extraemos el día mes y año
+    const now = new Date(f);
+    const dia = now.getDate();
+    const mes = now.getMonth() + 1;
+    const ano = now.getFullYear();
+    return this.fbDb
+      .collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses/${mes}/dias/${dia}/cierrecaja/${idcuen}/consignaciones`)
+      .doc(idcons)
+      .set(objact).then(mes => {
+        if (valorRestante.valor <= 0) {
+          console.log(valorRestante.valor);
+          this.fbDb
+            .collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/ConsignacionesPendientes`)
+            .doc(idcuen).delete();
+        }
+        else {
+          this.fbDb
+            .collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/ConsignacionesPendientes`)
+            .doc(idcuen).update(valorRestante);
+        }
+      });
+  }
+
+
+  actualizaFotoConsignafirebaseasesorpersona(idconsig, fec, linkref) {
+    //extraemos el día mes y año
+    console.log(fec);
+    const fecha = new Date(fec);
+    const dia = fecha.getDate();
+    const mes = fecha.getMonth() + 1;
+    const ano = fecha.getFullYear();
+    this.fbDb.collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses/${mes}/dias/${dia}/consignaciones/`)
+      .doc(idconsig).update({ link_imgfb: linkref });
+    this.fbDb.collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/consignaciones/`)
+      .doc(idconsig).update({ link_imgfb: linkref });
+  }
+
+
+
 
 }

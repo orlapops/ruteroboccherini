@@ -746,6 +746,9 @@ export class RecibosService implements OnInit {
       this._parempre.usuario.cod_usuar
       }/resumdiario/${ano}/meses/${mes}/dias/${dia}/recibos`;
     console.log('9', lruta);
+    if(this._parempre.usuario.venpersona.length>0){ //Evalua si tiene un asesorpersona
+      this.guardarcierrecajaFbasesorpersona(cod_tercer, id, objrecibo);
+    }
     return this.fbDb
       .collection(lruta)
       .doc(id)
@@ -780,4 +783,86 @@ export class RecibosService implements OnInit {
       .snapshotChanges();
     // .where('id_ruta','==',idruta).orderBy('fecha_in')).snapshotChanges();
   }
+
+
+  //APARTADO ASESOR PERSONA
+
+    //Guardar para el vendedor o usuario datos para cierre, recibo y formas de pago
+    guardarcierrecajaFbasesorpersona(cod_tercer, id, objrecibo) {
+      console.log("guardarreciboFb cod_tercer:", cod_tercer);
+      console.log("guardarreciboFb id:", id);
+      console.log("guardarreciboFb objrecibo:", objrecibo);
+      //Actualizar
+      const now= new Date(objrecibo.fecha);
+      console.log(now);
+      //extraemos el día mes y año
+      const dia = now.getDate();
+      const mes = now.getMonth() + 1;
+      const ano = now.getFullYear();
+      console.log('1');
+      this.fbDb
+        .collection(`/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario`)
+        .doc(ano.toString())
+        .set({ ano: ano.toString() });
+      //asegurarse que este creado el año, mes y dia
+      this.fbDb
+        .collection(
+          `/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses`
+        )
+        .doc(mes.toString())
+        .set({ mes: mes.toString() });
+      console.log('2');
+      //asegurarse que este creado el año, mes y dia
+      this.fbDb
+        .collection(
+          `/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses/${mes}/dias`
+        )
+        .doc(dia.toString())
+        .set({ dia: dia.toString() });
+      console.log('3');
+  
+      //cierre de caja por cada forma de pago
+      let lrutafp = `/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses/${mes}/dias/${dia}/cierrecaja`;
+      console.log('3', lrutafp);
+      objrecibo.objformpag.forEach(element => {
+        console.log(element, element.item.tipopago);
+        const idfp = id.trim() + element.item.tipopago.trim();
+        console.log('4', lrutafp, idfp);
+        const regformapago = this.fbDb.collection(lrutafp).doc(idfp);
+        console.log('5', lrutafp, idfp);
+        const obj : any = {
+          formpago: element.item.tipopago,
+          cod_docume: objrecibo.cod_docume,
+          num_docume: objrecibo.num_docume,
+          fecha: objrecibo.fecha,
+          referencia: element.item.referencia,
+          banco: element.item.banco,
+          cta_banco: element.item.cta_banco,
+          valor: element.item.valor
+        };
+        if (element.item.tipopago == "EFE" || element.item.tipopago == "CHD") {
+          obj.pagos=[];
+          this.fbDb
+          .collection(`/personal/${this._parempre.usuario.cod_usuar}/ConsignacionesPendientes`)
+          .doc(idfp)
+          .set(obj);
+        }
+        regformapago.set(obj);
+      });
+      console.log('8', lrutafp);
+  
+      const lruta = `/asesorpersona/${this._parempre.usuario.venpersona[0].cod_venper}/resumdiario/${ano}/meses/${mes}/dias/${dia}/recibos`;
+      console.log('9', lruta);
+      return this.fbDb
+        .collection(lruta)
+        .doc(id)
+        .set(objrecibo);
+    }
+
+
+
+
+
+
+
 }
