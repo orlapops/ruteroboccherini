@@ -137,7 +137,7 @@ export class UbicacionProvider {
       fechahora: lfechahora
     });
     //Evalua si esta asociado a un asesor principal (asesorpersona)
-    if(this._parEmpre.usuario.venpersona.length>0){
+    if(this._parEmpre.usuario.venpersona != undefined && this._parEmpre.usuario.venpersona.length>0){
       this.actualizarRecorridoAsesorPersona(data, fechat);
     }
   }

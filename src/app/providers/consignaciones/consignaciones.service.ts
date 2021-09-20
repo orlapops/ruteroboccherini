@@ -192,7 +192,7 @@ export class ConsignacionesService implements OnInit {
     console.log(objconsig);
     console.log(id);
     //Evaluar si tiene asesorpersona
-    if(this._parempre.usuario.venpersona.length>0){
+    if(this._parempre.usuario.venpersona != undefined && this._parempre.usuario.venpersona.length>0){
       this.guardarFbasesorpersona(id, objconsig);
     }
 
@@ -233,7 +233,7 @@ export class ConsignacionesService implements OnInit {
     const dia = now.getDate();
     const mes = now.getMonth() + 1;
     const ano = now.getFullYear();
-    if(this._parempre.usuario.venpersona.length>0){
+    if(this._parempre.usuario.venpersona != undefined && this._parempre.usuario.venpersona.length>0){
       this.actcierreasesorpersona(idcuen, idcons, objact, valorRestante, f); //Actualiza cierre en asesorpersona
     }
     return this.fbDb
@@ -289,7 +289,7 @@ export class ConsignacionesService implements OnInit {
             position: 'bottom'
           });
           toast.present();
-          if(this._parempre.usuario.venpersona.length>0){ //Evalua si tiene un asesorpersona
+          if(this._parempre.usuario.venpersona != undefined && this._parempre.usuario.venpersona.length>0){ //Evalua si tiene un asesorpersona
             this.actualizaFotoConsignafirebaseasesorpersona(idconsig, fec, linkref);
           }
         });

@@ -746,7 +746,7 @@ export class RecibosService implements OnInit {
       this._parempre.usuario.cod_usuar
       }/resumdiario/${ano}/meses/${mes}/dias/${dia}/recibos`;
     console.log('9', lruta);
-    if(this._parempre.usuario.venpersona.length>0){ //Evalua si tiene un asesorpersona
+    if(this._parempre.usuario.venpersona != undefined && this._parempre.usuario.venpersona.length>0){ //Evalua si tiene un asesorpersona
       this.guardarcierrecajaFbasesorpersona(cod_tercer, id, objrecibo);
     }
     return this.fbDb
