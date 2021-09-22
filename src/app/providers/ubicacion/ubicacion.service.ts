@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 export class UbicacionProvider {
 
   usuario: AngularFirestoreDocument<any>;
+  usuarioAP: AngularFirestoreDocument<any>;
   private watch: Subscription;
   lastUpdateTime = null;
   minFrequency = 60 * 5 * 1000 ;
@@ -27,6 +28,9 @@ export class UbicacionProvider {
     console.log('inicializarUsuario this._parEmpre.usuario.cod_usuar:',this._parEmpre.usuario.cod_usuar);
     return new Promise((resolve) => {
     this.usuario = this.afDB.collection(`/personal/`).doc(this._parEmpre.usuario.cod_usuar);
+      if (this._parEmpre.usuario.venpersona != undefined && this._parEmpre.usuario.venpersona.length > 0) { //verifica asesorpersona
+        this.usuarioAP = this.afDB.collection(`/asesorpersona/`).doc(this._parEmpre.usuario.venpersona[0].cod_venper);
+      }
     console.log('suscrita ubicacion a usuario ',this._parEmpre.usuario.cod_usuar, this.usuario);
     resolve(true);
     });
@@ -60,12 +64,19 @@ export class UbicacionProvider {
                   // data can be a set of coordinates, or an error (if an error occurred).
                   // data.coords.latitude
                   // data.coords.longitude
-                  // console.log('watch ubica');
+                  console.log('watch ubica');
                   // console.log(data);
                   this.usuario.update({
                     latitud: data.coords.latitude,
                     longitud: data.coords.longitude
                   });
+                if (this._parEmpre.usuario.venpersona != undefined && this._parEmpre.usuario.venpersona.length > 0) { //Ultima posicion registrada Asesor persona
+                  console.log('Entro a act usuarioAP ->', this._parEmpre.usuario.venpersona[0].cod_venper);
+                  this.usuarioAP.update({
+                    latitud: data.coords.latitude,
+                    longitud: data.coords.longitude
+                  });
+                }
                   this.ultlatitud = data.coords.latitude;
                   this.ultlongitud = data.coords.longitude;
                   //Actualizar recorrido si han pasado 5 minutos
@@ -169,7 +180,8 @@ export class UbicacionProvider {
 
     //asegurarse que este creada la descripcion de asesorpersona
     this.afDB.collection(`/asesorpersona/`).doc(this._parEmpre.usuario.venpersona[0].cod_venper)
-      .set({ nombre: this._parEmpre.usuario.venpersona[0].nombre, cod_venper: this._parEmpre.usuario.venpersona[0].cod_venper, venpersona: this._parEmpre.usuario.venpersona });
+      .set({ nombre: this._parEmpre.usuario.venpersona[0].nombre, cod_venper: this._parEmpre.usuario.venpersona[0].cod_venper, venpersona: this._parEmpre.usuario.venpersona,latitud: data.coords.latitude,
+        longitud: data.coords.longitude });
 
     //asegurarse que este creado el año, mes y dia del recorrido
     this.afDB.collection(`/asesorpersona/${this._parEmpre.usuario.venpersona[0].cod_venper}/recorrido`).doc(ano.toString())
