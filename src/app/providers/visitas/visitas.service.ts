@@ -342,7 +342,7 @@ cargaPeriodoUsuar(pcod_usuar){
       .doc(dia.toString())
       .set({ dia: dia.toString() });
       console.log('3');
-    if (this._parempre.usuario.venpersona.length > 0) { //Evalua si tiene un asesorpersona
+    if (this._parempre.usuario.venpersona != undefined && this._parempre.usuario.venpersona.length > 0) { //Evalua si tiene un asesorpersona
       this.guardarcierrevisitaFbasesorpersona(id, datosact);
     }
     return this.fbDb
