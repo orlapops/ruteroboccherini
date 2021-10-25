@@ -360,7 +360,7 @@ export class ClientesListPage implements OnInit {
   async cargarInventarioCliente(cod_tercero) {
     this._prodserv.cargoInventarioNetsolinPed = false;
     return new Promise((resolve, reject) => {
-      this._prodserv.cargaInventarioNetsolinPedido(cod_tercero).then(cargo => {
+      this._prodserv.cargaInventarioNetsolinPedido(cod_tercero.cod_tercer).then(cargo => {
         if (cargo) {
           console.log('Inventario Cargado -> ', this._prodserv.inventario);
           resolve(this._prodserv.inventarioPed);
@@ -385,8 +385,8 @@ export class ClientesListPage implements OnInit {
         console.log('Item de pedido en inventario comparativa (i,ptemp)->', i, busqueda[0]);
         if (busqueda[0].existencia > i.item.cantidad) {
           if (i.item.total != busqueda[0].precio_ven) { //VALIDA SI TIENE ALGUN CAMBIO EL PRECIO
-            pedidoTemp.items_pedido[0].item.precio = busqueda[0].precio_ven;
-            pedidoTemp.items_pedido[0].item.total = busqueda[0].precio_ven * pedidoTemp.items_pedido[0].item.cantidad;
+            pedidoTemp.items_pedido[count].item.precio = busqueda[0].precio_ven;
+            pedidoTemp.items_pedido[count].item.total = busqueda[0].precio_ven * pedidoTemp.items_pedido[count].item.cantidad;
           }
         } else {
           i.item['nodisponible'] = true;
