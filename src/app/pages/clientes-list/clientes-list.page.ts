@@ -80,18 +80,47 @@ export class ClientesListPage implements OnInit {
         //       this.clientes = this._clientes.clienbus;
         //   };
         // })
-      this._clientes.getClientesvendFb().subscribe((datos: any) => {
-        console.log("Cargo clientes  de firebase datos", datos);
-        if (this.textbus === undefined || this.textbus ==='' ){
-          this.clientes = datos;  
-        } else {
-          this.clientes = datos.filter(
-            (item: any) =>
-              item.cod_tercer.toLowerCase().indexOf(this.textbus.toLowerCase()) > -1 ||
-              item.nombre.toLowerCase().indexOf(this.textbus.toLowerCase()) > -1
-          )
-          }  
-      });
+        if(!this._parEmpre.cargoClientes){ //Carga clientes de usuario desde Netsolin, Solo carga una vez - JOSE - 9 NOV 2021
+          this._parEmpre.cargaClientesxvendNetsolin().then(res => {
+            if(res){
+              console.log('Clientes -> ', this._parEmpre.clientesxVendedor);
+              if (this.textbus === undefined || this.textbus ==='' ){
+                this.clientes = this._parEmpre.clientesxVendedor.clientes;  
+              } else {
+                this.clientes = this._parEmpre.clientesxVendedor.clientes.filter(
+                  (item: any) =>
+                    item.cod_tercer.toLowerCase().indexOf(this.textbus.toLowerCase()) > -1 ||
+                    item.nombre.toLowerCase().indexOf(this.textbus.toLowerCase()) > -1
+                )
+                }  
+            }if(!res){
+              this._ioncomponents.presentAlert('Error cargando Clientes');
+            }
+          });
+        }if(this._parEmpre.cargoClientes){
+          if (this.textbus === undefined || this.textbus ==='' ){
+            this.clientes = this._parEmpre.clientesxVendedor.clientes;  
+          } else {
+            this.clientes = this._parEmpre.clientesxVendedor.clientes.filter(
+              (item: any) =>
+                item.cod_tercer.toLowerCase().indexOf(this.textbus.toLowerCase()) > -1 ||
+                item.nombre.toLowerCase().indexOf(this.textbus.toLowerCase()) > -1
+            )
+            } 
+        }
+        //Comentado por mantener los datos simpre actualizados 9 NOVIEMBRE 2021 - JOSE
+      // this._clientes.getClientesvendFb().subscribe((datos: any) => {
+      //   console.log("Cargo clientes  de firebase datos", datos);
+      //   if (this.textbus === undefined || this.textbus ==='' ){
+      //     this.clientes = datos;  
+      //   } else {
+      //     this.clientes = datos.filter(
+      //       (item: any) =>
+      //         item.cod_tercer.toLowerCase().indexOf(this.textbus.toLowerCase()) > -1 ||
+      //         item.nombre.toLowerCase().indexOf(this.textbus.toLowerCase()) > -1
+      //     )
+      //     }  
+      // });
     // this.visitas = this._visitas.visitaTodas.filter((item: any) =>
     //         item.data.cod_tercer.toLowerCase().indexOf(this.textbus.toLowerCase()) > -1 
     //         || item.data.nombre.toLowerCase().indexOf(this.textbus.toLowerCase()) > -1 );  

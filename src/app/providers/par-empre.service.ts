@@ -35,7 +35,9 @@ export class ParEmpreService {
   item: Observable<Item>;
   URL_SERVICIOS: string ="";
   idreglog = 'depuracion1';
-  
+  //Clientes de Usuario
+  cargoClientes = false;
+  clientesxVendedor:any;
 
   constructor(
     private afDB: AngularFirestore,
@@ -195,6 +197,8 @@ reg_logappusuario(titulo, mensaje, datoslog) {
           resolve(false);
         } else {
           console.log('ingreso a cargaClientesxvendNetsolin cargo ciudades');
+          this.cargoClientes = true;
+          this.clientesxVendedor = data;
           this.guardarClientexvendFB(data).then(resultado => {
               if (resultado) {
                 resolve(true);
