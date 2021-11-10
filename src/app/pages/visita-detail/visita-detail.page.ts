@@ -682,6 +682,7 @@ export class VisitaDetailPage implements OnInit {
     this.mediacapture.captureImage(options).then((res: MediaFile[]) => {
       // this.camera.getPicture(optionscam).then((imageData) => {
       this.presentLoading('Guardando Imagen');
+      console.log(res, res[0]);
       this.imagenPreview = this.webview.convertFileSrc(res[0].fullPath);
       this._actividad.actualizafotosVisitafirebase(this._visitas.visita_activa_copvdet.cod_tercer,
         this.visitaID, res[0].fullPath).then(() => {
