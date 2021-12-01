@@ -68,7 +68,7 @@
     "cordova-plugin-splashscreen": "^5.0.3",
     "cordova-plugin-telerik-imagepicker": "^2.3.3",
     "cordova-res": "^0.6.0",
-    "cordova-sqlite-storage": "^3.3.0",
+    "cordova-sqlite-storage": "^6.0.0",
     "core-js": "^2.6.5",
     "firebase": "^6.4.0",
     "onesignal-cordova-plugin": "^2.5.2",
