@@ -51,7 +51,7 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "angular-animations": "0.0.10",
     "cordova": "^9.0.0",
-    "cordova-android": "^9.1.0",
+    "cordova-android": "^11.0.0",
     "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-bluetooth-serial": "^0.4.7",
     "cordova-plugin-camera": "^4.1.0",
@@ -142,8 +142,8 @@
       "onesignal-cordova-plugin": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-background-mode": {},
-      "cordova-plugin-telerik-imagepicker": {},
-      "cordova-plugin-media-capture": {}
+      "cordova-plugin-media-capture": {},
+      "cordova-plugin-telerik-imagepicker": {}
     },
     "platforms": [
       "android"
