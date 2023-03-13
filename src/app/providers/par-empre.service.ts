@@ -250,7 +250,7 @@ verificausuarioNetsolin(codigo: string,psw:string,plogeo:string ) {
      .subscribe( (data:any) =>{ 
       console.log(" verificausuarioNetsolin 3");
       console.log(data);  
-      if( data.error){
+      if( data.error || data.isCallbackError){
           console.log(" verificausuarioNetsolin 31");
         // Aqui hay un problema
          console.log('data.messages');
